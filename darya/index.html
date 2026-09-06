@@ -152,10 +152,11 @@ p{margin:0 0 1rem}
 /* процесс */
 .steps{border-top:1px solid var(--line)}
 .step{display:grid;gap:6px 32px;padding:26px 0;border-bottom:1px solid var(--line)}
-@media (min-width:720px){.step{grid-template-columns:64px minmax(0,1fr)}}
-.step p{margin:0;color:var(--ink-2);font-size:1rem;max-width:60ch}
+.step{grid-template-columns:minmax(0,1fr) auto;align-items:baseline}
+.step p{margin:0;color:var(--ink-2);font-size:1rem;max-width:60ch;grid-column:1}
+.step h3{grid-column:1;font-size:1.1rem}
+.step p.n{grid-column:2;grid-row:1 / span 3;justify-self:end;font:500 1.5rem/1.2 var(--serif);color:var(--ink-3);max-width:none}
 .step p + p{margin-top:.6rem}
-@media (min-width:720px){.step .n{grid-row:1 / span 3}.step h3,.step p{grid-column:2}}
 
 /* образование */
 .edu{border-top:1px solid var(--line)}
