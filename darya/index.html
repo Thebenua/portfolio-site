@@ -91,9 +91,10 @@ a{color:inherit}
 .btn-line:hover{opacity:1;border-color:var(--ink)}
 
 .section{padding:clamp(64px,7vw,96px) 0;border-top:1px solid var(--line)}
-.grid{display:grid;gap:20px 40px}
-@media (min-width:900px){.grid{grid-template-columns:150px minmax(0,1fr)}}
-.num{font:400 clamp(3.4rem,6vw,5.4rem)/.85 var(--serif);letter-spacing:-.03em;color:var(--ink-3);margin:0;font-variant-numeric:lining-nums tabular-nums;transform:translateY(-.08em)}
+.grid{display:grid;gap:12px 40px}
+@media (min-width:900px){.grid{grid-template-columns:150px minmax(0,1fr);align-items:baseline}}
+.num{font:400 clamp(2.4rem,4.2vw,3.6rem)/1 var(--serif);letter-spacing:.02em;color:var(--ink-3);margin:0}
+@media (max-width:899px){.num{margin-bottom:-4px}}
 .grid-wide > .cards,.grid-wide > .note{grid-column:1 / -1}
 h2{font:700 clamp(1.8rem,3.2vw,2.5rem)/1.12 var(--sans);letter-spacing:-.03em;margin:0 0 1.4rem;text-wrap:balance}
 h3{font:600 1.02rem/1.4 var(--sans);letter-spacing:-.012em;margin:0 0 .4rem}
@@ -101,6 +102,7 @@ p{margin:0 0 1rem}
 .prose{max-width:62ch}
 .prose p:last-child{margin-bottom:0}
 .lead{color:var(--ink-2)}
+.sec-lead{color:var(--ink-2);margin:-.4rem 0 1.8rem;max-width:60ch}
 .note{margin-top:28px;color:var(--ink-3);font-size:.9rem;max-width:60ch}
 
 /* обложка */
@@ -188,7 +190,7 @@ p{margin:0 0 1rem}
 .faq p{margin:0;color:var(--ink-2);font-size:.95rem}
 
 /* контакты */
-.contact{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:clamp(36px,5vw,64px);display:grid;gap:28px;align-items:end}
+.contact{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:clamp(32px,4.5vw,56px);display:grid;gap:28px;align-items:end}
 @media (min-width:900px){.contact{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}}
 .contact h2{margin-bottom:.8rem}
 .contact p{margin:0 0 .8rem;color:var(--ink-2);max-width:48ch}
@@ -251,7 +253,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="znakomo">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">01</p>
+      <p class="num" aria-hidden="true">I</p>
       <div>
         <h2>Напряжение, которое не выключается</h2>
         <ul class="symptoms">
@@ -264,7 +266,7 @@ footer p{margin:0;max-width:52ch}
         </ul>
         <div class="resolve">
           <p>Я перестала бороться со своей тревогой и научилась дружить с ней.</p>
-          <p>Это состояние знакомо мне не только по учебникам. Выход из него есть — не через «возьми себя в руки», а через понимание того, как устроено именно ваше состояние, и через конкретные шаги, которые мы проходим вместе.</p>
+          <p>Это состояние знакомо мне не только по учебникам. Выход из него есть — не через «возьми себя в руки», а через понимание того, как устроено именно ваше состояние, и через конкретные шаги, которые мы проходим вместе. Ниже — с чем я работаю, как устроен процесс и что вас ждёт на первой встрече.</p>
         </div>
       </div>
     </div>
@@ -272,9 +274,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="zaprosy">
     <div class="wrap grid grid-wide">
-      <p class="num" aria-hidden="true">02</p>
+      <p class="num" aria-hidden="true">II</p>
       <div>
         <h2>С чем ко мне можно обратиться</h2>
+        <p class="sec-lead">Тревога редко приходит одна и у каждого выглядит по-своему. Вот запросы, с которыми ко мне приходят чаще всего.</p>
       </div>
         <div class="cards">
           <div class="card">
@@ -324,9 +327,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="podhod">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">03</p>
+      <p class="num" aria-hidden="true">III</p>
       <div>
         <h2>Работаю не с симптомом, а с человеком</h2>
+        <p class="sec-lead">Состояния разные, но логика работы одна: сначала понять, что именно происходит, и только потом — менять.</p>
         <div class="prose">
           <p>Я работаю комплексно — не только с конкретным симптомом, но и со всей вашей личностью. Я соединяю доказательные подходы: схема-терапию, ЛОРП, КПТ и ЭПР.</p>
           <p>Я считаю, что одним из ключевых шагов навстречу ремиссии и хорошему самочувствию является понимание собственного состояния, его особенностей и прозрачность процесса терапии. Мне важно, чтобы вы понимали: как именно устроено ваше расстройство, почему мы работаем именно в таком формате, зачем делаем эти упражнения, куда мы по итогу придём.</p>
@@ -356,21 +360,23 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="obo-mne">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">04</p>
+      <p class="num" aria-hidden="true">IV</p>
       <div class="prose">
         <h2>Меня зовут Дарья</h2>
-        <p>Я практикующий психолог и секс-терапевт. А ещё я просто человек, который перестал бороться со своей тревогой и научился дружить с ней.</p>
-        <p>Мне очень хорошо знакомо состояние бесконечного напряжения — когда тревога настолько сильная, что кажется, будто это никогда не закончится и никто не сможет тебе помочь. Я знаю, что из него есть выход, и знаю, как он устроен изнутри.</p>
-        <p>Поэтому в работе для меня важнее всего ясность: вы должны понимать, что с вами происходит, как это называется и что мы с этим делаем. Терапия перестаёт быть страшной, когда перестаёт быть непонятной.</p>
+        <p class="sec-lead">Почему для меня это принципиально — потому что я знаю это состояние не со стороны.</p>
+        <p>Я практикующий психолог и секс-терапевт. Работаю с тревожным спектром — тревога, паника, ОКР, фобии, ипохондрия — и с расстройствами пограничного спектра.</p>
+        <p>В профессию я пришла через собственный опыт. Я знаю, что такое бесконечное напряжение, когда кажется, что это никогда не закончится, — и знаю, как из него выходят: не силой воли, а пониманием и последовательной работой.</p>
+        <p>Поэтому для меня важнее всего ясность: вы должны понимать, что с вами происходит, как это называется и что мы с этим делаем. Терапия перестаёт быть страшной, когда перестаёт быть непонятной. Как это выглядит на практике — ниже, по шагам.</p>
       </div>
     </div>
   </section>
 
   <section class="section" id="process">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">05</p>
+      <p class="num" aria-hidden="true">V</p>
       <div>
         <h2>Как происходит работа со мной</h2>
+        <p class="sec-lead">Путь от первого сообщения до регулярной работы — четыре шага, и на каждом вы знаете, что происходит.</p>
         <div class="steps">
           <div class="step">
             <p class="label">01</p>
@@ -400,9 +406,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="obrazovanie">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">06</p>
+      <p class="num" aria-hidden="true">VI</p>
       <div>
         <h2>Образование</h2>
+        <p class="sec-lead">За методами, о которых я говорю выше, стоит обучение — вот оно, в часах.</p>
         <div class="edu">
           <div class="edu-row"><b>Социальная психология</b><span>МФПУ «Синергия»</span><div class="hours">высшее</div></div>
           <div class="edu-row"><b>Коррекция тревожно-фобических расстройств</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">534 ч</div></div>
@@ -419,9 +426,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="stoimost">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">07</p>
+      <p class="num" aria-hidden="true">VII</p>
       <div>
         <h2>Форматы работы</h2>
+        <p class="sec-lead">Работать можно онлайн из любого города или очно в Симферополе. Первая встреча может остаться разовой — это нормально.</p>
         <div class="rates">
           <div class="rate">
             <p class="label-caps">Онлайн-консультация</p>
@@ -445,9 +453,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="vazhno">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">08</p>
+      <p class="num" aria-hidden="true">VIII</p>
       <div>
         <h2>Перед началом работы</h2>
+        <p class="sec-lead">Несколько вещей, о которых честнее сказать до первой встречи, а не после.</p>
         <div class="cols">
           <div>
             <h3>Как я работаю</h3>
@@ -477,9 +486,10 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="voprosy">
     <div class="wrap grid">
-      <p class="num" aria-hidden="true">09</p>
+      <p class="num" aria-hidden="true">IX</p>
       <div>
         <h2>Что спрашивают чаще всего</h2>
+        <p class="sec-lead">И то, о чём спрашивают почти все, прежде чем написать.</p>
         <div class="faq">
           <div><h3>Я не знаю, с чего начать</h3><p>Просто напишите в мессенджер и опишите в двух словах, что происходит. Этого достаточно — остальное разберём вместе.</p></div>
           <div><h3>Сколько нужно встреч?</h3><p>Зависит от запроса. На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности.</p></div>
@@ -493,12 +503,12 @@ footer p{margin:0;max-width:52ch}
   </section>
 
   <section class="section" id="kontakty">
-    <div class="wrap">
+    <div class="wrap grid">
+      <p class="num" aria-hidden="true">X</p>
       <div class="contact">
         <div>
-          <p class="num" aria-hidden="true">10</p>
           <h2>Напишите прямо сейчас</h2>
-          <p>Кратко поделитесь, что вас беспокоит. Я отвечу лично в течение дня, и мы подберём комфортное время для первой встречи.</p>
+          <p>Если что-то из прочитанного отозвалось — этого уже достаточно, чтобы начать. Кратко поделитесь, что вас беспокоит. Я отвечу лично в течение дня, и мы подберём комфортное время для первой встречи.</p>
           <p class="reply">Ответ — в течение дня</p>
         </div>
         <div class="channels">
