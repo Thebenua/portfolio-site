@@ -6,18 +6,18 @@
 <meta name="description" content="Дарья Пономарцова — психолог, секс-терапевт. Тревога, панические атаки, ОКР, фобии, ПРЛ. Онлайн и очно в Симферополе.">
 <!--
   Дарья Пономарцова — психолог, секс-терапевт. Одностраничный сайт.
-  Фото: положить foto.jpg рядом с файлом. Полоска «Черновик» — блок .draftbar, удалить перед публикацией.
-  Пунктиром (.tbd) отмечены данные, которые ещё уточняются.
+  Фото: foto.jpg рядом с файлом.
 -->
 <title>Дарья Пономарцова</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
 :root{
   --sans:"Manrope","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --serif:"Cormorant Garamond","Times New Roman",Georgia,serif;
 
   --bg:#FFFFFF;
   --bg-2:#F4F7F8;
@@ -74,9 +74,7 @@ a{color:inherit}
 .label-caps{font:600 .7rem/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0}
 .pill{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink-2);font:500 .74rem/1.2 var(--sans);letter-spacing:.01em;white-space:nowrap}
 .pills{display:flex;flex-wrap:wrap;gap:6px}
-.tbd{border-bottom:1px dotted var(--ink-3);cursor:help}
 
-.draftbar{border-bottom:1px solid var(--line);padding:9px 0;color:var(--ink-3);font:500 .72rem/1.5 var(--mono)}
 
 .topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
@@ -92,10 +90,11 @@ a{color:inherit}
 .btn-line{background:transparent;color:var(--ink);border-color:var(--line-2)}
 .btn-line:hover{opacity:1;border-color:var(--ink)}
 
-.section{padding:clamp(96px,10vw,140px) 0;border-top:1px solid var(--line)}
-.grid{display:grid;gap:32px}
-@media (min-width:900px){.grid{grid-template-columns:minmax(0,3fr) minmax(0,9fr);gap:48px}}
-.grid > .label{padding-top:.4rem}
+.section{padding:clamp(64px,7vw,96px) 0;border-top:1px solid var(--line)}
+.grid{display:grid;gap:20px 40px}
+@media (min-width:900px){.grid{grid-template-columns:150px minmax(0,1fr)}}
+.num{font:400 clamp(3.4rem,6vw,5.4rem)/.85 var(--serif);letter-spacing:-.03em;color:var(--ink-3);margin:0;font-variant-numeric:lining-nums tabular-nums;transform:translateY(-.08em)}
+.grid-wide > .cards,.grid-wide > .note{grid-column:1 / -1}
 h2{font:700 clamp(1.8rem,3.2vw,2.5rem)/1.12 var(--sans);letter-spacing:-.03em;margin:0 0 1.4rem;text-wrap:balance}
 h3{font:600 1.02rem/1.4 var(--sans);letter-spacing:-.012em;margin:0 0 .4rem}
 p{margin:0 0 1rem}
@@ -105,7 +104,7 @@ p{margin:0 0 1rem}
 .note{margin-top:28px;color:var(--ink-3);font-size:.9rem;max-width:60ch}
 
 /* обложка */
-.hero{padding:clamp(64px,8vw,112px) 0 clamp(64px,8vw,112px)}
+.hero{padding:clamp(56px,7vw,96px) 0 clamp(56px,6vw,88px)}
 .hero-grid{display:grid;gap:48px;align-items:center}
 @media (min-width:900px){.hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px}}
 .hero h1{font:800 clamp(2.6rem,6vw,4.4rem)/1 var(--sans);letter-spacing:-.04em;margin:1.1rem 0 1.4rem;text-wrap:balance}
@@ -116,7 +115,7 @@ p{margin:0 0 1rem}
 .portrait-slot em{font:400 .8rem/1.5 var(--mono);font-style:normal;color:var(--ink-3)}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 
-.stats{display:grid;gap:0;border-top:1px solid var(--line);margin-top:clamp(56px,7vw,96px)}
+.stats{display:grid;gap:0;border-top:1px solid var(--line);margin-top:clamp(44px,5vw,72px)}
 @media (min-width:640px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .stat{padding:28px 32px 28px 0;border-bottom:1px solid var(--line)}
 @media (min-width:640px){.stat{border-bottom:none;border-right:1px solid var(--line)}.stat:last-child{border-right:none}.stat + .stat{padding-left:32px}}
@@ -131,13 +130,13 @@ p{margin:0 0 1rem}
 .resolve p:last-child{margin-bottom:0;color:var(--ink-2)}
 
 /* запросы */
-.cards{display:grid;gap:16px}
+.cards{display:grid;gap:14px;align-items:start;margin-top:8px}
 @media (min-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:1000px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px}
 .card h3{margin:0}
-.card p{margin:0 0 auto;color:var(--ink-2);font-size:.92rem;line-height:1.6}
-.card .pills{margin-top:8px}
+.card p{margin:0;color:var(--ink-2);font-size:.9rem;line-height:1.58}
+.card .pills{margin-top:6px}
 
 /* подход */
 .methods{border-top:1px solid var(--line);margin-top:40px}
@@ -209,8 +208,6 @@ footer p{margin:0;max-width:52ch}
 </head>
 <body>
 
-<div class="draftbar"><div class="wrap">Черновик · 06.09 · пунктиром отмечено то, что Дарья дописывает</div></div>
-
 <header class="topbar">
   <div class="wrap">
     <a class="mark" href="#top">Дарья Пономарцова</a>
@@ -231,7 +228,7 @@ footer p{margin:0;max-width:52ch}
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <p class="label">[01] Психолог · секс-терапевт</p>
+          <p class="label-caps">Психолог · секс-терапевт</p>
           <h1>Дарья Пономарцова</h1>
           <p class="lead">Тревога, панические атаки, ОКР, фобии, ПРЛ. Работаю в доказательных подходах и объясняю каждый шаг: что с вами происходит, почему мы делаем именно это и к чему придём.</p>
           <div class="hero-cta">
@@ -254,7 +251,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="znakomo">
     <div class="wrap grid">
-      <p class="label">[02] Если вы здесь</p>
+      <p class="num" aria-hidden="true">01</p>
       <div>
         <h2>Напряжение, которое не выключается</h2>
         <ul class="symptoms">
@@ -274,10 +271,11 @@ footer p{margin:0;max-width:52ch}
   </section>
 
   <section class="section" id="zaprosy">
-    <div class="wrap grid">
-      <p class="label">[03] Запросы</p>
+    <div class="wrap grid grid-wide">
+      <p class="num" aria-hidden="true">02</p>
       <div>
         <h2>С чем ко мне можно обратиться</h2>
+      </div>
         <div class="cards">
           <div class="card">
             <h3>Тревога и тревожные расстройства</h3>
@@ -321,13 +319,12 @@ footer p{margin:0;max-width:52ch}
           </div>
         </div>
         <p class="note">Если вы не нашли свою проблему в списке, но хотели бы поработать вместе — напишите мне, я подскажу.</p>
-      </div>
     </div>
   </section>
 
   <section class="section" id="podhod">
     <div class="wrap grid">
-      <p class="label">[04] Подход</p>
+      <p class="num" aria-hidden="true">03</p>
       <div>
         <h2>Работаю не с симптомом, а с человеком</h2>
         <div class="prose">
@@ -359,7 +356,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="obo-mne">
     <div class="wrap grid">
-      <p class="label">[05] Обо мне</p>
+      <p class="num" aria-hidden="true">04</p>
       <div class="prose">
         <h2>Меня зовут Дарья</h2>
         <p>Я практикующий психолог и секс-терапевт. А ещё я просто человек, который перестал бороться со своей тревогой и научился дружить с ней.</p>
@@ -371,7 +368,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="process">
     <div class="wrap grid">
-      <p class="label">[06] Процесс</p>
+      <p class="num" aria-hidden="true">05</p>
       <div>
         <h2>Как происходит работа со мной</h2>
         <div class="steps">
@@ -403,7 +400,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="obrazovanie">
     <div class="wrap grid">
-      <p class="label">[07] Квалификация</p>
+      <p class="num" aria-hidden="true">06</p>
       <div>
         <h2>Образование</h2>
         <div class="edu">
@@ -422,7 +419,7 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="stoimost">
     <div class="wrap grid">
-      <p class="label">[08] Форматы</p>
+      <p class="num" aria-hidden="true">07</p>
       <div>
         <h2>Форматы работы</h2>
         <div class="rates">
@@ -441,14 +438,14 @@ footer p{margin:0;max-width:52ch}
             <a class="btn btn-sm btn-line" href="#kontakty">Записаться</a>
           </div>
         </div>
-        <p class="note"><span class="tbd" title="Уточнить у Дарьи: как оплачивается встреча, условия переноса и отмены">Оплата и условия переноса — уточняются.</span></p>
+        
       </div>
     </div>
   </section>
 
   <section class="section" id="vazhno">
     <div class="wrap grid">
-      <p class="label">[09] Важно знать</p>
+      <p class="num" aria-hidden="true">08</p>
       <div>
         <h2>Перед началом работы</h2>
         <div class="cols">
@@ -471,7 +468,7 @@ footer p{margin:0;max-width:52ch}
           </div>
           <div>
             <h3>Важные нюансы терапии</h3>
-            <p><span class="tbd" title="Дарья дописывает этот раздел и раздел «Первая встреча»">Раздел дописывается.</span></p>
+            <p>Раздел готовится.</p>
           </div>
         </div>
       </div>
@@ -480,12 +477,12 @@ footer p{margin:0;max-width:52ch}
 
   <section class="section" id="voprosy">
     <div class="wrap grid">
-      <p class="label">[10] Вопросы</p>
+      <p class="num" aria-hidden="true">09</p>
       <div>
         <h2>Что спрашивают чаще всего</h2>
         <div class="faq">
           <div><h3>Я не знаю, с чего начать</h3><p>Просто напишите в мессенджер и опишите в двух словах, что происходит. Этого достаточно — остальное разберём вместе.</p></div>
-          <div><h3>Сколько нужно встреч?</h3><p><span class="tbd" title="Уточнить типичные сроки">Зависит от запроса.</span> На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности.</p></div>
+          <div><h3>Сколько нужно встреч?</h3><p>Зависит от запроса. На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности.</p></div>
           <div><h3>Чем психолог отличается от психиатра?</h3><p>Я не ставлю диагнозы и не выписываю лекарства. Если понадобится медикаментозная поддержка, помогу найти психиатра и продолжу работу параллельно.</p></div>
           <div><h3>А если во время экспозиции станет хуже?</h3><p>Экспозиция всегда идёт по шагам, которые мы обсуждаем заранее. Мы не переходим к следующему, пока предыдущий не станет переносимым для вас.</p></div>
           <div><h3>Это конфиденциально?</h3><p>Да. Всё, что происходит на встрече, остаётся между нами — за исключением ситуаций, предусмотренных этическим кодексом психолога.</p></div>
@@ -499,7 +496,7 @@ footer p{margin:0;max-width:52ch}
     <div class="wrap">
       <div class="contact">
         <div>
-          <p class="label">[11] Контакты</p>
+          <p class="num" aria-hidden="true">10</p>
           <h2>Напишите прямо сейчас</h2>
           <p>Кратко поделитесь, что вас беспокоит. Я отвечу лично в течение дня, и мы подберём комфортное время для первой встречи.</p>
           <p class="reply">Ответ — в течение дня</p>
