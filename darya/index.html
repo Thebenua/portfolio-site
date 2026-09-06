@@ -71,6 +71,7 @@ a{color:inherit}
 .wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
 
 .label{font:500 .72rem/1.5 var(--mono);letter-spacing:.02em;color:var(--ink-3);margin:0}
+.n{font:500 1.3rem/1 var(--serif);color:var(--ink-3);letter-spacing:.02em;font-variant-numeric:lining-nums tabular-nums}
 .label-caps{font:600 .7rem/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0}
 .pill{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink-2);font:500 .74rem/1.2 var(--sans);letter-spacing:.01em;white-space:nowrap}
 .pills{display:flex;flex-wrap:wrap;gap:6px}
@@ -154,14 +155,15 @@ p{margin:0 0 1rem}
 @media (min-width:720px){.step{grid-template-columns:64px minmax(0,1fr)}}
 .step p{margin:0;color:var(--ink-2);font-size:.95rem;max-width:60ch}
 .step p + p{margin-top:.6rem}
-@media (min-width:720px){.step .label{grid-row:1 / span 3}.step h3,.step p{grid-column:2}}
+@media (min-width:720px){.step .n{grid-row:1 / span 3}.step h3,.step p{grid-column:2}}
 
 /* образование */
 .edu{border-top:1px solid var(--line)}
-.edu-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 24px;padding:20px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.edu-row b{grid-column:1;font:600 .98rem/1.45 var(--sans);letter-spacing:-.01em}
-.edu-row span{grid-column:1;font-size:.86rem;color:var(--ink-3);line-height:1.5}
-.edu-row .hours{grid-column:2;grid-row:1 / span 2;font:500 .8rem/1.5 var(--mono);color:var(--ink-2);white-space:nowrap}
+.edu-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 24px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.edu-row b{grid-column:1;font:600 1.08rem/1.4 var(--sans);letter-spacing:-.012em}
+.edu-row span{grid-column:1;font-size:.94rem;color:var(--ink-3);line-height:1.5}
+.edu-row .hours{grid-column:2;grid-row:1 / span 2;font:500 1.5rem/1.2 var(--serif);color:var(--ink);white-space:nowrap;font-variant-numeric:lining-nums tabular-nums}
+.edu-row .hours small{font:500 .95rem/1 var(--serif);color:var(--ink-3);margin-left:4px}
 
 /* форматы */
 .rates{display:grid;gap:16px;max-width:800px}
@@ -176,11 +178,12 @@ p{margin:0 0 1rem}
 /* важно знать */
 .cols{display:grid;gap:36px}
 @media (min-width:880px){.cols{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}}
-.cols h3{padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.cols h3{font-size:1.18rem;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:4px}
 .cols ul{margin:0;padding:0;list-style:none}
-.cols li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem;color:var(--ink-2)}
-.cols li .label{padding-top:.15rem}
-.cols p{margin:12px 0 0;font-size:.92rem;color:var(--ink-2)}
+.cols li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:1rem;color:var(--ink-2);line-height:1.55;align-items:baseline}
+.cols .plain li{grid-template-columns:minmax(0,1fr)}
+.cols li .n{padding-top:0}
+.cols p{margin:14px 0 0;font-size:1rem;color:var(--ink-2)}
 
 /* вопросы */
 .faq{border-top:1px solid var(--line)}
@@ -375,23 +378,23 @@ footer p{margin:0;max-width:52ch}
         <p class="sec-lead">Как выглядит путь от первого сообщения до регулярной работы — четыре шага, и на каждом вы понимаете, что происходит.</p>
         <div class="steps">
           <div class="step">
-            <p class="label">01</p>
+            <p class="n">1</p>
             <h3>Запись</h3>
             <p>Вы пишете мне в удобный мессенджер, и мы выбираем комфортное время.</p>
           </div>
           <div class="step">
-            <p class="label">02</p>
+            <p class="n">2</p>
             <h3>Первая сессия</h3>
             <p>Подробно обсуждаем ваш запрос. Формируем понимание: что с вами происходит, как это называется и что с этим можно сделать, чтобы вы чувствовали себя лучше.</p>
             <p>Первая встреча может остаться разовой стратегической сессией, где вы получите ответы на свои вопросы, — или стать началом регулярной совместной работы.</p>
           </div>
           <div class="step">
-            <p class="label">03</p>
+            <p class="n">3</p>
             <h3>Стратегия терапии</h3>
             <p>Если продолжаем регулярную терапию — целостно изучаем вашу сложность и выстраиваем план: цели терапии, что важно делать для их достижения, методы работы, пошаговый план действий.</p>
           </div>
           <div class="step">
-            <p class="label">04</p>
+            <p class="n">4</p>
             <h3>Регулярные встречи</h3>
             <p>Определяем частоту встреч и выбираем комфортное время, исходя из ваших возможностей и запроса.</p>
           </div>
@@ -406,11 +409,11 @@ footer p{margin:0;max-width:52ch}
         <h2>Образование</h2>
         <p class="sec-lead">За методами, о которых я говорю выше, стоит обучение — вот оно, в часах.</p>
         <div class="edu">
-          <div class="edu-row"><b>Социальная психология</b><span>МФПУ «Синергия»</span><div class="hours">высшее</div></div>
-          <div class="edu-row"><b>Коррекция тревожно-фобических расстройств</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">534 ч</div></div>
-          <div class="edu-row"><b>Психологическое консультирование и коучинг в сексологии</b><span>ЧУ ДПО «Московский институт сексологии»</span><div class="hours">300 ч</div></div>
-          <div class="edu-row"><b>Психотерапия при расстройствах пограничного спектра</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">144 ч</div></div>
-          <div class="edu-row"><b>Схема-терапия</b><span>Академия современной психологии</span><div class="hours">72 ч</div></div>
+          <div class="edu-row"><b>Социальная психология</b><span>МФПУ «Синергия»</span><div class="hours"><small>высшее</small></div></div>
+          <div class="edu-row"><b>Коррекция тревожно-фобических расстройств</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">534<small>ч</small></div></div>
+          <div class="edu-row"><b>Психологическое консультирование и коучинг в сексологии</b><span>ЧУ ДПО «Московский институт сексологии»</span><div class="hours">300<small>ч</small></div></div>
+          <div class="edu-row"><b>Психотерапия при расстройствах пограничного спектра</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">144<small>ч</small></div></div>
+          <div class="edu-row"><b>Схема-терапия</b><span>Академия современной психологии</span><div class="hours">72<small>ч</small></div></div>
           <div class="edu-row"><b>КПТ, базовый курс</b><span>Ассоциация когнитивно-поведенческой терапии</span><div class="hours">—</div></div>
           <div class="edu-row"><b>«В глубине ОКР. От понимания к свободе»</b><span>курс Анастасии Терской</span><div class="hours">—</div></div>
         </div>
@@ -454,18 +457,18 @@ footer p{margin:0;max-width:52ch}
           <div>
             <h3>Как я работаю</h3>
             <ul>
-              <li><span class="label">01</span><span>Диагностика</span></li>
-              <li><span class="label">02</span><span>Информирование</span></li>
-              <li><span class="label">03</span><span>Работа с симптомами</span></li>
-              <li><span class="label">04</span><span>Реконструкция отношений и навыков</span></li>
+              <li><span class="n">1</span><span>Диагностика</span></li>
+              <li><span class="n">2</span><span>Информирование</span></li>
+              <li><span class="n">3</span><span>Работа с симптомами</span></li>
+              <li><span class="n">4</span><span>Реконструкция отношений и навыков</span></li>
             </ul>
           </div>
           <div>
             <h3>С чем я не работаю</h3>
-            <ul>
-              <li><span class="label">—</span><span>Семейные пары</span></li>
-              <li><span class="label">—</span><span>Дети и подростки младше 18 лет</span></li>
-              <li><span class="label">—</span><span>Алкогольные, химические и игровые зависимости</span></li>
+            <ul class="plain">
+              <li>Семейные пары</li>
+              <li>Дети и подростки младше 18 лет</li>
+              <li>Алкогольные, химические и игровые зависимости</li>
             </ul>
           </div>
           <div>
