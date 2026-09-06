@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Дарья Пономарцова — психолог, секс-терапевт. Тревога, панические атаки, ОКР, фобии, ПРЛ. Онлайн и очно в Симферополе.">
+<!--
+  Дарья Пономарцова — психолог, секс-терапевт. Одностраничный сайт.
+  Фото: положить foto.jpg рядом с файлом. Полоска «Черновик» — блок .draftbar, удалить перед публикацией.
+  Пунктиром (.tbd) отмечены данные, которые ещё уточняются.
+-->
+<title>Дарья Пономарцова</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --sans:"Manrope","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --bg:#FFFFFF;
+  --bg-2:#F4F7F8;
+  --card:#FFFFFF;
+  --ink:#1B252D;
+  --ink-2:#4E606D;
+  --ink-3:#7C8E9B;
+  --accent:#5C7C93;
+  --tint:#E9F0F4;
+  --line:#E1E8EC;
+  --line-2:#CBD6DD;
+  --btn-bg:#1B252D;
+  --btn-fg:#FFFFFF;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1518;
+    --bg-2:#151D23;
+    --card:#171F25;
+    --ink:#EEF3F6;
+    --ink-2:#B2C2CD;
+    --ink-3:#8496A3;
+    --accent:#93B4CA;
+    --tint:#1F2B33;
+    --line:#26323A;
+    --line-2:#33424B;
+    --btn-bg:#EEF3F6;
+    --btn-fg:#0F1518;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1518;
+  --bg-2:#151D23;
+  --card:#171F25;
+  --ink:#EEF3F6;
+  --ink-2:#B2C2CD;
+  --ink-3:#8496A3;
+  --accent:#93B4CA;
+  --tint:#1F2B33;
+  --line:#26323A;
+  --line-2:#33424B;
+  --btn-bg:#EEF3F6;
+  --btn-fg:#0F1518;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.68 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
+
+.label{font:500 .72rem/1.5 var(--mono);letter-spacing:.02em;color:var(--ink-3);margin:0}
+.label-caps{font:600 .7rem/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0}
+.pill{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink-2);font:500 .74rem/1.2 var(--sans);letter-spacing:.01em;white-space:nowrap}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.tbd{border-bottom:1px dotted var(--ink-3);cursor:help}
+
+.draftbar{border-bottom:1px solid var(--line);padding:9px 0;color:var(--ink-3);font:500 .72rem/1.5 var(--mono)}
+
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
+.mark{font:700 .95rem/1 var(--sans);letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+.navlinks{display:none;gap:28px;font:500 .84rem/1 var(--sans)}
+.navlinks a{color:var(--ink-2);text-decoration:none}
+.navlinks a:hover{color:var(--ink)}
+@media (min-width:900px){.navlinks{display:flex}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:12px;background:var(--btn-bg);color:var(--btn-fg);font:600 .9rem/1 var(--sans);letter-spacing:-.005em;text-decoration:none;border:1px solid var(--btn-bg);transition:opacity .18s,border-color .18s,color .18s}
+.btn:hover{opacity:.86}
+.btn-sm{padding:10px 16px;font-size:.82rem;border-radius:10px}
+.btn-line{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn-line:hover{opacity:1;border-color:var(--ink)}
+
+.section{padding:clamp(96px,10vw,140px) 0;border-top:1px solid var(--line)}
+.grid{display:grid;gap:32px}
+@media (min-width:900px){.grid{grid-template-columns:minmax(0,3fr) minmax(0,9fr);gap:48px}}
+.grid > .label{padding-top:.4rem}
+h2{font:700 clamp(1.8rem,3.2vw,2.5rem)/1.12 var(--sans);letter-spacing:-.03em;margin:0 0 1.4rem;text-wrap:balance}
+h3{font:600 1.02rem/1.4 var(--sans);letter-spacing:-.012em;margin:0 0 .4rem}
+p{margin:0 0 1rem}
+.prose{max-width:62ch}
+.prose p:last-child{margin-bottom:0}
+.lead{color:var(--ink-2)}
+.note{margin-top:28px;color:var(--ink-3);font-size:.9rem;max-width:60ch}
+
+/* обложка */
+.hero{padding:clamp(64px,8vw,112px) 0 clamp(64px,8vw,112px)}
+.hero-grid{display:grid;gap:48px;align-items:center}
+@media (min-width:900px){.hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px}}
+.hero h1{font:800 clamp(2.6rem,6vw,4.4rem)/1 var(--sans);letter-spacing:-.04em;margin:1.1rem 0 1.4rem;text-wrap:balance}
+.hero .lead{font-size:1.1rem;max-width:44ch;margin-bottom:2rem}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.portrait{position:relative;margin:0;aspect-ratio:4/5;max-width:420px;width:100%;justify-self:end;border-radius:20px;overflow:hidden;border:1px solid var(--line)}
+.portrait-slot{position:absolute;inset:0;background:linear-gradient(165deg,var(--bg-2),var(--tint));display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:28px}
+.portrait-slot em{font:400 .8rem/1.5 var(--mono);font-style:normal;color:var(--ink-3)}
+.portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+
+.stats{display:grid;gap:0;border-top:1px solid var(--line);margin-top:clamp(56px,7vw,96px)}
+@media (min-width:640px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stat{padding:28px 32px 28px 0;border-bottom:1px solid var(--line)}
+@media (min-width:640px){.stat{border-bottom:none;border-right:1px solid var(--line)}.stat:last-child{border-right:none}.stat + .stat{padding-left:32px}}
+.stat b{display:block;font:700 2rem/1.1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.stat span{display:block;color:var(--ink-3);font-size:.86rem;line-height:1.5}
+
+/* «знакомо» */
+.symptoms{list-style:none;margin:0 0 40px;padding:0;max-width:60ch;border-top:1px solid var(--line)}
+.symptoms li{font:500 1.12rem/1.5 var(--sans);letter-spacing:-.01em;color:var(--ink-2);padding:18px 0;border-bottom:1px solid var(--line)}
+.resolve{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:clamp(32px,4vw,48px);max-width:64ch}
+.resolve p:first-child{font:600 1.32rem/1.35 var(--sans);letter-spacing:-.02em;color:var(--ink)}
+.resolve p:last-child{margin-bottom:0;color:var(--ink-2)}
+
+/* запросы */
+.cards{display:grid;gap:16px}
+@media (min-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1000px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0}
+.card p{margin:0 0 auto;color:var(--ink-2);font-size:.92rem;line-height:1.6}
+.card .pills{margin-top:8px}
+
+/* подход */
+.methods{border-top:1px solid var(--line);margin-top:40px}
+.method{display:grid;gap:6px 32px;padding:26px 0;border-bottom:1px solid var(--line)}
+@media (min-width:720px){.method{grid-template-columns:200px minmax(0,1fr)}}
+.method b{font:600 1rem/1.4 var(--sans);letter-spacing:-.01em}
+.method .full{display:block;font:400 .72rem/1.5 var(--mono);color:var(--ink-3);margin-top:2px}
+.method p{margin:0;color:var(--ink-2);font-size:.95rem;max-width:58ch}
+
+/* процесс */
+.steps{border-top:1px solid var(--line)}
+.step{display:grid;gap:6px 32px;padding:26px 0;border-bottom:1px solid var(--line)}
+@media (min-width:720px){.step{grid-template-columns:64px minmax(0,1fr)}}
+.step p{margin:0;color:var(--ink-2);font-size:.95rem;max-width:60ch}
+.step p + p{margin-top:.6rem}
+@media (min-width:720px){.step .label{grid-row:1 / span 3}.step h3,.step p{grid-column:2}}
+
+/* образование */
+.edu{border-top:1px solid var(--line)}
+.edu-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 24px;padding:20px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.edu-row b{grid-column:1;font:600 .98rem/1.45 var(--sans);letter-spacing:-.01em}
+.edu-row span{grid-column:1;font-size:.86rem;color:var(--ink-3);line-height:1.5}
+.edu-row .hours{grid-column:2;grid-row:1 / span 2;font:500 .8rem/1.5 var(--mono);color:var(--ink-2);white-space:nowrap}
+
+/* форматы */
+.rates{display:grid;gap:16px;max-width:800px}
+@media (min-width:640px){.rates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rate{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px}
+.rate .price{font:700 1.7rem/1.1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.rate .price small{font:400 .78rem/1 var(--mono);color:var(--ink-3);letter-spacing:0;margin-left:8px}
+.rate p{margin:0;color:var(--ink-2);font-size:.92rem}
+.rate .addr{margin-top:auto;padding-top:14px;font:400 .76rem/1.5 var(--mono);color:var(--ink-3)}
+.rate .btn{margin-top:18px;align-self:flex-start}
+
+/* важно знать */
+.cols{display:grid;gap:36px}
+@media (min-width:880px){.cols{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}}
+.cols h3{padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:4px}
+.cols ul{margin:0;padding:0;list-style:none}
+.cols li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.95rem;color:var(--ink-2)}
+.cols li .label{padding-top:.15rem}
+.cols p{margin:12px 0 0;font-size:.92rem;color:var(--ink-2)}
+
+/* вопросы */
+.faq{border-top:1px solid var(--line)}
+.faq div{display:grid;gap:8px 32px;padding:24px 0;border-bottom:1px solid var(--line)}
+@media (min-width:820px){.faq div{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+.faq h3{margin:0}
+.faq p{margin:0;color:var(--ink-2);font-size:.95rem}
+
+/* контакты */
+.contact{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:clamp(36px,5vw,64px);display:grid;gap:28px;align-items:end}
+@media (min-width:900px){.contact{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}}
+.contact h2{margin-bottom:.8rem}
+.contact p{margin:0 0 .8rem;color:var(--ink-2);max-width:48ch}
+.contact p:last-of-type{margin-bottom:0}
+.channels{display:flex;flex-wrap:wrap;gap:10px}
+@media (min-width:900px){.channels{justify-content:flex-end}}
+.reply{font:400 .78rem/1.5 var(--mono);color:var(--ink-3)}
+
+footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--ink-3);font-size:.82rem;line-height:1.6}
+footer .wrap{display:grid;gap:16px}
+@media (min-width:720px){footer .wrap{grid-template-columns:minmax(0,1fr) auto;align-items:start}}
+footer p{margin:0;max-width:52ch}
+.socials{display:flex;flex-wrap:wrap;gap:18px;font:500 .8rem/1.5 var(--sans)}
+.socials a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line-2)}
+.socials a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="draftbar"><div class="wrap">Черновик · 06.09 · пунктиром отмечено то, что Дарья дописывает</div></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="mark" href="#top">Дарья Пономарцова</a>
+    <nav class="navlinks">
+      <a href="#zaprosy">С чем работаю</a>
+      <a href="#podhod">Подход</a>
+      <a href="#obo-mne">Обо мне</a>
+      <a href="#process">Как проходит</a>
+      <a href="#stoimost">Стоимость</a>
+    </nav>
+    <a class="btn btn-sm" href="#kontakty">Написать</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="label">[01] Психолог · секс-терапевт</p>
+          <h1>Дарья Пономарцова</h1>
+          <p class="lead">Тревога, панические атаки, ОКР, фобии, ПРЛ. Работаю в доказательных подходах и объясняю каждый шаг: что с вами происходит, почему мы делаем именно это и к чему придём.</p>
+          <div class="hero-cta">
+            <a class="btn" href="#kontakty">Написать мне</a>
+            <a class="btn btn-line" href="#process">Как проходит работа</a>
+          </div>
+        </div>
+        <figure class="portrait">
+          <div class="portrait-slot"><em>foto.jpg · 4:5</em></div>
+          <img src="foto.jpg" alt="Дарья Пономарцова">
+        </figure>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>2000+</b><span>часов практики</span></div>
+        <div class="stat"><b>4</b><span>доказательных подхода: КПТ, ЭПР, схема-терапия, ЛОРП</span></div>
+        <div class="stat"><b>Онлайн и очно</b><span>Симферополь, ул. Гоголя, 24</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="znakomo">
+    <div class="wrap grid">
+      <p class="label">[02] Если вы здесь</p>
+      <div>
+        <h2>Напряжение, которое не выключается</h2>
+        <ul class="symptoms">
+          <li>Вы просыпаетесь несколько раз за ночь с сильным сердцебиением.</li>
+          <li>Ком в горле не проходит совсем.</li>
+          <li>Мыслей так много, что кажется — они вас поглотят.</li>
+          <li>Не получается приступить ни к одному делу, а к вечеру вы всё равно безумно устали.</li>
+          <li>Мир вокруг словно что-то вторгающееся, а вы сами — маленький и хрупкий.</li>
+          <li>И кажется, что это никогда не закончится и никто не сможет помочь.</li>
+        </ul>
+        <div class="resolve">
+          <p>Я перестала бороться со своей тревогой и научилась дружить с ней.</p>
+          <p>Это состояние знакомо мне не только по учебникам. Выход из него есть — не через «возьми себя в руки», а через понимание того, как устроено именно ваше состояние, и через конкретные шаги, которые мы проходим вместе.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="zaprosy">
+    <div class="wrap grid">
+      <p class="label">[03] Запросы</p>
+      <div>
+        <h2>С чем ко мне можно обратиться</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>Тревога и тревожные расстройства</h3>
+            <p>Тревога, которая создаёт сильное напряжение: сложно замедлиться и расслабиться, хроническая усталость, постоянный контроль.</p>
+            <div class="pills"><span class="pill">КПТ</span><span class="pill">Схема-терапия</span></div>
+          </div>
+          <div class="card">
+            <h3>Панические атаки</h3>
+            <p>Сильная паника или паническое расстройство. Мысли «я схожу с ума», «я умираю». Избегание определённых мест, страх выйти из дома.</p>
+            <div class="pills"><span class="pill">КПТ</span><span class="pill">ЭПР</span></div>
+          </div>
+          <div class="card">
+            <h3>ОКР и навязчивые мысли</h3>
+            <p>Ритуалы, перепроверки, страх собственных мыслей и образов. Ощущение: «если я не сделаю это действие, всё вокруг разрушится».</p>
+            <div class="pills"><span class="pill">ЭПР</span><span class="pill">КПТ</span></div>
+          </div>
+          <div class="card">
+            <h3>Фобии и страхи</h3>
+            <p>Социофобия, страх открытых пространств, кардиофобия, страх летать на самолёте, страх насекомых и другие.</p>
+            <div class="pills"><span class="pill">ЭПР</span><span class="pill">КПТ</span></div>
+          </div>
+          <div class="card">
+            <h3>Пограничное расстройство личности</h3>
+            <p>Установленный диагноз или подозрение на него.</p>
+            <div class="pills"><span class="pill">Схема-терапия</span><span class="pill">ЛОРП</span></div>
+          </div>
+          <div class="card">
+            <h3>Ипохондрия и страх за здоровье</h3>
+            <p>Регулярный поиск болезней, боли и симптомы, которые обостряются из-за стресса.</p>
+            <div class="pills"><span class="pill">КПТ</span><span class="pill">ЭПР</span></div>
+          </div>
+          <div class="card">
+            <h3>Сексуализированные запросы</h3>
+            <p>Коммуникация с партнёром, отсутствующий или слабый оргазм, болезненный половой акт, сниженное либидо.</p>
+            <div class="pills"><span class="pill">Секс-терапия</span></div>
+          </div>
+          <div class="card">
+            <h3>Отношения с собой и другими</h3>
+            <p>Конфликты в отношениях, неуверенность в себе, эмоциональное выгорание, кризисы, вопросы самооценки.</p>
+            <div class="pills"><span class="pill">Схема-терапия</span><span class="pill">ЛОРП</span></div>
+          </div>
+        </div>
+        <p class="note">Если вы не нашли свою проблему в списке, но хотели бы поработать вместе — напишите мне, я подскажу.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="podhod">
+    <div class="wrap grid">
+      <p class="label">[04] Подход</p>
+      <div>
+        <h2>Работаю не с симптомом, а с человеком</h2>
+        <div class="prose">
+          <p>Я работаю комплексно — не только с конкретным симптомом, но и со всей вашей личностью. Я соединяю доказательные подходы: схема-терапию, ЛОРП, КПТ и ЭПР.</p>
+          <p>Я считаю, что одним из ключевых шагов навстречу ремиссии и хорошему самочувствию является понимание собственного состояния, его особенностей и прозрачность процесса терапии. Мне важно, чтобы вы понимали: как именно устроено ваше расстройство, почему мы работаем именно в таком формате, зачем делаем эти упражнения, куда мы по итогу придём.</p>
+        </div>
+        <div class="methods">
+          <div class="method">
+            <div><b>КПТ</b><span class="full">когнитивно-поведенческая терапия</span></div>
+            <p>Разбираем связку «мысль → эмоция → действие» и учимся замечать её в моменте, а не спустя сутки.</p>
+          </div>
+          <div class="method">
+            <div><b>ЭПР</b><span class="full">экспозиция с предотвращением реакции</span></div>
+            <p>Основной метод при ОКР и фобиях: постепенно встречаемся с тем, что пугает, и не выполняем ритуал. Всегда по шагам, о которых договорились заранее.</p>
+          </div>
+          <div class="method">
+            <div><b>Схема-терапия</b><span class="full">72 часа обучения</span></div>
+            <p>Смотрим не только на симптом, но и на устойчивые схемы, которые сложились задолго до него и продолжают запускать его сегодня.</p>
+          </div>
+          <div class="method">
+            <div><b>ЛОРП</b><span class="full">личностно-ориентированная реконструктивная психотерапия</span></div>
+            <p>Отечественный подход: состояние рассматривается через историю личности и отношения, а не как отдельная поломка внутри вас.</p>
+          </div>
+        </div>
+        <p class="note">Для меня важно информирование в процессе терапии — чтобы даже после первой встречи вы смогли иметь хотя бы небольшое понимание, что с вами происходит, как это называется и что с этим можно сделать.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="obo-mne">
+    <div class="wrap grid">
+      <p class="label">[05] Обо мне</p>
+      <div class="prose">
+        <h2>Меня зовут Дарья</h2>
+        <p>Я практикующий психолог и секс-терапевт. А ещё я просто человек, который перестал бороться со своей тревогой и научился дружить с ней.</p>
+        <p>Мне очень хорошо знакомо состояние бесконечного напряжения — когда тревога настолько сильная, что кажется, будто это никогда не закончится и никто не сможет тебе помочь. Я знаю, что из него есть выход, и знаю, как он устроен изнутри.</p>
+        <p>Поэтому в работе для меня важнее всего ясность: вы должны понимать, что с вами происходит, как это называется и что мы с этим делаем. Терапия перестаёт быть страшной, когда перестаёт быть непонятной.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="wrap grid">
+      <p class="label">[06] Процесс</p>
+      <div>
+        <h2>Как происходит работа со мной</h2>
+        <div class="steps">
+          <div class="step">
+            <p class="label">01</p>
+            <h3>Запись</h3>
+            <p>Вы пишете мне в удобный мессенджер, и мы выбираем комфортное время.</p>
+          </div>
+          <div class="step">
+            <p class="label">02</p>
+            <h3>Первая сессия</h3>
+            <p>Подробно обсуждаем ваш запрос. Формируем понимание: что с вами происходит, как это называется и что с этим можно сделать, чтобы вы чувствовали себя лучше.</p>
+            <p>Первая встреча может остаться разовой стратегической сессией, где вы получите ответы на свои вопросы, — или стать началом регулярной совместной работы.</p>
+          </div>
+          <div class="step">
+            <p class="label">03</p>
+            <h3>Стратегия терапии</h3>
+            <p>Если продолжаем регулярную терапию — целостно изучаем вашу сложность и выстраиваем план: цели терапии, что важно делать для их достижения, методы работы, пошаговый план действий.</p>
+          </div>
+          <div class="step">
+            <p class="label">04</p>
+            <h3>Регулярные встречи</h3>
+            <p>Определяем частоту встреч и выбираем комфортное время, исходя из ваших возможностей и запроса.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="obrazovanie">
+    <div class="wrap grid">
+      <p class="label">[07] Квалификация</p>
+      <div>
+        <h2>Образование</h2>
+        <div class="edu">
+          <div class="edu-row"><b>Социальная психология</b><span>МФПУ «Синергия»</span><div class="hours">высшее</div></div>
+          <div class="edu-row"><b>Коррекция тревожно-фобических расстройств</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">534 ч</div></div>
+          <div class="edu-row"><b>Психологическое консультирование и коучинг в сексологии</b><span>ЧУ ДПО «Московский институт сексологии»</span><div class="hours">300 ч</div></div>
+          <div class="edu-row"><b>Психотерапия при расстройствах пограничного спектра</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">144 ч</div></div>
+          <div class="edu-row"><b>Схема-терапия</b><span>Академия современной психологии</span><div class="hours">72 ч</div></div>
+          <div class="edu-row"><b>КПТ, базовый курс</b><span>Ассоциация когнитивно-поведенческой терапии</span><div class="hours">—</div></div>
+          <div class="edu-row"><b>«В глубине ОКР. От понимания к свободе»</b><span>курс Анастасии Терской</span><div class="hours">—</div></div>
+        </div>
+        <p class="note">Это основные обучения. У меня также есть специализация по телесно-ориентированной терапии, гипнотерапии, классическому и современному психоанализу. Я продолжаю своё развитие и регулярно повышаю квалификацию.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stoimost">
+    <div class="wrap grid">
+      <p class="label">[08] Форматы</p>
+      <div>
+        <h2>Форматы работы</h2>
+        <div class="rates">
+          <div class="rate">
+            <p class="label-caps">Онлайн-консультация</p>
+            <div class="price">4 500 ₽<small>55 мин</small></div>
+            <p>Разовая консультация, на которой мы подробно исследуем ваш запрос и обсуждаем первые шаги навстречу изменениям.</p>
+            <div class="addr">Из любого города · видеосвязь</div>
+            <a class="btn btn-sm" href="#kontakty">Записаться</a>
+          </div>
+          <div class="rate">
+            <p class="label-caps">Очная консультация</p>
+            <div class="price">5 000 ₽<small>55 мин</small></div>
+            <p>Разовая консультация очно в Симферополе. Более живой контакт в комфортном кабинете.</p>
+            <div class="addr">Симферополь, ул. Гоголя, 24</div>
+            <a class="btn btn-sm btn-line" href="#kontakty">Записаться</a>
+          </div>
+        </div>
+        <p class="note"><span class="tbd" title="Уточнить у Дарьи: как оплачивается встреча, условия переноса и отмены">Оплата и условия переноса — уточняются.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="vazhno">
+    <div class="wrap grid">
+      <p class="label">[09] Важно знать</p>
+      <div>
+        <h2>Перед началом работы</h2>
+        <div class="cols">
+          <div>
+            <h3>Как я работаю</h3>
+            <ul>
+              <li><span class="label">01</span><span>Диагностика</span></li>
+              <li><span class="label">02</span><span>Информирование</span></li>
+              <li><span class="label">03</span><span>Работа с симптомами</span></li>
+              <li><span class="label">04</span><span>Реконструкция отношений и навыков</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>С чем я не работаю</h3>
+            <ul>
+              <li><span class="label">—</span><span>Семейные пары</span></li>
+              <li><span class="label">—</span><span>Дети и подростки младше 18 лет</span></li>
+              <li><span class="label">—</span><span>Алкогольные, химические и игровые зависимости</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Важные нюансы терапии</h3>
+            <p><span class="tbd" title="Дарья дописывает этот раздел и раздел «Первая встреча»">Раздел дописывается.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="voprosy">
+    <div class="wrap grid">
+      <p class="label">[10] Вопросы</p>
+      <div>
+        <h2>Что спрашивают чаще всего</h2>
+        <div class="faq">
+          <div><h3>Я не знаю, с чего начать</h3><p>Просто напишите в мессенджер и опишите в двух словах, что происходит. Этого достаточно — остальное разберём вместе.</p></div>
+          <div><h3>Сколько нужно встреч?</h3><p><span class="tbd" title="Уточнить типичные сроки">Зависит от запроса.</span> На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности.</p></div>
+          <div><h3>Чем психолог отличается от психиатра?</h3><p>Я не ставлю диагнозы и не выписываю лекарства. Если понадобится медикаментозная поддержка, помогу найти психиатра и продолжу работу параллельно.</p></div>
+          <div><h3>А если во время экспозиции станет хуже?</h3><p>Экспозиция всегда идёт по шагам, которые мы обсуждаем заранее. Мы не переходим к следующему, пока предыдущий не станет переносимым для вас.</p></div>
+          <div><h3>Это конфиденциально?</h3><p>Да. Всё, что происходит на встрече, остаётся между нами — за исключением ситуаций, предусмотренных этическим кодексом психолога.</p></div>
+          <div><h3>Можно ли прийти очно?</h3><p>Да — в Симферополе, ул. Гоголя, 24. Онлайн работаю из любого города.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="kontakty">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <p class="label">[11] Контакты</p>
+          <h2>Напишите прямо сейчас</h2>
+          <p>Кратко поделитесь, что вас беспокоит. Я отвечу лично в течение дня, и мы подберём комфортное время для первой встречи.</p>
+          <p class="reply">Ответ — в течение дня</p>
+        </div>
+        <div class="channels">
+          <a class="btn" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn btn-line" href="https://wa.me/79781123235" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn-line" href="https://vk.me/id136876716" target="_blank" rel="noopener">ВКонтакте</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p>Дарья Пономарцова — психолог, секс-терапевт. Онлайн и очно в Симферополе.</p>
+      <p>Информация на сайте носит справочный характер и не заменяет консультацию специалиста. © 2026</p>
+    </div>
+    <nav class="socials">
+      <a href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram-канал</a>
+      <a href="https://www.youtube.com/@ponomarzovaa" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.instagram.com/ponomarzova" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.portrait img').forEach(function (img) {
+    img.addEventListener('error', function () { img.remove(); });
+    if (img.complete && img.naturalWidth === 0) img.remove();
+  });
+</script>
+</body>
+</html>
