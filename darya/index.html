@@ -3,534 +3,1181 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Дарья Пономарцова — психолог, секс-терапевт. Тревога, панические атаки, ОКР, фобии, ПРЛ. Онлайн и очно в Симферополе.">
 <!--
   Дарья Пономарцова — психолог, секс-терапевт. Одностраничный сайт.
-  Фото: foto.jpg рядом с файлом.
+  Фрагмент: <title> → мета → шрифты → <style> → разметка. build.sh собирает из него документ.
+  Фото: foto.jpg рядом с файлом. OG-превью: og.jpg рядом с файлом.
 -->
-<title>Дарья Пономарцова</title>
+<title>Дарья Пономарцова — психолог, секс-терапевт | Симферополь и онлайн</title>
+<meta name="description" content="Дарья Пономарцова — психолог, секс-терапевт. Тревога, панические атаки, ОКР, фобии, ипохондрия, пограничное расстройство. КПТ, ЭПР, схема-терапия, ЛОРП. Онлайн и очно в Симферополе.">
+<link rel="canonical" href="https://thebenua.github.io/portfolio-site/darya/">
+<meta name="theme-color" content="#F2F5F6" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#10171C" media="(prefers-color-scheme:dark)">
+
+<meta property="og:type" content="profile">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Дарья Пономарцова">
+<meta property="og:title" content="Дарья Пономарцова — психолог, секс-терапевт">
+<meta property="og:description" content="Тревога, панические атаки, ОКР, фобии, пограничное расстройство. Доказательные подходы, прозрачный процесс терапии. Онлайн и очно в Симферополе.">
+<meta property="og:url" content="https://thebenua.github.io/portfolio-site/darya/">
+<meta property="og:image" content="https://thebenua.github.io/portfolio-site/darya/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Дарья Пономарцова, психолог и секс-терапевт">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Дарья Пономарцова — психолог, секс-терапевт">
+<meta name="twitter:description" content="Тревога, панические атаки, ОКР, фобии, пограничное расстройство. Онлайн и очно в Симферополе.">
+<meta name="twitter:image" content="https://thebenua.github.io/portfolio-site/darya/og.jpg">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235C7C93'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='600' fill='%23fff' text-anchor='middle'%3E%D0%94%D0%9F%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%235C7C93'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='600' fill='%23fff' text-anchor='middle'%3E%D0%94%D0%9F%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..700&family=Literata:opsz,wght@7..72,400..600&display=swap">
 
 <style>
+/* ══════════════════════ ТОКЕНЫ ══════════════════════ */
 :root{
-  --sans:"Manrope","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --serif:"Cormorant Garamond","Times New Roman",Georgia,serif;
+  color-scheme:light dark;
 
-  --bg:#FFFFFF;
-  --bg-2:#F4F7F8;
-  --card:#FFFFFF;
-  --ink:#1B252D;
-  --ink-2:#4E606D;
-  --ink-3:#7C8E9B;
+  --sans:"Golos Text","Manrope","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --display:"Literata",Georgia,"Times New Roman",serif;
+
+  /* кегли — 8 ступеней, значений вне списка нет */
+  --fs-100:.8125rem;
+  --fs-200:.9375rem;
+  --fs-300:1.0625rem;
+  --fs-400:1.1875rem;
+  --fs-500:1.375rem;
+  --fs-600:clamp(1.625rem,1.15rem + 1.6vw,2.125rem);
+  --fs-700:clamp(1.875rem,1.20rem + 2.4vw,2.75rem);
+  --fs-800:clamp(2.25rem,1.35rem + 3.9vw,4rem);
+  --fs-quote:clamp(1.5rem,1.05rem + 1.6vw,2rem);
+
+  /* интерлиньяж */
+  --lh-display:1.07;
+  --lh-head:1.18;
+  --lh-ui:1.45;
+  --lh-body:1.62;
+
+  /* трекинг */
+  --tr-display:-.026em;
+  --tr-head:-.016em;
+  --tr-caps:.11em;
+
+  /* мера строки */
+  --measure:34em;
+  --measure-short:24em;
+
+  /* сетка */
+  --wrap:1200px;
+  --gutter:clamp(20px,4.5vw,40px);
+  --gap:clamp(16px,2vw,28px);
+
+  /* отступы, база 4px */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px;
+  --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  --pad-s:clamp(36px,3.6vw,52px);
+  --pad-m:clamp(48px,4.8vw,70px);
+  --pad-l:clamp(56px,5.8vw,86px);
+  --space-head:clamp(24px,3vw,36px);
+
+  /* радиусы */
+  --r-xs:4px; --r-sm:8px; --r-md:14px; --r-lg:20px;
+
+  /* движение */
+  --t-fast:140ms; --t-base:180ms; --ease:cubic-bezier(.2,.6,.2,1);
+
+  /* светлая тема */
+  --paper:#F2F5F6;
+  --band:#E8EEF1;
+  --surface:#FFFFFF;
+  --ink:#16202A;
+  --ink-2:#40525F;
+  --ink-3:#5A6E7C;
+  --ink-4:#8695A0;
+  --line:#DCE3E7;
+  --line-2:#C2CDD4;
   --accent:#5C7C93;
-  --tint:#E9F0F4;
-  --line:#E1E8EC;
-  --line-2:#CBD6DD;
-  --btn-bg:#1B252D;
+  --accent-ink:#3F6076;
+  --accent-soft:#E3EBF0;
+  --deep:#2C4354;
+  --on-deep:#FFFFFF;
+  --on-deep-2:#CFDCE4;
+  --btn-bg:#22303A;
   --btn-fg:#FFFFFF;
-  --resolve:#5C7C93;
+  --sand:#B79C74;
+  --sh-1:0 1px 2px rgba(22,32,42,.05), 0 6px 16px -10px rgba(22,32,42,.12);
+  --sh-2:0 2px 6px rgba(22,32,42,.06), 0 18px 40px -20px rgba(22,32,42,.22);
+  --hi:inset 0 1px 0 rgba(255,255,255,.65);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0F1518;
-    --bg-2:#151D23;
-    --card:#171F25;
-    --ink:#EEF3F6;
-    --ink-2:#B2C2CD;
-    --ink-3:#8496A3;
-    --accent:#93B4CA;
-    --tint:#1F2B33;
-    --line:#26323A;
-    --line-2:#33424B;
-    --btn-bg:#EEF3F6;
-    --btn-fg:#0F1518;
-    --resolve:#3E5D74;
+    --paper:#10171C;
+    --band:#161F25;
+    --surface:#1B262F;
+    --ink:#E9EFF3;
+    --ink-2:#B4C3CD;
+    --ink-3:#90A3AF;
+    --ink-4:#6D808D;
+    --line:#2A353D;
+    --line-2:#3A4952;
+    --accent:#8FB0C7;
+    --accent-ink:#A9C6D8;
+    --accent-soft:#22303B;
+    --deep:#24384A;
+    --on-deep:#EAF1F6;
+    --on-deep-2:#BFD2DE;
+    --btn-bg:#7FA3BC;
+    --btn-fg:#0F171D;
+    --sand:#D3BC9A;
+    --sh-1:0 1px 2px rgba(0,0,0,.45), 0 8px 22px -12px rgba(0,0,0,.55);
+    --sh-2:0 12px 36px -16px rgba(0,0,0,.70);
+    --hi:inset 0 1px 0 rgba(255,255,255,.055);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0F1518;
-  --bg-2:#151D23;
-  --card:#171F25;
-  --ink:#EEF3F6;
-  --ink-2:#B2C2CD;
-  --ink-3:#8496A3;
-  --accent:#93B4CA;
-  --tint:#1F2B33;
-  --line:#26323A;
-  --line-2:#33424B;
-  --btn-bg:#EEF3F6;
-  --btn-fg:#0F1518;
-  --resolve:#3E5D74;
+  --paper:#10171C;
+  --band:#161F25;
+  --surface:#1B262F;
+  --ink:#E9EFF3;
+  --ink-2:#B4C3CD;
+  --ink-3:#90A3AF;
+  --ink-4:#6D808D;
+  --line:#2A353D;
+  --line-2:#3A4952;
+  --accent:#8FB0C7;
+  --accent-ink:#A9C6D8;
+  --accent-soft:#22303B;
+  --deep:#24384A;
+  --on-deep:#EAF1F6;
+  --on-deep-2:#BFD2DE;
+  --btn-bg:#7FA3BC;
+  --btn-fg:#0F171D;
+  --sand:#D3BC9A;
+  --sh-1:0 1px 2px rgba(0,0,0,.45), 0 8px 22px -12px rgba(0,0,0,.55);
+  --sh-2:0 12px 36px -16px rgba(0,0,0,.70);
+  --hi:inset 0 1px 0 rgba(255,255,255,.055);
+  color-scheme:dark;
 }
+:root[data-theme="light"]{color-scheme:light}
 
+/* ══════════════════════ БАЗА ══════════════════════ */
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.68 var(--sans);-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink-2);
+  font:400 var(--fs-300)/var(--lh-body) var(--sans);
+  text-rendering:optimizeLegibility;font-synthesis-weight:none}
 img{display:block;max-width:100%}
 a{color:inherit}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-.wrap{width:min(1120px,calc(100% - 48px));margin-inline:auto}
+h1,h2,h3{margin:0}
+p{margin:0}
+p + p{margin-top:.85em}
+p,li{text-wrap:pretty}
 
-.label{font:500 .72rem/1.5 var(--mono);letter-spacing:.02em;color:var(--ink-3);margin:0}
-.n{font:500 1.3rem/1 var(--serif);color:var(--ink-3);letter-spacing:.02em;font-variant-numeric:lining-nums tabular-nums}
-.label-caps{font:600 .7rem/1.5 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0}
-.pill{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink-2);font:500 .74rem/1.2 var(--sans);letter-spacing:.01em;white-space:nowrap}
+h1{font:700 var(--fs-800)/var(--lh-display) var(--sans);letter-spacing:var(--tr-display);color:var(--ink);text-wrap:balance;hyphens:none}
+h2{font:700 var(--fs-700)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink);text-wrap:balance}
+h3{font:600 var(--fs-500)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
+
+.stat b,.price,.hours,.step .n,.panel .num{font-variant-numeric:tabular-nums lining-nums}
+.abbr{letter-spacing:.02em}
+::selection{background:color-mix(in srgb,var(--accent) 30%,transparent);color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
+.deep :focus-visible{outline-color:#fff}
+section[id],main[id]{scroll-margin-top:84px}
+@media (max-width:1023px){section[id],main[id]{scroll-margin-top:132px}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important}
+}
+
+/* ══════════════════════ СЕТКА ══════════════════════ */
+.wrap{width:min(var(--wrap),100% - 2*var(--gutter));margin-inline:auto}
+.sec-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--gap);row-gap:var(--space-head)}
+.sec-grid > *{grid-column:1/-1}
+@media (min-width:720px){.sec-grid{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media (min-width:1000px){.sec-grid{grid-template-columns:repeat(12,minmax(0,1fr))}}
+
+.section{padding:var(--pad-m) 0}
+.section.pad-s{padding:var(--pad-s) 0}
+.section.pad-l{padding:var(--pad-l) 0}
+.band{background:var(--band)}
+
+/* шапка секции: 01 · Рубрика ————————— мета */
+.sec-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;
+  column-gap:var(--s4);padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
+.rub,.sec-head .meta{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;color:var(--ink-3)}
+.rule{height:1px;background:var(--line);min-width:12px}
+@media (max-width:599px){
+  .sec-head{grid-template-columns:auto 1fr}
+  .sec-head .meta{display:none}
+}
+
+/* ══════════════════════ КНОПКИ И МЕЛОЧИ ══════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:48px;padding:0 24px;border-radius:var(--r-sm);
+  background:var(--btn-bg);color:var(--btn-fg);
+  font:600 var(--fs-200)/1 var(--sans);letter-spacing:-.005em;text-decoration:none;
+  border:1px solid transparent;cursor:pointer;
+  transition:background var(--t-base) var(--ease),box-shadow var(--t-base) var(--ease),
+             transform var(--t-fast) var(--ease),border-color var(--t-base) var(--ease)}
+.btn:hover{background:color-mix(in srgb,var(--btn-bg) 86%,var(--ink));box-shadow:var(--sh-1)}
+.btn:active{transform:none;box-shadow:none}
+@media (prefers-reduced-motion:no-preference){.btn:hover{transform:translateY(-1px)}}
+.btn-sm{min-height:38px;padding:0 16px;font-size:var(--fs-100)}
+.btn-line{background:var(--accent-soft);color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.btn-line:hover{background:color-mix(in srgb,var(--accent) 18%,var(--accent-soft));border-color:var(--accent)}
+.btn-block{width:100%}
+
+.tick{display:block;width:26px;height:2px;background:var(--sand);border-radius:1px}
+.tag{display:inline-flex;align-items:center;padding:4px 9px;border-radius:var(--r-xs);
+  font:600 var(--fs-100)/1.2 var(--sans);letter-spacing:.02em;white-space:nowrap;
+  background:var(--accent-soft);color:var(--accent-ink);
+  border:1px solid color-mix(in srgb,var(--accent) 28%,transparent)}
 .pills{display:flex;flex-wrap:wrap;gap:6px}
 
+/* врезка на подложке с левой полосой */
+.aside-note{background:var(--accent-soft);border-left:3px solid var(--accent);
+  border-radius:0 var(--r-md) var(--r-md) 0;padding:20px 24px;
+  font-size:var(--fs-200);color:var(--ink-2)}
 
-.topbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
-.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;height:64px}
-.mark{font:700 .95rem/1 var(--sans);letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
-.navlinks{display:none;gap:28px;font:500 .84rem/1 var(--sans)}
-.navlinks a{color:var(--ink-2);text-decoration:none}
+/* ══════════════════════ ШАПКА ══════════════════════ */
+.topbar{position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--paper) 86%,transparent);
+  backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);
+  border-bottom:1px solid var(--line);transition:box-shadow var(--t-base) var(--ease)}
+.topbar.is-scrolled{box-shadow:var(--sh-1)}
+.topbar-in{display:flex;align-items:center;gap:var(--s4);height:60px}
+.mark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;
+  font:600 var(--fs-200)/1 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.mono{display:grid;place-items:center;width:28px;height:28px;border-radius:var(--r-xs);
+  background:var(--accent-ink);color:var(--paper);font:700 .75rem/1 var(--sans);letter-spacing:.02em}
+.navlinks{display:flex;align-items:center;gap:22px;margin-left:auto;
+  font:500 var(--fs-100)/1 var(--sans)}
+.navlinks a{color:var(--ink-2);text-decoration:none;padding:6px 0;position:relative;
+  transition:color var(--t-base) var(--ease)}
 .navlinks a:hover{color:var(--ink)}
-@media (min-width:900px){.navlinks{display:flex}}
+.navlinks a[aria-current]{color:var(--accent-ink)}
+.navlinks a[aria-current]::after{content:'';position:absolute;left:0;right:0;bottom:-2px;
+  height:2px;background:var(--accent);border-radius:1px}
+.topbar-act{display:flex;align-items:center;gap:var(--s2);margin-left:var(--s5)}
+.themetog{display:grid;place-items:center;width:34px;height:34px;flex:none;
+  border-radius:var(--r-sm);border:1px solid var(--line);background:transparent;
+  color:var(--ink-2);cursor:pointer;transition:border-color var(--t-base) var(--ease),color var(--t-base) var(--ease)}
+.themetog:hover{border-color:var(--line-2);color:var(--ink)}
+.themetog svg{width:17px;height:17px;display:block}
+.i-sun{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .i-sun{display:block}
+  :root:not([data-theme="light"]) .i-moon{display:none}}
+:root[data-theme="dark"] .i-sun{display:block}
+:root[data-theme="dark"] .i-moon{display:none}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:12px;background:var(--btn-bg);color:var(--btn-fg);font:600 .9rem/1 var(--sans);letter-spacing:-.005em;text-decoration:none;border:1px solid var(--btn-bg);transition:opacity .18s,border-color .18s,color .18s}
-.btn:hover{opacity:.86}
-.btn-sm{padding:10px 16px;font-size:.82rem;border-radius:10px}
-.btn-line{background:transparent;color:var(--ink);border-color:var(--line-2)}
-.btn-line:hover{opacity:1;border-color:var(--ink)}
+@media (max-width:1023px){
+  .topbar-in{height:auto;flex-wrap:wrap;padding-block:11px;row-gap:11px}
+  .topbar-act{margin-left:auto}
+  .navlinks{order:3;width:100%;margin:0;gap:var(--s2);overflow-x:auto;
+    scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x proximity;
+    padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navlinks a{flex:none;scroll-snap-align:start;padding:7px 12px;border-radius:var(--r-sm);
+    background:var(--accent-soft);color:var(--accent-ink);white-space:nowrap}
+  .navlinks a[aria-current]{background:var(--accent-ink);color:var(--paper)}
+  .navlinks a[aria-current]::after{display:none}
+}
+@media (max-width:400px){.mark span:last-child{display:none}}
 
-.section{padding:clamp(64px,7vw,96px) 0;border-top:1px solid var(--line)}
-.grid{display:grid;gap:12px 40px}
-@media (min-width:900px){.grid{grid-template-columns:150px minmax(0,1fr);align-items:baseline}}
-.num{font:500 clamp(2.05rem,3.65vw,2.85rem)/1.12 var(--serif);letter-spacing:.02em;color:var(--ink-3);margin:0}
-@media (max-width:899px){.num{margin-bottom:-4px}}
-.grid-wide > .cards,.grid-wide > .note,.grid-wide > .steps{grid-column:1 / -1}
-h2{font:700 clamp(1.8rem,3.2vw,2.5rem)/1.12 var(--sans);letter-spacing:-.03em;margin:0 0 1.4rem;text-wrap:balance}
-h3{font:600 1.02rem/1.4 var(--sans);letter-spacing:-.012em;margin:0 0 .4rem}
-p{margin:0 0 1rem}
-.prose{max-width:62ch}
-.prose p:last-child{margin-bottom:0}
-.lead{color:var(--ink-2)}
-.note{margin-top:28px;color:var(--ink-3);font-size:.9rem;max-width:60ch}
+/* ══════════════════════ ОБЛОЖКА ══════════════════════ */
+.hero{position:relative;padding:clamp(36px,4.5vw,64px) 0 clamp(40px,4.6vw,64px);isolation:isolate;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(115% 80% at 78% 6%, color-mix(in srgb,var(--accent) 13%,transparent), transparent 62%)}
+.hero > .wrap{position:relative;z-index:1}
+.hero-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:var(--gap);row-gap:var(--s7);align-items:stretch}
+.hero-grid > *{grid-column:1/-1}
+@media (min-width:720px){.hero-grid{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media (min-width:1000px){
+  .hero-grid{grid-template-columns:repeat(12,minmax(0,1fr));row-gap:clamp(32px,4vw,48px);align-items:center}
+  .hero-text{grid-column:1/span 7;justify-content:center}
+  .hero h1{max-width:9ch}
+  .portrait-wrap{grid-column:8/-1;align-self:stretch}
+}
+.hero-text{display:flex;flex-direction:column;justify-content:space-between;gap:var(--s5);
+  padding-block:clamp(0px,1.5vw,20px)}
+.masthead{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:var(--s4);
+  padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
+.masthead span{font:600 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;color:var(--accent-ink);white-space:nowrap}
+.masthead i{height:1px;background:var(--line)}
+.hero h1{margin-top:var(--s5)}
+.hero .lead{font-size:var(--fs-400);color:var(--ink-2);max-width:var(--measure-short);margin-top:var(--s5)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6)}
+.reply{display:flex;align-items:center;gap:10px;margin-top:var(--s6);
+  font:500 var(--fs-100)/1.4 var(--sans);color:var(--ink-3)}
+.reply .tick{flex:none;width:24px}
 
-/* обложка */
-.hero{padding:clamp(56px,7vw,96px) 0 clamp(56px,6vw,88px)}
-.hero-grid{display:grid;gap:48px;align-items:center}
-@media (min-width:900px){.hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px}}
-.hero h1{font:800 clamp(2.6rem,6vw,4.4rem)/1 var(--sans);letter-spacing:-.04em;margin:1.1rem 0 1.4rem;text-wrap:balance}
-.hero .lead{font-size:1.1rem;max-width:44ch;margin-bottom:2rem}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
-.portrait{position:relative;margin:0;aspect-ratio:4/5;max-width:420px;width:100%;justify-self:end;border-radius:20px;overflow:hidden;border:1px solid var(--line)}
-.portrait-slot{position:absolute;inset:0;background:linear-gradient(165deg,var(--bg-2),var(--tint));display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:28px}
-.portrait-slot em{font:400 .8rem/1.5 var(--mono);font-style:normal;color:var(--ink-3)}
+.portrait-wrap{position:relative}
+.portrait-plate{position:absolute;right:-14px;bottom:-14px;width:62%;height:56%;
+  border-radius:var(--r-lg);background:var(--accent);opacity:.15;z-index:0}
+.portrait{position:relative;z-index:1;margin:0;height:100%;
+  min-height:clamp(340px,40vw,520px);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh-2);background:linear-gradient(158deg,var(--band),var(--accent-soft));
+  display:grid;place-items:center}
+.portrait::after{content:'ДП';font:500 clamp(3rem,6vw,4.5rem)/1 var(--display);
+  color:var(--ink-4);letter-spacing:.04em}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}}
+:root[data-theme="dark"] .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}
+@media (max-width:999px){
+  .portrait{min-height:0;aspect-ratio:5/4;border-radius:var(--r-md)}
+  .portrait img{object-position:50% 18%}
+  .portrait-plate{display:none}
+  .hero-cta .btn{flex:1 1 100%}
+}
 
-.stats{display:grid;gap:0;border-top:1px solid var(--line);margin-top:clamp(44px,5vw,72px)}
-@media (min-width:640px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.stat{padding:28px 32px 28px 0;border-bottom:1px solid var(--line)}
-@media (min-width:640px){.stat{border-bottom:none;border-right:1px solid var(--line)}.stat:last-child{border-right:none}.stat + .stat{padding-left:32px}}
-.stat b{display:block;font:700 2rem/1.1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-bottom:8px}
-.stat span{display:block;color:var(--ink-3);font-size:.86rem;line-height:1.5}
+/* панель цифр */
+.stats{display:grid;grid-template-columns:1fr;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--sh-1),var(--hi);overflow:hidden}
+@media (min-width:720px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.stat{padding:24px 28px;border-bottom:1px solid var(--line)}
+.stat:last-child{border-bottom:0}
+@media (min-width:720px){
+  .stat{border-bottom:0;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0}
+}
+.stat .tick{margin-bottom:14px}
+.stat b{display:block;font:700 var(--fs-600)/1.1 var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
+.stat > span{display:block;margin-top:8px;font-size:var(--fs-200);line-height:1.5;color:var(--ink-3)}
+.abbr{display:inline}
 
-/* «знакомо» */
-.symptoms{list-style:none;margin:0 0 40px;padding:0;max-width:60ch;border-top:1px solid var(--line)}
-.symptoms li{font:500 1.12rem/1.5 var(--sans);letter-spacing:-.01em;color:var(--ink-2);padding:18px 0;border-bottom:1px solid var(--line)}
-.resolve{background:var(--resolve);color:#fff;border-radius:16px;padding:clamp(32px,4vw,48px);max-width:64ch}
-.resolve p:first-child{font:600 1.4rem/1.3 var(--sans);letter-spacing:-.02em;color:#fff}
-.resolve p:last-child{margin-bottom:0;color:rgba(255,255,255,.84)}
+/* ══════════════════════ ОБО МНЕ ══════════════════════ */
+@media (min-width:1000px){
+  .about-body{grid-column:1/span 6}
+  .about-side{grid-column:8/-1;align-self:center}
+}
+.about-body{max-width:var(--measure)}
+.about-body p:first-child{font-size:var(--fs-400);color:var(--ink)}
+.dashes{list-style:none;margin:.5em 0 0;padding:0}
+.dashes li{display:grid;grid-template-columns:1.2em minmax(0,1fr)}
+.dashes li::before{content:"—";color:var(--ink-4)}
+.dashes + p{margin-top:.5em}
+.about-side{display:grid;gap:var(--s5)}
+.resolve{background:var(--deep);color:var(--on-deep);border-radius:var(--r-lg);
+  padding:clamp(28px,3.2vw,44px);box-shadow:var(--sh-2),inset 0 1px 0 rgba(255,255,255,.10);
+  display:flex;flex-direction:column;justify-content:center;gap:var(--s4)}
+.resolve .tick{width:28px;background:var(--sand)}
+.resolve .q{font:500 var(--fs-quote)/1.22 var(--display);color:var(--on-deep);text-wrap:balance}
+.resolve p{color:var(--on-deep-2);font-size:var(--fs-300)}
+.pull{background:var(--accent-soft);border-left:3px solid var(--sand);
+  border-radius:0 var(--r-md) var(--r-md) 0;padding:24px 26px;
+  font:500 var(--fs-quote)/1.28 var(--display);color:var(--accent-ink);text-wrap:balance}
 
-/* запросы */
-.cards{display:grid;gap:14px;align-items:stretch;margin-top:8px}
+/* ══════════════════════ ПОДХОД ══════════════════════ */
+@media (min-width:1000px){
+  .approach-lead{grid-column:1/span 7}
+  .approach-note{grid-column:8/-1}
+  .methods{grid-column:1/-1}
+}
+.approach-lead{max-width:var(--measure)}
+.approach-note{background:var(--deep);border-radius:var(--r-md);
+  box-shadow:var(--sh-2),inset 0 1px 0 rgba(255,255,255,.10);padding:26px 28px;
+  font:500 var(--fs-300)/var(--lh-body) var(--sans);color:var(--on-deep);
+  display:flex;flex-direction:column;justify-content:center}
+.approach-note .mk{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;
+  background:var(--sand);color:var(--deep);
+  font:700 var(--fs-200)/1 var(--display);margin-bottom:14px}
+.methods{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:var(--sh-1),var(--hi);overflow:hidden}
+.method{display:grid;grid-template-columns:1fr;gap:var(--s2);padding:22px 22px;
+  border-bottom:1px solid var(--line)}
+.method:last-child{border-bottom:0}
+@media (min-width:720px){
+  .method{grid-template-columns:minmax(0,4fr) minmax(0,8fr);
+    column-gap:clamp(28px,4vw,56px);align-items:baseline;padding:26px 28px}
+}
+.method b{display:block;font:600 var(--fs-500)/var(--lh-head) var(--sans);
+  letter-spacing:var(--tr-head);color:var(--ink)}
+.method .full{display:block;margin-top:6px;font:500 var(--fs-100)/1.4 var(--sans);
+  letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--ink-3)}
+.method p{font-size:var(--fs-300);color:var(--ink-2)}
+
+/* ══════════════════════ ЗАПРОСЫ ══════════════════════ */
+.cards{display:grid;gap:16px;grid-auto-rows:1fr}
 @media (min-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:1000px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px}
-.card h3{margin:0}
-.card p{margin:0;color:var(--ink-2);font-size:.9rem;line-height:1.58}
-.card .pills{margin-top:auto;padding-top:10px}
+@media (min-width:1000px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:22px 20px;box-shadow:var(--sh-1),var(--hi);display:flex;flex-direction:column;
+  transition:box-shadow var(--t-base) var(--ease),border-color var(--t-base) var(--ease),
+             transform var(--t-base) var(--ease)}
+@media (min-width:640px){.card{padding:26px 24px}}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--line));box-shadow:var(--sh-2)}
+@media (prefers-reduced-motion:no-preference){.card:hover{transform:translateY(-2px)}}
+.card-head{display:flex;align-items:center;gap:14px}
+.card h3{font-size:var(--fs-400)}
+.card .ico{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:12px;
+  background:var(--accent-soft);color:var(--accent-ink);
+  border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.card .ico svg{width:24px;height:24px;display:block;fill:none;stroke:currentColor;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card p{margin-top:14px;font-size:var(--fs-200);color:var(--ink-2)}
+.card--cta{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 45%,transparent);
+  box-shadow:none;gap:12px}
+.card--cta:hover{transform:none;box-shadow:none;border-color:var(--accent)}
+.card--cta p{margin-top:0;color:var(--ink-2)}
+.card--cta .btn{margin-top:auto;align-self:flex-start}
 
-/* подход */
-.methods{border-top:1px solid var(--line);margin-top:40px}
-.method{display:grid;gap:6px 32px;padding:26px 0;border-bottom:1px solid var(--line)}
-@media (min-width:720px){.method{grid-template-columns:200px minmax(0,1fr)}}
-.method b{font:600 1.08rem/1.4 var(--sans);letter-spacing:-.012em}
-.method .full{display:block;font:400 .86rem/1.5 var(--sans);color:var(--ink-3);margin-top:2px}
-.method p{margin:0;color:var(--ink-2);font-size:1rem;max-width:58ch}
+/* ══════════════════════ ПРОЦЕСС ══════════════════════ */
+.steps{display:grid;gap:16px}
+@media (min-width:720px){.steps{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}}
+.step{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);
+  border-radius:var(--r-lg);padding:24px 22px 26px;box-shadow:var(--sh-1),var(--hi);
+  display:flex;flex-direction:column;gap:14px}
+@media (min-width:640px){.step{padding:28px 28px 30px}}
+.step-head{display:flex;align-items:center;gap:14px}
+.step .n{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;
+  background:var(--accent-ink);color:var(--paper);font:700 var(--fs-300)/1 var(--sans)}
+.step .step-body{font-size:var(--fs-300);color:var(--ink-2)}
+.cta-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:var(--s4);margin-top:var(--s5);background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--accent);border-radius:var(--r-md);padding:20px 24px;
+  box-shadow:var(--sh-1),var(--hi)}
+.cta-bar p{font-size:var(--fs-300);color:var(--ink);font-weight:500;max-width:46ch}
+@media (max-width:599px){.cta-bar .btn{width:100%}}
 
-/* процесс */
-.steps{border-top:1px solid var(--line)}
-.step{display:grid;gap:6px 40px;padding:26px 0;border-bottom:1px solid var(--line);grid-template-columns:40px minmax(0,1fr);align-items:baseline}
-@media (min-width:900px){.step{grid-template-columns:150px minmax(0,1fr)}}
-.step p{margin:0;color:var(--ink-2);font-size:1rem;max-width:60ch}
-.step h3{font-size:1.1rem}
-.step h3,.step p{grid-column:2}
-.step p.n{grid-column:1;grid-row:1 / span 3;justify-self:start;font:500 1.5rem/1.2 var(--serif);color:var(--ink-3);max-width:none}
-.step p + p{margin-top:.6rem}
+/* ══════════════════════ ОБРАЗОВАНИЕ ══════════════════════ */
+.edu{display:grid}
+.edu-head{display:none}
+@media (min-width:720px){
+  .edu-head{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr) 96px;
+    column-gap:clamp(20px,2.6vw,36px);padding-bottom:10px;border-bottom:1px solid var(--line)}
+  .edu-head span{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+    text-transform:uppercase;color:var(--ink-4)}
+  .edu-head span:last-child{text-align:right}
+}
+.edu-row{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--s4);row-gap:4px;
+  align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.edu-row:first-of-type{border-top:1px solid var(--line)}
+@media (min-width:720px){
+  .edu-row{grid-template-columns:minmax(0,6fr) minmax(0,4fr) 96px;
+    column-gap:clamp(20px,2.6vw,36px);padding:18px 0}
+  .edu-row:first-of-type{border-top:0}
+}
+.edu-row b{font:600 var(--fs-400)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
+.edu-row .org{font-size:var(--fs-200);color:var(--ink-2);grid-column:1/-1}
+@media (min-width:720px){.edu-row .org{grid-column:2;grid-row:1}}
+.edu-row .hours{text-align:right;font:700 var(--fs-600)/1 var(--sans);color:var(--ink);white-space:nowrap}
+@media (max-width:719px){.edu-row .hours{font-size:var(--fs-400)}}
+.edu-row .hours small{font:500 var(--fs-100)/1 var(--sans);color:var(--ink-3);margin-left:.3em}
+.edu-row .hours.is-empty{font:500 var(--fs-400)/1 var(--sans);color:var(--ink-4)}
 
-/* образование */
-.edu{border-top:1px solid var(--line)}
-.edu-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 24px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline}
-.edu-row b{grid-column:1;font:600 1.08rem/1.4 var(--sans);letter-spacing:-.012em}
-.edu-row span{grid-column:1;font-size:.94rem;color:var(--ink-3);line-height:1.5}
-.edu-row .hours{grid-column:2;grid-row:1 / span 2;font:500 1.5rem/1.2 var(--serif);color:var(--ink);white-space:nowrap;font-variant-numeric:lining-nums tabular-nums}
-.edu-row .hours small{font:500 .95rem/1 var(--serif);color:var(--ink-3);margin-left:4px}
+/* ══════════════════════ ВАЖНО ══════════════════════ */
+.cols{display:grid;gap:16px;align-items:start}
+@media (min-width:800px){.cols{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+  box-shadow:var(--sh-1),var(--hi);transition:border-color var(--t-base) var(--ease)}
+.panel:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.panel summary{display:flex;justify-content:space-between;align-items:center;gap:16px;
+  padding:20px 22px;cursor:pointer;list-style:none}
+@media (min-width:640px){.panel summary{padding:22px 28px}}
+.panel summary::-webkit-details-marker{display:none}
+.panel summary h3{font-size:var(--fs-400)}
+.panel summary::after{content:"+";flex:none;display:grid;place-items:center;width:30px;height:30px;
+  border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);
+  font:600 1.2rem/1 var(--sans);transition:transform var(--t-base) var(--ease)}
+.panel[open] summary::after{transform:rotate(45deg)}
+.panel[open] summary{border-bottom:1px solid var(--line)}
+.panel ul{margin:0;padding:6px 22px 8px;list-style:none}
+@media (min-width:640px){.panel ul{padding:6px 28px 10px}}
+.panel li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:14px;align-items:center;
+  padding:14px 0;border-bottom:1px solid var(--line);font-size:var(--fs-300);color:var(--ink-2)}
+.panel li:last-child{border-bottom:0}
+.panel .num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--accent-soft);color:var(--accent-ink);
+  font:600 var(--fs-100)/1 var(--sans);font-variant-numeric:tabular-nums}
+.panel .dash li{grid-template-columns:18px minmax(0,1fr);gap:12px}
+.panel .dash li::before{content:"—";color:var(--ink-4);text-align:center}
 
-/* форматы */
-.rates{display:grid;gap:16px;max-width:800px}
-@media (min-width:640px){.rates{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.rate{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:10px}
-.rate .price{font:700 1.7rem/1.1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.rate .price small{font:400 .78rem/1 var(--mono);color:var(--ink-3);letter-spacing:0;margin-left:8px}
-.rate p{margin:0;color:var(--ink-2);font-size:.92rem}
-.rate .addr{margin-top:auto;padding-top:14px;font:400 .76rem/1.5 var(--mono);color:var(--ink-3)}
-.rate .btn{margin-top:18px;align-self:flex-start}
+/* ══════════════════════ СТОИМОСТЬ ══════════════════════ */
+.rates{display:grid;gap:16px;grid-auto-rows:1fr}
+@media (min-width:720px){.rates{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+.rate{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:26px 22px;box-shadow:var(--sh-1),var(--hi);display:flex;flex-direction:column;gap:12px}
+@media (min-width:640px){.rate{padding:clamp(28px,3vw,40px)}}
+.rate--lead{border-color:color-mix(in srgb,var(--accent) 42%,transparent);box-shadow:var(--sh-2)}
+.rate .kicker{font:600 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;color:var(--ink-3)}
+.rate .price{font:700 var(--fs-600)/1 var(--sans);letter-spacing:var(--tr-head);color:var(--accent-ink)}
+.rate .price small{font:500 var(--fs-100)/1 var(--sans);color:var(--ink-3);letter-spacing:0}
+.rate p{font-size:var(--fs-200);color:var(--ink-2)}
+.rate .addr{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);
+  font:500 var(--fs-100)/1.5 var(--sans);color:var(--ink-3)}
+.rate .alt{font-size:var(--fs-100);color:var(--ink-3);text-align:center}
+.rate .alt a,.rates-foot a{color:var(--accent-ink);text-decoration:underline;
+  text-underline-offset:.22em;text-decoration-thickness:1px;
+  text-decoration-color:color-mix(in srgb,currentColor 40%,transparent)}
+.rates-foot{border-top:1px solid var(--line);padding-top:20px;font-size:var(--fs-200);color:var(--ink-3)}
 
-/* важно знать */
-.cols{display:grid;gap:36px}
-@media (min-width:880px){.cols{grid-template-columns:repeat(3,minmax(0,1fr));gap:40px}}
-.cols h3{font-size:1.18rem;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:4px}
-.cols ul{margin:0;padding:0;list-style:none}
-.cols li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:1rem;color:var(--ink-2);line-height:1.55;align-items:baseline}
-.cols .plain li{grid-template-columns:minmax(0,1fr)}
-.cols li .n{padding-top:0}
-.cols p{margin:14px 0 0;font-size:1rem;color:var(--ink-2)}
+/* ══════════════════════ ВОПРОСЫ ══════════════════════ */
+.faq{display:grid;gap:0 clamp(28px,4vw,56px);align-items:start}
+@media (min-width:1000px){.faq{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.faq details{border-bottom:1px solid var(--line)}
+.faq .col > details:first-child{border-top:1px solid var(--line)}
+.faq summary{display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+  padding:18px 0;cursor:pointer;list-style:none;
+  font:600 var(--fs-400)/1.4 var(--sans);letter-spacing:var(--tr-head);color:var(--ink);
+  transition:color var(--t-base) var(--ease)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;color:var(--accent-ink);font-weight:600;font-size:1.15em;
+  line-height:1;transition:transform var(--t-base) var(--ease)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:hover{color:var(--accent-ink)}
+.faq p{padding-bottom:20px;max-width:var(--measure);font-size:var(--fs-300);color:var(--ink-2)}
 
-/* вопросы */
-.faq{border-top:1px solid var(--line)}
-.faq div{display:grid;gap:8px 32px;padding:24px 0;border-bottom:1px solid var(--line)}
-@media (min-width:820px){.faq div{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
-.faq h3{margin:0}
-.faq p{margin:0;color:var(--ink-2);font-size:1rem}
+/* ══════════════════════ КОНТАКТЫ ══════════════════════ */
+.deep{background:var(--deep);padding:var(--pad-l) 0;
+  --ink:var(--on-deep);--ink-2:var(--on-deep-2);--ink-3:var(--on-deep-2);
+  --line:rgba(255,255,255,.16);--accent-ink:var(--on-deep)}
+.deep h2{color:var(--on-deep)}
+.deep .rub,.deep .sec-head .meta{color:var(--on-deep-2)}
+.deep .rule{background:rgba(255,255,255,.20)}
+.deep .sec-head{border-bottom-color:rgba(255,255,255,.20)}
+@media (min-width:1000px){
+  .contact-text{grid-column:1/span 6}
+  .channels{grid-column:8/-1}
+}
+.contact-text p{color:var(--on-deep-2);max-width:var(--measure-short);margin-top:var(--s4)}
+.contact-text .reply{color:var(--on-deep-2);margin-top:var(--s5)}
+.contact-text .reply .tick{background:var(--accent)}
+.channels{display:grid;gap:10px;align-content:start}
+.channel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;
+  min-height:62px;padding:14px 20px;border-radius:var(--r-md);text-decoration:none;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);
+  font:600 var(--fs-300)/1.2 var(--sans);color:var(--on-deep);
+  transition:background var(--t-base) var(--ease),border-color var(--t-base) var(--ease)}
+.channel:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.32)}
+.channel span{display:block;margin-top:3px;font:500 var(--fs-100)/1.3 var(--sans);color:var(--on-deep-2)}
+.channel .go{font:500 var(--fs-100)/1 var(--sans);color:var(--on-deep-2);letter-spacing:var(--tr-caps)}
+.channel--tg{background:var(--on-deep);border-color:transparent;color:var(--deep)}
+.channel--tg:hover{background:var(--on-deep);border-color:transparent;filter:brightness(.94)}
+.channel--tg span,.channel--tg .go{color:color-mix(in srgb,var(--deep) 72%,transparent)}
 
-/* контакты */
-.contact{background:var(--bg-2);border:1px solid var(--line);border-radius:20px;padding:clamp(32px,4.5vw,56px);display:grid;gap:28px;align-items:end}
-@media (min-width:900px){.contact{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}}
-.contact h2{margin-bottom:.8rem}
-.contact p{margin:0 0 .8rem;color:var(--ink-2);max-width:48ch}
-.contact p:last-of-type{margin-bottom:0}
-.channels{display:flex;flex-wrap:wrap;gap:10px}
-@media (min-width:900px){.channels{justify-content:flex-end}}
-.reply{font:400 .78rem/1.5 var(--mono);color:var(--ink-3)}
+/* ══════════════════════ ФУТЕР ══════════════════════ */
+.foot{padding:44px 0 56px;border-top:1px solid var(--line);
+  color:var(--ink-3);font-size:var(--fs-200);line-height:1.6}
+@media (min-width:900px){
+  .foot-id{grid-column:1/span 5}
+  .foot-nav{grid-column:6/span 3}
+  .foot-soc{grid-column:9/-1}
+}
+.foot-id .name{font:600 var(--fs-300)/1.4 var(--sans);color:var(--ink);display:block}
+.foot-id p{margin-top:10px;max-width:var(--measure-short)}
+.foot-id .copy{margin-top:12px;font-size:var(--fs-100);color:var(--ink-4)}
+.foot h3{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+  text-transform:uppercase;color:var(--ink-4);margin-bottom:14px}
+.foot nav{display:grid;gap:9px;justify-items:start}
+.foot nav a{color:var(--ink-2);text-decoration:underline;text-decoration-thickness:1px;
+  text-underline-offset:.22em;text-decoration-skip-ink:auto;
+  text-decoration-color:color-mix(in srgb,currentColor 32%,transparent);
+  transition:color var(--t-base) var(--ease),text-decoration-color var(--t-base) var(--ease)}
+.foot nav a:hover{color:var(--ink);text-decoration-color:currentColor}
 
-footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--ink-3);font-size:.82rem;line-height:1.6}
-footer .wrap{display:grid;gap:16px}
-@media (min-width:720px){footer .wrap{grid-template-columns:minmax(0,1fr) auto;align-items:start}}
-footer p{margin:0;max-width:52ch}
-.socials{display:flex;flex-wrap:wrap;gap:18px;font:500 .8rem/1.5 var(--sans)}
-.socials a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line-2)}
-.socials a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+/* кнопка «наверх» */
+.totop{position:fixed;right:20px;bottom:20px;z-index:40;display:grid;place-items:center;
+  width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);
+  color:var(--ink-2);box-shadow:var(--sh-1);cursor:pointer;
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity var(--t-base) var(--ease),transform var(--t-base) var(--ease),
+             visibility var(--t-base) var(--ease),border-color var(--t-base) var(--ease)}
+.totop.is-on{opacity:1;visibility:visible;transform:none}
+.totop:hover{border-color:var(--line-2);color:var(--ink)}
+.totop svg{width:16px;height:16px;display:block}
+
+/* ── поправки ритма: в flex-контейнерах с gap отбивка абзаца не нужна ── */
+.resolve p + p,.rate p + p,.approach-note p + p{margin-top:0}
+.hero-text .reply{margin-top:0}
+.stat i.tick{margin-top:0}
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="wrap">
-    <a class="mark" href="#top">Дарья Пономарцова</a>
-    <nav class="navlinks">
+  <div class="wrap topbar-in">
+    <a class="mark" href="#top"><span class="mono">ДП</span><span>Дарья Пономарцова</span></a>
+    <nav class="navlinks" id="nav" aria-label="Разделы страницы">
       <a href="#obo-mne">Обо мне</a>
       <a href="#podhod">Подход</a>
-      <a href="#zaprosy">С чем работаю</a>
-      <a href="#process">Как проходит</a>
+      <a href="#zaprosy">Запросы</a>
+      <a href="#process">Процесс</a>
       <a href="#stoimost">Стоимость</a>
+      <a href="#voprosy">Вопросы</a>
     </nav>
-    <a class="btn btn-sm" href="#kontakty">Написать</a>
+    <div class="topbar-act">
+      <button class="themetog" type="button" id="themetog" aria-label="Переключить тему">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="btn btn-sm" href="#kontakty">Написать</a>
+    </div>
   </div>
 </header>
 
 <main id="top">
+  <span id="sentinel" aria-hidden="true"></span>
 
+  <!-- ─────────── ОБЛОЖКА ─────────── -->
   <section class="hero">
     <div class="wrap">
       <div class="hero-grid">
-        <div>
-          <p class="label-caps">Психолог · секс-терапевт</p>
-          <h1>Дарья Пономарцова</h1>
-          <p class="lead">Работаю с тревогой, паническими атаками, ОКР, фобиями и пограничным расстройством. Онлайн и очно в Симферополе.</p>
-          <div class="hero-cta">
-            <a class="btn" href="#kontakty">Написать мне</a>
-            <a class="btn btn-line" href="#process">Как проходит работа</a>
+        <div class="hero-text">
+          <div>
+            <p class="masthead"><span>Психолог&nbsp;· секс-терапевт</span><i></i></p>
+            <h1>Дарья Пономарцова</h1>
+            <p class="lead">Работаю с&nbsp;тревогой, паническими атаками, <span class="abbr">ОКР</span>, фобиями и&nbsp;пограничным расстройством. Онлайн и&nbsp;очно в&nbsp;Симферополе.</p>
+            <div class="hero-cta">
+              <a class="btn" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Написать в&nbsp;Telegram</a>
+              <a class="btn btn-line" href="#process">Как проходит работа</a>
+            </div>
           </div>
+          <p class="reply"><span class="tick"></span>Отвечаю лично, обычно в&nbsp;течение дня</p>
         </div>
-        <figure class="portrait">
-          <div class="portrait-slot"><em>foto.jpg · 4:5</em></div>
-          <img src="foto.jpg" alt="Дарья Пономарцова">
-        </figure>
-      </div>
-      <div class="stats">
-        <div class="stat"><b>2000+</b><span>часов практики</span></div>
-        <div class="stat"><b>4</b><span>доказательных подхода: КПТ, ЭПР, схема-терапия, ЛОРП</span></div>
-        <div class="stat"><b>Онлайн и очно</b><span>Симферополь, ул. Гоголя, 24</span></div>
+        <div class="portrait-wrap">
+          <div class="portrait-plate" aria-hidden="true"></div>
+          <figure class="portrait">
+            <img src="foto.jpg" width="960" height="1280" decoding="async" fetchpriority="high"
+                 alt="Дарья Пономарцова, психолог и секс-терапевт, портрет">
+          </figure>
+        </div>
+        <div class="stats">
+          <div class="stat"><i class="tick"></i><b>2&nbsp;000+</b><span>часов практики</span></div>
+          <div class="stat"><i class="tick"></i><b>4</b><span>доказательных подхода: <span class="abbr">КПТ</span>, <span class="abbr">ЭПР</span>, схема-терапия, <span class="abbr">ЛОРП</span></span></div>
+          <div class="stat"><i class="tick"></i><b>Симферополь</b><span>очно, ул.&nbsp;Гоголя,&nbsp;24, и&nbsp;онлайн из&nbsp;любого города</span></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="obo-mne">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">I</p>
-      <div class="prose">
-        <h2>Меня зовут Дарья</h2>
-        <p>Я практикующий психолог и секс-терапевт. А ещё я просто человек, который перестал бороться со своей тревогой и научился дружить с ней.</p>
-        <p>Работаю с тревожным спектром — тревога, паника, ОКР, фобии, ипохондрия — и с расстройствами пограничного спектра. Онлайн и очно в Симферополе.</p>
-        <p>Мне очень хорошо знакомо состояние бесконечного напряжения.</p>
-      </div>
-    </div>
-  </section>
-  <section class="section" id="znakomo">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">II</p>
-      <div>
-        <h2>Напряжение, которое не выключается</h2>
-        <ul class="symptoms">
-          <li>Вы просыпаетесь несколько раз за ночь с сильным сердцебиением.</li>
-          <li>Ком в горле не проходит совсем.</li>
-          <li>Мыслей так много, что кажется — они вас поглотят.</li>
-          <li>Не получается приступить ни к одному делу, а к вечеру вы всё равно безумно устали.</li>
-          <li>Мир вокруг словно что-то вторгающееся, а вы сами — маленький и хрупкий.</li>
-          <li>И кажется, что это никогда не закончится и никто не сможет помочь.</li>
+  <!-- ─────────── ОБО МНЕ ─────────── -->
+  <section class="section band pad-l" id="obo-mne">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Обо мне</span><i class="rule"></i><span class="meta">Психолог, секс-терапевт</span></p>
+      <h2>Меня зовут Дарья</h2>
+      <div class="about-body">
+        <p>Я&nbsp;практикующий психолог и&nbsp;секс-терапевт. Работаю с&nbsp;тревожным спектром (тревога, паника, <span class="abbr">ОКР</span>, фобии, ипохондрия) и&nbsp;с&nbsp;расстройствами пограничного спектра. Онлайн и&nbsp;очно в&nbsp;Симферополе.</p>
+        <p>Мне очень хорошо знакомо состояние бесконечного напряжения:</p>
+        <ul class="dashes">
+          <li>вы просыпаетесь несколько раз за&nbsp;ночь с&nbsp;сильным сердцебиением;</li>
+          <li>ком в&nbsp;горле не&nbsp;проходит совсем;</li>
+          <li>мыслей так много, что кажется, они вас поглотят;</li>
+          <li>не&nbsp;получается приступить ни&nbsp;к&nbsp;одному делу, а&nbsp;к&nbsp;вечеру вы всё равно безумно устали;</li>
+          <li>мир вокруг словно что-то вторгающееся, а&nbsp;вы сами маленький и&nbsp;хрупкий.</li>
         </ul>
+        <p>И&nbsp;кажется, что это никогда не&nbsp;закончится и&nbsp;никто не&nbsp;сможет помочь.</p>
+      </div>
+      <div class="about-side">
         <div class="resolve">
-          <p>Из этого состояния есть выход.</p>
-          <p>Я знаю это не только по учебникам — я прошла это сама. Выход лежит не через «возьми себя в руки», а через понимание того, как устроено именно ваше состояние, и через конкретные шаги, которые мы проходим вместе.</p>
+          <span class="tick"></span>
+          <p class="q">Из&nbsp;этого состояния есть выход.</p>
+          <p>Я&nbsp;знаю это не&nbsp;только по&nbsp;учебникам&nbsp;— я&nbsp;прошла это сама. Выход лежит через понимание того, как устроено именно ваше состояние, и&nbsp;через конкретные шаги, которые мы проходим вместе.</p>
         </div>
+        <p class="pull">А&nbsp;ещё я&nbsp;просто человек, который перестал бороться со&nbsp;своей тревогой и&nbsp;научился дружить с&nbsp;ней.</p>
       </div>
     </div>
   </section>
-  <section class="section" id="podhod">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">III</p>
-      <div>
-        <h2>Работаю не с симптомом, а с человеком</h2>
-        <div class="prose">
-          <p>Я работаю комплексно — не только с конкретным симптомом, но и со всей вашей личностью. Я соединяю доказательные подходы: схема-терапию, ЛОРП, КПТ и ЭПР.</p>
-          <p>Я считаю, что одним из ключевых шагов навстречу ремиссии и хорошему самочувствию является понимание собственного состояния, его особенностей и прозрачность процесса терапии. Мне важно, чтобы вы понимали: как именно устроено ваше расстройство, почему мы работаем именно в таком формате, зачем делаем эти упражнения, куда мы по итогу придём.</p>
+
+  <!-- ─────────── ОБРАЗОВАНИЕ ─────────── -->
+  <section class="section pad-s" id="obrazovanie">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Образование</span><i class="rule"></i><span class="meta">7 программ</span></p>
+      <h2>Образование</h2>
+      <div class="edu">
+        <div class="edu-head" aria-hidden="true"><span>Программа</span><span>Учреждение</span><span>Объём</span></div>
+        <div class="edu-row">
+          <b>Социальная психология</b>
+          <span class="org"><span class="abbr">МФПУ</span>&nbsp;«Синергия»&nbsp;· высшее</span>
+          <span class="hours is-empty"></span>
         </div>
-        <div class="methods">
-          <div class="method">
-            <div><b>КПТ</b><span class="full">когнитивно-поведенческая терапия</span></div>
-            <p>Работа со связкой «мысль → эмоция → действие»: учимся замечать её и менять.</p>
-          </div>
-          <div class="method">
-            <div><b>ЭПР</b><span class="full">экспозиция с предотвращением реакции</span></div>
-            <p>Основной метод при ОКР и фобиях: постепенное столкновение с тем, что пугает, без выполнения ритуала. По шагам, согласованным заранее.</p>
-          </div>
-          <div class="method">
-            <div><b>Схема-терапия</b><span class="full">72 часа обучения</span></div>
-            <p>Работа с устойчивыми схемами, которые сложились задолго до симптома и продолжают его запускать.</p>
-          </div>
-          <div class="method">
-            <div><b>ЛОРП</b><span class="full">личностно-ориентированная реконструктивная психотерапия</span></div>
-            <p>Состояние рассматривается через историю личности и отношения, а не как отдельный симптом.</p>
-          </div>
+        <div class="edu-row">
+          <b>Коррекция тревожно-фобических расстройств</b>
+          <span class="org">Школа эмоционального интеллекта и&nbsp;психотерапии</span>
+          <span class="hours">534<small>ч</small></span>
         </div>
-        <p class="note">Для меня важно информирование в процессе терапии — чтобы даже после первой встречи вы смогли иметь хотя бы небольшое понимание, что с вами происходит, как это называется и что с этим можно сделать.</p>
-      </div>
-    </div>
-  </section>
-  <section class="section" id="zaprosy">
-    <div class="wrap grid grid-wide">
-      <p class="num" aria-hidden="true">IV</p>
-      <div>
-        <h2>С чем ко мне можно обратиться</h2>
-      </div>
-        <div class="cards">
-          <div class="card">
-            <h3>Тревога и тревожные расстройства</h3>
-            <p>Тревога, которая создаёт сильное напряжение: сложно замедлиться и расслабиться, хроническая усталость, постоянный контроль.</p>
-            <div class="pills"><span class="pill">КПТ</span><span class="pill">Схема-терапия</span></div>
-          </div>
-          <div class="card">
-            <h3>Панические атаки</h3>
-            <p>Сильная паника или паническое расстройство. Мысли «я схожу с ума», «я умираю». Избегание определённых мест, страх выйти из дома.</p>
-            <div class="pills"><span class="pill">КПТ</span><span class="pill">ЭПР</span></div>
-          </div>
-          <div class="card">
-            <h3>ОКР и навязчивые мысли</h3>
-            <p>Ритуалы, перепроверки, страх собственных мыслей и образов. Ощущение: «если я не сделаю это действие, всё вокруг разрушится».</p>
-            <div class="pills"><span class="pill">ЭПР</span><span class="pill">КПТ</span></div>
-          </div>
-          <div class="card">
-            <h3>Фобии и страхи</h3>
-            <p>Социофобия, страх открытых пространств, кардиофобия, страх летать на самолёте, страх насекомых и другие.</p>
-            <div class="pills"><span class="pill">ЭПР</span><span class="pill">КПТ</span></div>
-          </div>
-          <div class="card">
-            <h3>Пограничное расстройство личности</h3>
-            <p>Установленный диагноз или подозрение на него.</p>
-            <div class="pills"><span class="pill">Схема-терапия</span><span class="pill">ЛОРП</span></div>
-          </div>
-          <div class="card">
-            <h3>Ипохондрия и страх за здоровье</h3>
-            <p>Регулярный поиск болезней, боли и симптомы, которые обостряются из-за стресса.</p>
-            <div class="pills"><span class="pill">КПТ</span><span class="pill">ЭПР</span></div>
-          </div>
-          <div class="card">
-            <h3>Сексуализированные запросы</h3>
-            <p>Коммуникация с партнёром, отсутствующий или слабый оргазм, болезненный половой акт, сниженное либидо.</p>
-            <div class="pills"><span class="pill">Секс-терапия</span></div>
-          </div>
-          <div class="card">
-            <h3>Отношения с собой и другими</h3>
-            <p>Конфликты в отношениях, неуверенность в себе, эмоциональное выгорание, кризисы, вопросы самооценки.</p>
-            <div class="pills"><span class="pill">Схема-терапия</span><span class="pill">ЛОРП</span></div>
-          </div>
+        <div class="edu-row">
+          <b>Психологическое консультирование и коучинг в сексологии</b>
+          <span class="org">ЧУ&nbsp;ДПО «Московский институт сексологии»</span>
+          <span class="hours">300<small>ч</small></span>
         </div>
-        <p class="note">Если вы не нашли свою проблему в списке, но хотели бы поработать вместе — напишите мне, я подскажу.</p>
-    </div>
-  </section>
-  <section class="section" id="process">
-    <div class="wrap grid grid-wide">
-      <p class="num" aria-hidden="true">V</p>
-      <div>
-        <h2>Как происходит работа со мной</h2>
-      </div>
-        <div class="steps">
-          <div class="step">
-            <p class="n">1</p>
-            <h3>Запись</h3>
-            <p>Вы пишете мне в удобный мессенджер, и мы выбираем комфортное время.</p>
-          </div>
-          <div class="step">
-            <p class="n">2</p>
-            <h3>Первая сессия</h3>
-            <p>Подробно обсуждаем ваш запрос. Формируем понимание: что с вами происходит, как это называется и что с этим можно сделать, чтобы вы чувствовали себя лучше.</p>
-            <p>Первая встреча может остаться разовой стратегической сессией, где вы получите ответы на свои вопросы, — или стать началом регулярной совместной работы.</p>
-          </div>
-          <div class="step">
-            <p class="n">3</p>
-            <h3>Стратегия терапии</h3>
-            <p>Если продолжаем регулярную терапию — целостно изучаем вашу сложность и выстраиваем план: цели терапии, что важно делать для их достижения, методы работы, пошаговый план действий.</p>
-          </div>
-          <div class="step">
-            <p class="n">4</p>
-            <h3>Регулярные встречи</h3>
-            <p>Определяем частоту встреч и выбираем комфортное время, исходя из ваших возможностей и запроса.</p>
-          </div>
+        <div class="edu-row">
+          <b>Психотерапия при расстройствах пограничного спектра</b>
+          <span class="org">Школа эмоционального интеллекта и&nbsp;психотерапии</span>
+          <span class="hours">144<small>ч</small></span>
         </div>
-    </div>
-  </section>
-  <section class="section" id="obrazovanie">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">VI</p>
-      <div>
-        <h2>Образование</h2>
-        <div class="edu">
-          <div class="edu-row"><b>Социальная психология</b><span>МФПУ «Синергия»</span><div class="hours"><small>высшее</small></div></div>
-          <div class="edu-row"><b>Коррекция тревожно-фобических расстройств</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">534<small>ч</small></div></div>
-          <div class="edu-row"><b>Психологическое консультирование и коучинг в сексологии</b><span>ЧУ ДПО «Московский институт сексологии»</span><div class="hours">300<small>ч</small></div></div>
-          <div class="edu-row"><b>Психотерапия при расстройствах пограничного спектра</b><span>Школа эмоционального интеллекта и психотерапии</span><div class="hours">144<small>ч</small></div></div>
-          <div class="edu-row"><b>Схема-терапия</b><span>Академия современной психологии</span><div class="hours">72<small>ч</small></div></div>
-          <div class="edu-row"><b>КПТ, базовый курс</b><span>Ассоциация когнитивно-поведенческой терапии</span><div class="hours">—</div></div>
-          <div class="edu-row"><b>«В глубине ОКР. От понимания к свободе»</b><span>курс Анастасии Терской</span><div class="hours">—</div></div>
+        <div class="edu-row">
+          <b><span class="abbr">КПТ</span>, базовый курс</b>
+          <span class="org">Ассоциация когнитивно-поведенческой терапии</span>
+          <span class="hours">100<small>ч</small></span>
         </div>
-        <p class="note">Это основные обучения. У меня также есть специализация по телесно-ориентированной терапии, гипнотерапии, классическому и современному психоанализу. Я продолжаю своё развитие и регулярно повышаю квалификацию.</p>
-      </div>
-    </div>
-  </section>
-  <section class="section" id="stoimost">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">VII</p>
-      <div>
-        <h2>Форматы работы</h2>
-        <div class="rates">
-          <div class="rate">
-            <p class="label-caps">Онлайн-консультация</p>
-            <div class="price">4 500 ₽<small>55 мин</small></div>
-            <p>Разовая консультация, на которой мы подробно исследуем ваш запрос и обсуждаем первые шаги навстречу изменениям.</p>
-            <div class="addr">Из любого города · видеосвязь</div>
-            <a class="btn btn-sm" href="#kontakty">Записаться</a>
-          </div>
-          <div class="rate">
-            <p class="label-caps">Очная консультация</p>
-            <div class="price">5 000 ₽<small>55 мин</small></div>
-            <p>Разовая консультация очно в Симферополе. Более живой контакт в комфортном кабинете.</p>
-            <div class="addr">Симферополь, ул. Гоголя, 24</div>
-            <a class="btn btn-sm btn-line" href="#kontakty">Записаться</a>
-          </div>
+        <div class="edu-row">
+          <b>Схема-терапия</b>
+          <span class="org">Академия современной психологии</span>
+          <span class="hours">72<small>ч</small></span>
         </div>
-        
-      </div>
-    </div>
-  </section>
-  <section class="section" id="vazhno">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">VIII</p>
-      <div>
-        <h2>Перед началом работы</h2>
-        <div class="cols">
-          <div>
-            <h3>Как я работаю</h3>
-            <ul>
-              <li><span class="n">1</span><span>Диагностика</span></li>
-              <li><span class="n">2</span><span>Информирование</span></li>
-              <li><span class="n">3</span><span>Работа с симптомами</span></li>
-              <li><span class="n">4</span><span>Реконструкция отношений и навыков</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>С чем я не работаю</h3>
-            <ul class="plain">
-              <li>Семейные пары</li>
-              <li>Дети и подростки младше 18 лет</li>
-              <li>Алкогольные, химические и игровые зависимости</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Важные нюансы терапии</h3>
-            <p>Раздел готовится.</p>
-          </div>
+        <div class="edu-row">
+          <b>«В глубине ОКР. От понимания к свободе»</b>
+          <span class="org">курс Анастасии Терской</span>
+          <span class="hours is-empty"></span>
         </div>
       </div>
+      <p class="aside-note">Это основные обучения. У&nbsp;меня также есть специализация по&nbsp;телесно-ориентированной терапии, гипнотерапии, классическому и&nbsp;современному психоанализу. Я&nbsp;продолжаю своё развитие и&nbsp;регулярно повышаю квалификацию.</p>
     </div>
   </section>
-  <section class="section" id="voprosy">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">IX</p>
-      <div>
-        <h2>Что спрашивают чаще всего</h2>
-        <div class="faq">
-          <div><h3>Я не знаю, с чего начать</h3><p>Просто напишите в мессенджер и опишите в двух словах, что происходит. Этого достаточно — остальное разберём вместе.</p></div>
-          <div><h3>Сколько нужно встреч?</h3><p>Зависит от запроса. На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности.</p></div>
-          <div><h3>Чем психолог отличается от психиатра?</h3><p>Я не ставлю диагнозы и не выписываю лекарства. Если понадобится медикаментозная поддержка, помогу найти психиатра и продолжу работу параллельно.</p></div>
-          <div><h3>А если во время экспозиции станет хуже?</h3><p>Экспозиция всегда идёт по шагам, которые мы обсуждаем заранее. Мы не переходим к следующему, пока предыдущий не станет переносимым для вас.</p></div>
-          <div><h3>Это конфиденциально?</h3><p>Да. Всё, что происходит на встрече, остаётся между нами — за исключением ситуаций, предусмотренных этическим кодексом психолога.</p></div>
-          <div><h3>Можно ли прийти очно?</h3><p>Да — в Симферополе, ул. Гоголя, 24. Онлайн работаю из любого города.</p></div>
-        </div>
+
+  <!-- ─────────── ПОДХОД ─────────── -->
+  <section class="section band" id="podhod">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Подход</span><i class="rule"></i><span class="meta">4 подхода</span></p>
+      <h2>Работаю не с симптомом, а с человеком</h2>
+      <div class="approach-lead">
+        <p>Я&nbsp;работаю комплексно: не&nbsp;только с&nbsp;конкретным симптомом, но&nbsp;и&nbsp;со&nbsp;всей вашей личностью. Я&nbsp;соединяю доказательные подходы: схема-терапию, <span class="abbr">ЛОРП</span>, <span class="abbr">КПТ</span> и&nbsp;<span class="abbr">ЭПР</span>.</p>
+        <p>Я&nbsp;считаю, что одним из&nbsp;ключевых шагов навстречу ремиссии и&nbsp;хорошему самочувствию является понимание собственного состояния, его особенностей и&nbsp;прозрачность процесса терапии. Мне важно, чтобы вы понимали: как именно устроено ваше расстройство, почему мы работаем именно в&nbsp;таком формате, зачем делаем эти упражнения, куда мы по&nbsp;итогу придём.</p>
       </div>
-    </div>
-  </section>
-  <section class="section" id="kontakty">
-    <div class="wrap grid">
-      <p class="num" aria-hidden="true">X</p>
-      <div class="contact">
-        <div>
-          <h2>Напишите прямо сейчас</h2>
-          <p>Кратко поделитесь, что вас беспокоит. Я отвечу лично в течение дня, и мы подберём комфортное время для первой встречи.</p>
-          <p class="reply">Ответ — в течение дня</p>
+      <div class="approach-note">
+        <span class="mk" aria-hidden="true">i</span>
+        <p>Для меня важно информирование в&nbsp;процессе терапии, чтобы даже после первой встречи у&nbsp;вас было хотя&nbsp;бы небольшое понимание того, что с&nbsp;вами происходит.</p>
+      </div>
+      <div class="methods">
+        <div class="method">
+          <div><b class="abbr">КПТ</b><span class="full">когнитивно-поведенческая терапия</span></div>
+          <p>Работа со&nbsp;связкой «мысль&nbsp;→ эмоция&nbsp;→ действие»: учимся замечать её&nbsp;и&nbsp;менять.</p>
         </div>
-        <div class="channels">
-          <a class="btn" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram</a>
-          <a class="btn btn-line" href="https://wa.me/79781123235" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn btn-line" href="https://vk.me/id136876716" target="_blank" rel="noopener">ВКонтакте</a>
+        <div class="method">
+          <div><b class="abbr">ЭПР</b><span class="full">экспозиция с предотвращением реакции</span></div>
+          <p>Основной метод при <span class="abbr">ОКР</span> и&nbsp;фобиях: постепенное столкновение с&nbsp;тем, что пугает, без выполнения ритуала. По&nbsp;шагам, согласованным заранее.</p>
+        </div>
+        <div class="method">
+          <div><b>Схема-терапия</b><span class="full">расширенная версия <span class="abbr">КПТ</span></span></div>
+          <p>Работа с&nbsp;устойчивыми схемами, которые сложились задолго до&nbsp;симптома и&nbsp;продолжают его запускать.</p>
+        </div>
+        <div class="method">
+          <div><b class="abbr">ЛОРП</b><span class="full">личностно-ориентированная реконструктивная психотерапия</span></div>
+          <p>Состояние рассматривается через призму системы отношений, через их&nbsp;реконструкцию трансформируется проблема.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ─────────── ЗАПРОСЫ ─────────── -->
+  <section class="section pad-l" id="zaprosy">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Запросы</span><i class="rule"></i><span class="meta">8 направлений</span></p>
+      <h2>С чем ко мне можно обратиться</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 7c2 0 2.5-1.5 5-1.5S9.5 7 12 7s2.5-1.5 5-1.5S19.5 7 22 7M2 12c2 0 2.5-1.5 5-1.5S9.5 12 12 12s2.5-1.5 5-1.5S19.5 12 22 12M2 17c2 0 2.5-1.5 5-1.5S9.5 17 12 17s2.5-1.5 5-1.5S19.5 17 22 17"/></svg></span>
+            <h3>Тревога и тревожные расстройства</h3>
+          </div>
+          <p>Тревога, которая создаёт сильное напряжение: сложно замедлиться и&nbsp;расслабиться, хроническая усталость, постоянный контроль.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M4 12h3.5l2-3 3 6 2-3H20"/></svg></span>
+            <h3>Панические атаки</h3>
+          </div>
+          <p>Сильная паника или паническое расстройство. Мысли «я схожу с&nbsp;ума», «я умираю». Избегание определённых мест, страх выйти из&nbsp;дома.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+            <h3><span class="abbr">ОКР</span> и навязчивые мысли</h3>
+          </div>
+          <p>Ритуалы, перепроверки, страх собственных мыслей и&nbsp;образов. Ощущение: «если я&nbsp;не&nbsp;сделаю это действие, всё вокруг разрушится».</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9 12l2 2 4-4"/></svg></span>
+            <h3>Фобии и страхи</h3>
+          </div>
+          <p>Социофобия, страх открытых пространств, кардиофобия, страх летать на&nbsp;самолёте, страх насекомых и&nbsp;другие.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 1 0 9 4.5 4.5 0 0 0 0 9"/></svg></span>
+            <h3>Пограничное расстройство личности</h3>
+          </div>
+          <p>Установленный диагноз или подозрение на&nbsp;него.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>
+            <h3>Ипохондрия и страх за здоровье</h3>
+          </div>
+          <p>Регулярный поиск болезней, боли и&nbsp;симптомы, которые обостряются из-за стресса.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg></span>
+            <h3>Сексуализированные запросы</h3>
+          </div>
+          <p>Коммуникация с&nbsp;партнёром, отсутствующий или слабый оргазм, болезненный половой акт, сниженное либидо.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg></span>
+            <h3>Отношения с собой и другими</h3>
+          </div>
+          <p>Конфликты в&nbsp;отношениях, неуверенность в&nbsp;себе, эмоциональное выгорание, кризисы, вопросы самооценки.</p>
+        </div>
+        <div class="card card--cta">
+          <h3>Не нашли свой запрос?</h3>
+          <p>Если вы не&nbsp;нашли свою проблему в&nbsp;списке выше, но&nbsp;вам&nbsp;бы хотелось поработать совместно, напиши мне для уточнения. Я&nbsp;подскажу.</p>
+          <a class="btn btn-sm" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Написать в&nbsp;Telegram</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── ПРОЦЕСС ─────────── -->
+  <section class="section band" id="process">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Процесс</span><i class="rule"></i><span class="meta">4 шага</span></p>
+      <h2>Как происходит работа со мной</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-head"><span class="n">1</span><h3>Запись</h3></div>
+          <div class="step-body"><p>Вы пишете мне в&nbsp;удобный мессенджер, и&nbsp;мы выбираем комфортное время.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="n">2</span><h3>Первая сессия</h3></div>
+          <div class="step-body">
+            <p>Подробно обсуждаем ваш запрос. Формируем понимание: что с&nbsp;вами происходит, как это называется и&nbsp;что с&nbsp;этим можно сделать, чтобы вы чувствовали себя лучше.</p>
+            <p>Первая встреча может остаться разовой стратегической сессией, где вы получите ответы на&nbsp;свои вопросы, или стать началом регулярной совместной работы.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="n">3</span><h3>Стратегия терапии</h3></div>
+          <div class="step-body"><p>Если продолжаем регулярную терапию, целостно изучаем вашу сложность и&nbsp;выстраиваем план: цели терапии, что важно делать для их&nbsp;достижения, методы работы, пошаговый план действий.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="n">4</span><h3>Регулярные встречи</h3></div>
+          <div class="step-body"><p>Определяем частоту встреч и&nbsp;выбираем комфортное время, исходя из&nbsp;ваших возможностей и&nbsp;запроса.</p></div>
+        </div>
+      </div>
+      <div class="cta-bar">
+        <p>Записаться на&nbsp;первую встречу</p>
+        <a class="btn" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Написать в&nbsp;Telegram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── ВАЖНО ─────────── -->
+  <section class="section" id="vazhno">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Важно</span><i class="rule"></i><span class="meta">Прозрачные правила</span></p>
+      <h2>Что ещё важно знать перед началом работы</h2>
+      <div class="cols">
+        <details class="panel">
+          <summary><h3>Как я работаю</h3></summary>
+          <ul>
+            <li><span class="num">1</span><span>Диагностика</span></li>
+            <li><span class="num">2</span><span>Информирование</span></li>
+            <li><span class="num">3</span><span>Работа с&nbsp;симптомами</span></li>
+            <li><span class="num">4</span><span>Реконструкция отношений и&nbsp;навыков</span></li>
+          </ul>
+        </details>
+        <details class="panel">
+          <summary><h3>С чем я не работаю</h3></summary>
+          <ul class="dash">
+            <li><span>Семейные пары</span></li>
+            <li><span>Дети и&nbsp;подростки младше 18&nbsp;лет</span></li>
+            <li><span>Алкогольные, химические и&nbsp;игровые зависимости</span></li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── СТОИМОСТЬ ─────────── -->
+  <section class="section band" id="stoimost">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Стоимость</span><i class="rule"></i><span class="meta">2 формата</span></p>
+      <h2>Форматы работы</h2>
+      <div class="rates">
+        <div class="rate rate--lead">
+          <span class="tick"></span>
+          <p class="kicker">Онлайн-консультация</p>
+          <p class="price">4&nbsp;500&#8239;₽ <small>·&nbsp;55&nbsp;мин</small></p>
+          <p>Разовая консультация, на&nbsp;которой мы подробно исследуем ваш запрос и&nbsp;обсуждаем первые шаги навстречу изменениям.</p>
+          <p class="addr">Из&nbsp;любого города&nbsp;· видеосвязь</p>
+          <a class="btn btn-block" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Записаться</a>
+          <p class="alt">или <a href="https://wa.me/79781123235" target="_blank" rel="noopener">написать в&nbsp;WhatsApp</a></p>
+        </div>
+        <div class="rate">
+          <span class="tick"></span>
+          <p class="kicker">Очная консультация</p>
+          <p class="price">5&nbsp;000&#8239;₽ <small>·&nbsp;55&nbsp;мин</small></p>
+          <p>Разовая консультация очно в&nbsp;Симферополе. Более живой контакт в&nbsp;комфортном кабинете.</p>
+          <p class="addr">Симферополь, ул.&nbsp;Гоголя,&nbsp;24</p>
+          <a class="btn btn-line btn-block" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Записаться</a>
+          <p class="alt">или <a href="https://wa.me/79781123235" target="_blank" rel="noopener">написать в&nbsp;WhatsApp</a></p>
+        </div>
+      </div>
+      <p class="rates-foot">Записаться можно в&nbsp;любом мессенджере:
+        <a href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram</a>&nbsp;·
+        <a href="https://wa.me/79781123235" target="_blank" rel="noopener">WhatsApp</a>&nbsp;·
+        <a href="https://vk.me/id136876716" target="_blank" rel="noopener">ВКонтакте</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ─────────── ВОПРОСЫ ─────────── -->
+  <section class="section pad-s" id="voprosy">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Вопросы</span><i class="rule"></i><span class="meta">6 ответов</span></p>
+      <h2>Что спрашивают чаще всего</h2>
+      <div class="faq">
+        <div class="col">
+          <details open>
+            <summary>Я не знаю, с чего начать</summary>
+            <p>Просто напишите в&nbsp;мессенджер и&nbsp;опишите в&nbsp;двух словах, что происходит. Этого достаточно, остальное разберём вместе.</p>
+          </details>
+          <details>
+            <summary>Сколько нужно встреч?</summary>
+            <p>Зависит от&nbsp;запроса. На&nbsp;первой встрече я&nbsp;скажу, на&nbsp;какой примерно горизонт мы смотрим, чтобы у&nbsp;вас не&nbsp;было ощущения бесконечности.</p>
+          </details>
+          <details>
+            <summary>Чем психолог отличается от психиатра?</summary>
+            <p>Я&nbsp;не&nbsp;ставлю диагнозы и&nbsp;не&nbsp;выписываю лекарства. Если понадобится медикаментозная поддержка, помогу найти психиатра и&nbsp;продолжу работу параллельно.</p>
+          </details>
+        </div>
+        <div class="col">
+          <details open>
+            <summary>А если во время экспозиции станет хуже?</summary>
+            <p>Экспозиция всегда идёт по&nbsp;шагам, которые мы обсуждаем заранее. Мы не&nbsp;переходим к&nbsp;следующему, пока предыдущий не&nbsp;станет переносимым для вас.</p>
+          </details>
+          <details>
+            <summary>Это конфиденциально?</summary>
+            <p>Да. Всё, что происходит на&nbsp;встрече, остаётся между нами, за&nbsp;исключением ситуаций, предусмотренных этическим кодексом психолога.</p>
+          </details>
+          <details>
+            <summary>Можно ли прийти очно?</summary>
+            <p>Да, в&nbsp;Симферополе, ул.&nbsp;Гоголя,&nbsp;24. Онлайн работаю из&nbsp;любого города.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── КОНТАКТЫ ─────────── -->
+  <section class="deep" id="kontakty">
+    <div class="wrap sec-grid">
+      <p class="sec-head"><span class="rub">Контакты</span><i class="rule"></i><span class="meta">Ответ в течение дня</span></p>
+      <div class="contact-text">
+        <h2>Напишите прямо сейчас</h2>
+        <p>Кратко поделитесь, что вас беспокоит. Я&nbsp;отвечу лично в&nbsp;течение дня, и&nbsp;мы подберём комфортное время для первой встречи.</p>
+        <p class="reply"><span class="tick"></span>Ответ&nbsp;— в&nbsp;течение дня</p>
+      </div>
+      <div class="channels">
+        <a class="channel channel--tg" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">
+          <div>Telegram<span>@ponomarzovaa</span></div><span class="go">Написать</span>
+        </a>
+        <a class="channel" href="https://wa.me/79781123235" target="_blank" rel="noopener">
+          <div>WhatsApp<span>+7&nbsp;978 112-32-35</span></div><span class="go">Написать</span>
+        </a>
+        <a class="channel" href="https://vk.me/id136876716" target="_blank" rel="noopener">
+          <div>ВКонтакте<span>vk.me</span></div><span class="go">Написать</span>
+        </a>
+        <a class="channel" href="tel:+79781123235">
+          <div>Позвонить<span>+7&nbsp;978 112-32-35</span></div><span class="go">Набрать</span>
+        </a>
+      </div>
+    </div>
+  </section>
 </main>
 
-<footer>
-  <div class="wrap">
-    <div>
-      <p>Дарья Пономарцова — психолог, секс-терапевт. Онлайн и очно в Симферополе.</p>
-      <p>Информация на сайте носит справочный характер и не заменяет консультацию специалиста. © 2026</p>
+<footer class="foot">
+  <div class="wrap sec-grid">
+    <div class="foot-id">
+      <span class="name">Дарья Пономарцова</span>
+      <p>Психолог, секс-терапевт. Онлайн и&nbsp;очно в&nbsp;Симферополе, ул.&nbsp;Гоголя,&nbsp;24.</p>
+      <p>Информация на&nbsp;сайте носит справочный характер и&nbsp;не&nbsp;заменяет консультацию специалиста.</p>
+      <p class="copy">©&nbsp;2026 · Дарья Пономарцова</p>
     </div>
-    <nav class="socials">
-      <a href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram-канал</a>
-      <a href="https://www.youtube.com/@ponomarzovaa" target="_blank" rel="noopener">YouTube</a>
-      <a href="https://www.instagram.com/ponomarzova" target="_blank" rel="noopener">Instagram</a>
-    </nav>
+    <div class="foot-nav">
+      <h3>Разделы</h3>
+      <nav aria-label="Разделы сайта">
+        <a href="#obo-mne">Обо мне</a>
+        <a href="#podhod">Подход</a>
+        <a href="#zaprosy">Запросы</a>
+        <a href="#process">Процесс</a>
+        <a href="#obrazovanie">Образование</a>
+        <a href="#stoimost">Стоимость</a>
+      </nav>
+    </div>
+    <div class="foot-soc">
+      <h3>Ещё</h3>
+      <nav aria-label="Профили в соцсетях">
+        <a href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">Telegram-канал</a>
+        <a href="https://www.youtube.com/@ponomarzovaa" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/ponomarzova" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+    </div>
   </div>
 </footer>
 
+<button class="totop" type="button" id="totop" aria-label="Наверх">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://thebenua.github.io/portfolio-site/darya/#person",
+      "name": "Дарья Пономарцова",
+      "jobTitle": "Психолог, секс-терапевт",
+      "image": "https://thebenua.github.io/portfolio-site/darya/foto.jpg",
+      "url": "https://thebenua.github.io/portfolio-site/darya/",
+      "knowsAbout": ["Тревожные расстройства", "Панические атаки", "ОКР", "Фобии", "Ипохондрия", "Пограничное расстройство личности", "Секс-терапия", "Когнитивно-поведенческая терапия", "Экспозиция с предотвращением реакции", "Схема-терапия"],
+      "alumniOf": [
+        {"@type": "EducationalOrganization", "name": "МФПУ «Синергия»"},
+        {"@type": "EducationalOrganization", "name": "Школа эмоционального интеллекта и психотерапии"},
+        {"@type": "EducationalOrganization", "name": "ЧУ ДПО «Московский институт сексологии»"},
+        {"@type": "EducationalOrganization", "name": "Академия современной психологии"},
+        {"@type": "EducationalOrganization", "name": "Ассоциация когнитивно-поведенческой терапии"}
+      ],
+      "sameAs": [
+        "https://t.me/ponomarzovaa",
+        "https://www.youtube.com/@ponomarzovaa",
+        "https://www.instagram.com/ponomarzova",
+        "https://vk.com/id136876716"
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://thebenua.github.io/portfolio-site/darya/#practice",
+      "name": "Дарья Пономарцова — психолог, секс-терапевт",
+      "description": "Психологическая помощь при тревоге, панических атаках, ОКР, фобиях, ипохондрии и расстройствах пограничного спектра. Онлайн и очно в Симферополе.",
+      "url": "https://thebenua.github.io/portfolio-site/darya/",
+      "image": "https://thebenua.github.io/portfolio-site/darya/foto.jpg",
+      "provider": {"@id": "https://thebenua.github.io/portfolio-site/darya/#person"},
+      "priceRange": "4500–5000 ₽",
+      "telephone": "+7 978 112-32-35",
+      "areaServed": "RU",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Симферополь",
+        "streetAddress": "ул. Гоголя, 24",
+        "addressCountry": "RU"
+      },
+      "availableChannel": [
+        {"@type": "ServiceChannel", "name": "Telegram", "serviceUrl": "https://t.me/ponomarzovaa"},
+        {"@type": "ServiceChannel", "name": "WhatsApp", "serviceUrl": "https://wa.me/79781123235"},
+        {"@type": "ServiceChannel", "name": "ВКонтакте", "serviceUrl": "https://vk.me/id136876716"}
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Форматы работы",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "price": "4500",
+            "priceCurrency": "RUB",
+            "itemOffered": {"@type": "Service", "name": "Онлайн-консультация, 55 минут"}
+          },
+          {
+            "@type": "Offer",
+            "price": "5000",
+            "priceCurrency": "RUB",
+            "itemOffered": {"@type": "Service", "name": "Очная консультация в Симферополе, 55 минут"}
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://thebenua.github.io/portfolio-site/darya/#faq",
+      "mainEntity": [
+        {"@type": "Question", "name": "Я не знаю, с чего начать", "acceptedAnswer": {"@type": "Answer", "text": "Просто напишите в мессенджер и опишите в двух словах, что происходит. Этого достаточно, остальное разберём вместе."}},
+        {"@type": "Question", "name": "Сколько нужно встреч?", "acceptedAnswer": {"@type": "Answer", "text": "Зависит от запроса. На первой встрече я скажу, на какой примерно горизонт мы смотрим, чтобы у вас не было ощущения бесконечности."}},
+        {"@type": "Question", "name": "Чем психолог отличается от психиатра?", "acceptedAnswer": {"@type": "Answer", "text": "Я не ставлю диагнозы и не выписываю лекарства. Если понадобится медикаментозная поддержка, помогу найти психиатра и продолжу работу параллельно."}},
+        {"@type": "Question", "name": "А если во время экспозиции станет хуже?", "acceptedAnswer": {"@type": "Answer", "text": "Экспозиция всегда идёт по шагам, которые мы обсуждаем заранее. Мы не переходим к следующему, пока предыдущий не станет переносимым для вас."}},
+        {"@type": "Question", "name": "Это конфиденциально?", "acceptedAnswer": {"@type": "Answer", "text": "Да. Всё, что происходит на встрече, остаётся между нами, за исключением ситуаций, предусмотренных этическим кодексом психолога."}},
+        {"@type": "Question", "name": "Можно ли прийти очно?", "acceptedAnswer": {"@type": "Answer", "text": "Да, в Симферополе, ул. Гоголя, 24. Онлайн работаю из любого города."}}
+      ]
+    }
+  ]
+}
+</script>
+
 <script>
-  document.querySelectorAll('.portrait img').forEach(function (img) {
-    img.addEventListener('error', function () { img.remove(); });
-    if (img.complete && img.naturalWidth === 0) img.remove();
+(function () {
+  var root = document.documentElement;
+  var motionOK = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* тема */
+  try {
+    var saved = localStorage.getItem("theme");
+    if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
+  } catch (e) {}
+  var tog = document.getElementById("themetog");
+  if (tog) tog.addEventListener("click", function () {
+    var isDark = root.getAttribute("data-theme") === "dark" ||
+      (!root.hasAttribute("data-theme") && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var next = isDark ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("theme", next); } catch (e) {}
   });
+
+  /* тень у шапки + кнопка «наверх» */
+  var bar = document.querySelector(".topbar");
+  var top = document.getElementById("totop");
+  var sentinel = document.getElementById("sentinel");
+  if (sentinel && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      var pinned = !entries[0].isIntersecting;
+      if (bar) bar.classList.toggle("is-scrolled", pinned);
+    }, { rootMargin: "-1px 0px 0px 0px" }).observe(sentinel);
+
+    var deep = document.getElementById("obo-mne");
+    if (deep && top) new IntersectionObserver(function (entries) {
+      top.classList.toggle("is-on", !entries[0].isIntersecting && entries[0].boundingClientRect.top < 0);
+    }, { rootMargin: "-40% 0px 0px 0px" }).observe(deep);
+  }
+  if (top) top.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: motionOK ? "smooth" : "auto" });
+  });
+
+  /* активный пункт меню */
+  var links = Array.prototype.slice.call(document.querySelectorAll("#nav a"));
+  var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  if ("IntersectionObserver" in window) {
+    var seen = {};
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { seen[en.target.id] = en.isIntersecting; });
+      var current = null;
+      targets.forEach(function (t) { if (t && seen[t.id]) current = current || t.id; });
+      links.forEach(function (a) {
+        if (current && a.getAttribute("href") === "#" + current) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    targets.forEach(function (t) { if (t) spy.observe(t); });
+  }
+
+  /* портрет: если файла нет — остаётся подложка с монограммой */
+  var img = document.querySelector(".portrait img");
+  if (img) {
+    var hide = function () { img.hidden = true; };
+    img.addEventListener("error", hide);
+    if (img.complete && img.naturalWidth === 0) hide();
+  }
+})();
 </script>
 </body>
 </html>
