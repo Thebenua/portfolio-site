@@ -29,8 +29,8 @@
 <meta name="twitter:description" content="Тревога, панические атаки, ОКР, фобии, пограничное расстройство. Онлайн и очно в Симферополе.">
 <meta name="twitter:image" content="https://thebenua.github.io/portfolio-site/darya/og.jpg">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235C7C93'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='600' fill='%23fff' text-anchor='middle'%3E%D0%94%D0%9F%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%235C7C93'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='600' fill='%23fff' text-anchor='middle'%3E%D0%94%D0%9F%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%235C7C93'/%3E%3Ccircle%20cx='32'%20cy='23'%20r='7.5'%20fill='%23E6D2AE'/%3E%3Cpath%20d='M11%2040c7-7%2014-7%2021%200s14%207%2021%200'%20fill='none'%20stroke='%23FFFFFF'%20stroke-width='4.2'%20stroke-linecap='round'/%3E%3Cpath%20d='M16%2050.5c5.3-5%2010.7-5%2016%200s10.7%205%2016%200'%20fill='none'%20stroke='%23FFFFFF'%20stroke-opacity='.55'%20stroke-width='3.6'%20stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='0'%20fill='%235C7C93'/%3E%3Ccircle%20cx='32'%20cy='23'%20r='7.5'%20fill='%23E6D2AE'/%3E%3Cpath%20d='M11%2040c7-7%2014-7%2021%200s14%207%2021%200'%20fill='none'%20stroke='%23FFFFFF'%20stroke-width='4.2'%20stroke-linecap='round'/%3E%3Cpath%20d='M16%2050.5c5.3-5%2010.7-5%2016%200s10.7%205%2016%200'%20fill='none'%20stroke='%23FFFFFF'%20stroke-opacity='.55'%20stroke-width='3.6'%20stroke-linecap='round'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,8 +255,6 @@ section[id],main[id]{scroll-margin-top:84px}
 .topbar-in{display:flex;align-items:center;gap:var(--s4);height:60px}
 .mark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;
   font:600 var(--fs-200)/1 var(--sans);letter-spacing:-.01em;color:var(--ink)}
-.mono{display:grid;place-items:center;width:28px;height:28px;border-radius:var(--r-xs);
-  background:var(--accent-ink);color:var(--paper);font:700 .75rem/1 var(--sans);letter-spacing:.02em}
 .navlinks{display:flex;align-items:center;gap:22px;margin-left:auto;
   font:500 var(--fs-100)/1 var(--sans)}
 .navlinks a{color:var(--ink-2);text-decoration:none;padding:6px 0;position:relative;
@@ -289,7 +287,6 @@ section[id],main[id]{scroll-margin-top:84px}
   .navlinks a[aria-current]{background:var(--accent-ink);color:var(--paper)}
   .navlinks a[aria-current]::after{display:none}
 }
-@media (max-width:400px){.mark span:last-child{display:none}}
 
 /* ══════════════════════ ОБЛОЖКА ══════════════════════ */
 .hero{position:relative;padding:clamp(36px,4.5vw,64px) 0 clamp(40px,4.6vw,64px);isolation:isolate;overflow:hidden}
@@ -326,8 +323,6 @@ section[id],main[id]{scroll-margin-top:84px}
   min-height:clamp(340px,40vw,520px);border-radius:var(--r-lg);overflow:hidden;
   box-shadow:var(--sh-2);background:linear-gradient(158deg,var(--band),var(--accent-soft));
   display:grid;place-items:center}
-.portrait::after{content:'ДП';font:500 clamp(3rem,6vw,4.5rem)/1 var(--display);
-  color:var(--ink-4);letter-spacing:.04em}
 .portrait img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}}
 :root[data-theme="dark"] .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}
@@ -366,15 +361,30 @@ section[id],main[id]{scroll-margin-top:84px}
 .dashes li::before{content:"—";color:var(--ink-4)}
 .dashes + p{margin-top:.5em}
 .about-side{display:grid;gap:var(--s5)}
-.resolve{background:var(--deep);color:var(--on-deep);border-radius:var(--r-lg);
-  padding:clamp(28px,3.2vw,44px);box-shadow:var(--sh-2),inset 0 1px 0 rgba(255,255,255,.10);
+.resolve{position:relative;isolation:isolate;overflow:hidden;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--deep) 84%,var(--accent)) 0%,var(--deep) 48%,color-mix(in srgb,var(--deep) 88%,#000) 100%);
+  color:var(--on-deep);border-radius:var(--r-lg);
+  padding:clamp(28px,3.2vw,44px);
+  box-shadow:var(--sh-2),inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.07);
   display:flex;flex-direction:column;justify-content:center;gap:var(--s4)}
-.resolve .tick{width:28px;background:var(--sand)}
+.resolve::before{content:"";position:absolute;z-index:-1;right:-22%;bottom:-48%;width:78%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--sand) 30%,transparent),transparent 72%);pointer-events:none}
+.resolve::after{content:"";position:absolute;z-index:-1;left:-18%;top:-40%;width:60%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.07),transparent 72%);pointer-events:none}
+.resolve .tick{width:32px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--sand),color-mix(in srgb,var(--sand) 35%,transparent))}
 .resolve .q{font:500 var(--fs-quote)/1.22 var(--display);color:var(--on-deep);text-wrap:balance}
 .resolve p{color:var(--on-deep-2);font-size:var(--fs-300)}
-.pull{background:var(--accent-soft);border-left:3px solid var(--sand);
-  border-radius:0 var(--r-md) var(--r-md) 0;padding:24px 26px;
-  font:500 var(--fs-quote)/1.28 var(--display);color:var(--accent-ink);text-wrap:balance}
+.pull{position:relative;margin:0;display:grid;gap:var(--s3);
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(24px,3vw,34px) clamp(24px,3vw,36px) clamp(22px,2.6vw,28px);
+  box-shadow:var(--sh-1),var(--hi)}
+.pull::before{content:"“";display:block;height:.42em;font:600 4.5rem/.72 var(--display);color:var(--sand);opacity:.9;
+  margin-top:-.12em;pointer-events:none}
+.pull blockquote{margin:0;font:500 var(--fs-quote)/1.28 var(--display);color:var(--accent-ink);text-wrap:balance}
+.pull figcaption{display:flex;align-items:center;gap:12px;margin-top:var(--s2);
+  font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--ink-3)}
+.pull figcaption::before{content:"";width:22px;height:2px;border-radius:1px;background:var(--sand)}
+.pull:hover{border-color:color-mix(in srgb,var(--sand) 45%,var(--line))}
 
 /* ══════════════════════ ПОДХОД ══════════════════════ */
 @media (min-width:1000px){
@@ -606,7 +616,7 @@ section[id],main[id]{scroll-margin-top:84px}
 
 <header class="topbar">
   <div class="wrap topbar-in">
-    <a class="mark" href="#top"><span class="mono">ДП</span><span>Дарья Пономарцова</span></a>
+    <a class="mark" href="#top">Дарья Пономарцова</a>
     <nav class="navlinks" id="nav" aria-label="Разделы страницы">
       <a href="#obo-mne">Обо мне</a>
       <a href="#podhod">Подход</a>
@@ -683,7 +693,10 @@ section[id],main[id]{scroll-margin-top:84px}
           <p class="q">Из&nbsp;этого состояния есть выход.</p>
           <p>Я&nbsp;знаю это не&nbsp;только по&nbsp;учебникам&nbsp;— я&nbsp;прошла это сама. Выход лежит через понимание того, как устроено именно ваше состояние, и&nbsp;через конкретные шаги, которые мы проходим вместе.</p>
         </div>
-        <p class="pull">А&nbsp;ещё я&nbsp;просто человек, который перестал бороться со&nbsp;своей тревогой и&nbsp;научился дружить с&nbsp;ней.</p>
+        <figure class="pull">
+          <blockquote>А&nbsp;ещё я&nbsp;просто человек, который перестал бороться со&nbsp;своей тревогой и&nbsp;научился дружить с&nbsp;ней.</blockquote>
+          <figcaption>Дарья</figcaption>
+        </figure>
       </div>
     </div>
   </section>
