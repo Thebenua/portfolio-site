@@ -181,7 +181,6 @@ h1{font:800 var(--fs-800)/var(--lh-display) var(--sans);letter-spacing:var(--tr-
 h2{font:700 var(--fs-700)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink);text-wrap:balance}
 h3{font:600 var(--fs-500)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
 
-.stat b,.price,.hours,.step .n,.panel .num{font-variant-numeric:tabular-nums lining-nums}
 .abbr{letter-spacing:.02em}
 .hl{font-weight:600;color:var(--ink)}
 ::selection{background:color-mix(in srgb,var(--accent) 30%,transparent);color:var(--ink)}
@@ -499,7 +498,7 @@ section[id],main[id]{scroll-margin-top:84px}
 .panel > ul > li:last-child{border-bottom:0}
 .panel .num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
   background:var(--accent-soft);color:var(--accent-ink);
-  font:500 1.1rem/1 var(--display);font-variant-numeric:tabular-nums}
+  font:500 1.1rem/1 var(--display)}
 .panel .dash li{grid-template-columns:18px minmax(0,1fr);gap:12px}
 .panel .dash li::before{content:"—";color:var(--ink-4);text-align:center}
 .panel .body{padding:8px 22px 22px;font-size:var(--fs-300);color:var(--ink-2)}
@@ -613,6 +612,9 @@ section[id],main[id]{scroll-margin-top:84px}
 .resolve p + p,.rate p + p,.approach-note p + p{margin-top:0}
 .hero-text .reply{margin-top:0}
 .stat i.tick{margin-top:0}
+/* прямые (маюскульные) цифры везде — ставится в конце, т.к. font: сбрасывает font-variant-numeric */
+*,*::before,*::after{font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1,"onum" 0}
+.stat b,.price,.hours,.step .n,.panel .num,.approach-note .mk{font-variant-numeric:lining-nums tabular-nums;font-feature-settings:"lnum" 1,"onum" 0,"tnum" 1}
 </style>
 </head>
 <body>
