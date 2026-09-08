@@ -34,15 +34,16 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..700&family=Literata:opsz,wght@7..72,400..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
 /* ══════════════════════ ТОКЕНЫ ══════════════════════ */
 :root{
   color-scheme:light dark;
 
-  --sans:"Golos Text","Manrope","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --display:"Literata",Georgia,"Times New Roman",serif;
+  --sans:"Manrope","Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --display:"Cormorant Garamond","Times New Roman",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 
   /* кегли — 8 ступеней, значений вне списка нет */
   --fs-100:.8125rem;
@@ -53,7 +54,7 @@
   --fs-600:clamp(1.625rem,1.15rem + 1.6vw,2.125rem);
   --fs-700:clamp(1.875rem,1.20rem + 2.4vw,2.75rem);
   --fs-800:clamp(2.25rem,1.35rem + 3.9vw,4rem);
-  --fs-quote:clamp(1.5rem,1.05rem + 1.6vw,2rem);
+  --fs-quote:clamp(1.75rem,1.2rem + 1.9vw,2.4rem);
 
   /* интерлиньяж */
   --lh-display:1.07;
@@ -62,7 +63,7 @@
   --lh-body:1.62;
 
   /* трекинг */
-  --tr-display:-.026em;
+  --tr-display:-.036em;
   --tr-head:-.016em;
   --tr-caps:.11em;
 
@@ -176,12 +177,13 @@ p{margin:0}
 p + p{margin-top:.85em}
 p,li{text-wrap:pretty}
 
-h1{font:700 var(--fs-800)/var(--lh-display) var(--sans);letter-spacing:var(--tr-display);color:var(--ink);text-wrap:balance;hyphens:none}
+h1{font:800 var(--fs-800)/var(--lh-display) var(--sans);letter-spacing:var(--tr-display);color:var(--ink);text-wrap:balance;hyphens:none}
 h2{font:700 var(--fs-700)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink);text-wrap:balance}
 h3{font:600 var(--fs-500)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
 
 .stat b,.price,.hours,.step .n,.panel .num{font-variant-numeric:tabular-nums lining-nums}
 .abbr{letter-spacing:.02em}
+.hl{font-weight:600;color:var(--ink)}
 ::selection{background:color-mix(in srgb,var(--accent) 30%,transparent);color:var(--ink)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:var(--r-sm)}
 .deep :focus-visible{outline-color:#fff}
@@ -210,7 +212,7 @@ section[id],main[id]{scroll-margin-top:84px}
 /* шапка секции: 01 · Рубрика ————————— мета */
 .sec-head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;
   column-gap:var(--s4);padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
-.rub,.sec-head .meta{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+.rub,.sec-head .meta{font:500 .72rem/1 var(--mono);letter-spacing:.06em;
   text-transform:uppercase;color:var(--ink-3)}
 .rule{height:1px;background:var(--line);min-width:12px}
 @media (max-width:599px){
@@ -306,14 +308,14 @@ section[id],main[id]{scroll-margin-top:84px}
   padding-block:clamp(0px,1.5vw,20px)}
 .masthead{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:var(--s4);
   padding-bottom:var(--s4);border-bottom:1px solid var(--line)}
-.masthead span{font:600 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+.masthead span{font:500 .72rem/1 var(--mono);letter-spacing:.06em;
   text-transform:uppercase;color:var(--accent-ink);white-space:nowrap}
 .masthead i{height:1px;background:var(--line)}
 .hero h1{margin-top:var(--s5)}
 .hero .lead{font-size:var(--fs-400);color:var(--ink-2);max-width:var(--measure-short);margin-top:var(--s5)}
 .hero-cta{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6)}
 .reply{display:flex;align-items:center;gap:10px;margin-top:var(--s6);
-  font:500 var(--fs-100)/1.4 var(--sans);color:var(--ink-3)}
+  font:400 .78rem/1.5 var(--mono);color:var(--ink-3)}
 .reply .tick{flex:none;width:24px}
 
 .portrait-wrap{position:relative}
@@ -327,8 +329,9 @@ section[id],main[id]{scroll-margin-top:84px}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}}
 :root[data-theme="dark"] .portrait{box-shadow:var(--sh-2),inset 0 0 0 1px rgba(143,176,199,.18)}
 @media (max-width:999px){
-  .portrait{min-height:0;aspect-ratio:5/4;border-radius:var(--r-md)}
-  .portrait img{object-position:50% 18%}
+  .portrait-wrap{width:100%;max-width:480px;margin-inline:auto}
+  .portrait{min-height:0;aspect-ratio:3/4;border-radius:var(--r-md)}
+  .portrait img{object-position:50% 50%}
   .portrait-plate{display:none}
   .hero-cta .btn{flex:1 1 100%}
 }
@@ -372,19 +375,8 @@ section[id],main[id]{scroll-margin-top:84px}
 .resolve::after{content:"";position:absolute;z-index:-1;left:-18%;top:-40%;width:60%;aspect-ratio:1;border-radius:50%;
   background:radial-gradient(closest-side,rgba(255,255,255,.07),transparent 72%);pointer-events:none}
 .resolve .tick{width:32px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--sand),color-mix(in srgb,var(--sand) 35%,transparent))}
-.resolve .q{font:500 var(--fs-quote)/1.22 var(--display);color:var(--on-deep);text-wrap:balance}
+.resolve .q{font:500 var(--fs-quote)/1.16 var(--display);color:var(--on-deep);text-wrap:balance}
 .resolve p{color:var(--on-deep-2);font-size:var(--fs-300)}
-.pull{position:relative;margin:0;display:grid;gap:var(--s3);
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
-  padding:clamp(24px,3vw,34px) clamp(24px,3vw,36px) clamp(22px,2.6vw,28px);
-  box-shadow:var(--sh-1),var(--hi)}
-.pull::before{content:"“";display:block;height:.42em;font:600 4.5rem/.72 var(--display);color:var(--sand);opacity:.9;
-  margin-top:-.12em;pointer-events:none}
-.pull blockquote{margin:0;font:500 var(--fs-quote)/1.28 var(--display);color:var(--accent-ink);text-wrap:balance}
-.pull figcaption{display:flex;align-items:center;gap:12px;margin-top:var(--s2);
-  font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--ink-3)}
-.pull figcaption::before{content:"";width:22px;height:2px;border-radius:1px;background:var(--sand)}
-.pull:hover{border-color:color-mix(in srgb,var(--sand) 45%,var(--line))}
 
 /* ══════════════════════ ПОДХОД ══════════════════════ */
 @media (min-width:1000px){
@@ -411,7 +403,7 @@ section[id],main[id]{scroll-margin-top:84px}
 }
 .method b{display:block;font:600 var(--fs-500)/var(--lh-head) var(--sans);
   letter-spacing:var(--tr-head);color:var(--ink)}
-.method .full{display:block;margin-top:6px;font:500 var(--fs-100)/1.4 var(--sans);
+.method .full{display:block;margin-top:6px;font:400 .72rem/1.5 var(--mono);
   letter-spacing:var(--tr-caps);text-transform:uppercase;color:var(--ink-3)}
 .method p{font-size:var(--fs-300);color:var(--ink-2)}
 
@@ -449,7 +441,7 @@ section[id],main[id]{scroll-margin-top:84px}
 @media (min-width:640px){.step{padding:28px 28px 30px}}
 .step-head{display:flex;align-items:center;gap:14px}
 .step .n{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;
-  background:var(--accent-ink);color:var(--paper);font:700 var(--fs-300)/1 var(--sans)}
+  background:var(--accent-ink);color:var(--paper);font:500 1.4rem/1 var(--display)}
 .step .step-body{font-size:var(--fs-300);color:var(--ink-2)}
 .cta-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
   gap:var(--s4);margin-top:var(--s5);background:var(--surface);border:1px solid var(--line);
@@ -464,7 +456,7 @@ section[id],main[id]{scroll-margin-top:84px}
 @media (min-width:720px){
   .edu-head{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,4fr) 96px;
     column-gap:clamp(20px,2.6vw,36px);padding-bottom:10px;border-bottom:1px solid var(--line)}
-  .edu-head span{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+  .edu-head span{font:500 .72rem/1 var(--mono);letter-spacing:.06em;
     text-transform:uppercase;color:var(--ink-4)}
   .edu-head span:last-child{text-align:right}
 }
@@ -479,9 +471,9 @@ section[id],main[id]{scroll-margin-top:84px}
 .edu-row b{font:600 var(--fs-400)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
 .edu-row .org{font-size:var(--fs-200);color:var(--ink-2);grid-column:1/-1}
 @media (min-width:720px){.edu-row .org{grid-column:2;grid-row:1}}
-.edu-row .hours{text-align:right;font:700 var(--fs-600)/1 var(--sans);color:var(--ink);white-space:nowrap}
+.edu-row .hours{text-align:right;font:500 var(--fs-600)/1 var(--display);color:var(--ink);white-space:nowrap}
 @media (max-width:719px){.edu-row .hours{font-size:var(--fs-400)}}
-.edu-row .hours small{font:500 var(--fs-100)/1 var(--sans);color:var(--ink-3);margin-left:.3em}
+.edu-row .hours small{font:500 var(--fs-200)/1 var(--display);color:var(--ink-3);margin-left:.3em}
 .edu-row .hours.is-empty{font:500 var(--fs-400)/1 var(--sans);color:var(--ink-4)}
 
 /* ══════════════════════ ВАЖНО ══════════════════════ */
@@ -500,16 +492,27 @@ section[id],main[id]{scroll-margin-top:84px}
   font:600 1.2rem/1 var(--sans);transition:transform var(--t-base) var(--ease)}
 .panel[open] summary::after{transform:rotate(45deg)}
 .panel[open] summary{border-bottom:1px solid var(--line)}
-.panel ul{margin:0;padding:6px 22px 8px;list-style:none}
-@media (min-width:640px){.panel ul{padding:6px 28px 10px}}
-.panel li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:14px;align-items:center;
+.panel > ul{margin:0;padding:6px 22px 8px;list-style:none}
+@media (min-width:640px){.panel > ul{padding:6px 28px 10px}}
+.panel > ul > li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:14px;align-items:center;
   padding:14px 0;border-bottom:1px solid var(--line);font-size:var(--fs-300);color:var(--ink-2)}
-.panel li:last-child{border-bottom:0}
+.panel > ul > li:last-child{border-bottom:0}
 .panel .num{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
   background:var(--accent-soft);color:var(--accent-ink);
-  font:600 var(--fs-100)/1 var(--sans);font-variant-numeric:tabular-nums}
+  font:500 1.1rem/1 var(--display);font-variant-numeric:tabular-nums}
 .panel .dash li{grid-template-columns:18px minmax(0,1fr);gap:12px}
 .panel .dash li::before{content:"—";color:var(--ink-4);text-align:center}
+.panel .body{padding:8px 22px 22px;font-size:var(--fs-300);color:var(--ink-2)}
+@media (min-width:640px){.panel .body{padding:10px 28px 26px}}
+.panel .body .lead-in{font:600 var(--fs-400)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
+.panel .body .dashes{margin:.5em 0 .85em}
+.panel .stages{margin:0;padding:4px 22px 8px;list-style:none;display:grid}
+@media (min-width:640px){.panel .stages{padding:4px 28px 10px}}
+.panel .stages li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:14px;align-items:start;
+  padding:16px 0;border-bottom:1px solid var(--line);font-size:var(--fs-300);color:var(--ink-2)}
+.panel .stages li:last-child{border-bottom:0}
+.panel .stages .num{margin-top:.1em}
+.panel .stages b{display:block;margin-bottom:6px;font:600 var(--fs-400)/var(--lh-head) var(--sans);letter-spacing:var(--tr-head);color:var(--ink)}
 
 /* ══════════════════════ СТОИМОСТЬ ══════════════════════ */
 .rates{display:grid;gap:16px;grid-auto-rows:1fr}
@@ -518,13 +521,13 @@ section[id],main[id]{scroll-margin-top:84px}
   padding:26px 22px;box-shadow:var(--sh-1),var(--hi);display:flex;flex-direction:column;gap:12px}
 @media (min-width:640px){.rate{padding:clamp(28px,3vw,40px)}}
 .rate--lead{border-color:color-mix(in srgb,var(--accent) 42%,transparent);box-shadow:var(--sh-2)}
-.rate .kicker{font:600 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+.rate .kicker{font:500 .72rem/1 var(--mono);letter-spacing:.06em;
   text-transform:uppercase;color:var(--ink-3)}
 .rate .price{font:700 var(--fs-600)/1 var(--sans);letter-spacing:var(--tr-head);color:var(--accent-ink)}
-.rate .price small{font:500 var(--fs-100)/1 var(--sans);color:var(--ink-3);letter-spacing:0}
+.rate .price small{font:400 .78rem/1 var(--mono);color:var(--ink-3);letter-spacing:0}
 .rate p{font-size:var(--fs-200);color:var(--ink-2)}
 .rate .addr{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);
-  font:500 var(--fs-100)/1.5 var(--sans);color:var(--ink-3)}
+  font:400 .76rem/1.5 var(--mono);color:var(--ink-3)}
 .rate .alt{font-size:var(--fs-100);color:var(--ink-3);text-align:center}
 .rate .alt a,.rates-foot a{color:var(--accent-ink);text-decoration:underline;
   text-underline-offset:.22em;text-decoration-thickness:1px;
@@ -570,7 +573,7 @@ section[id],main[id]{scroll-margin-top:84px}
   transition:background var(--t-base) var(--ease),border-color var(--t-base) var(--ease)}
 .channel:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.32)}
 .channel span{display:block;margin-top:3px;font:500 var(--fs-100)/1.3 var(--sans);color:var(--on-deep-2)}
-.channel .go{font:500 var(--fs-100)/1 var(--sans);color:var(--on-deep-2);letter-spacing:var(--tr-caps)}
+.channel .go{font:500 .72rem/1 var(--mono);color:var(--on-deep-2);letter-spacing:.06em}
 .channel--tg{background:var(--on-deep);border-color:transparent;color:var(--deep)}
 .channel--tg:hover{background:var(--on-deep);border-color:transparent;filter:brightness(.94)}
 .channel--tg span,.channel--tg .go{color:color-mix(in srgb,var(--deep) 72%,transparent)}
@@ -586,7 +589,7 @@ section[id],main[id]{scroll-margin-top:84px}
 .foot-id .name{font:600 var(--fs-300)/1.4 var(--sans);color:var(--ink);display:block}
 .foot-id p{margin-top:10px;max-width:var(--measure-short)}
 .foot-id .copy{margin-top:12px;font-size:var(--fs-100);color:var(--ink-4)}
-.foot h3{font:500 var(--fs-100)/1 var(--sans);letter-spacing:var(--tr-caps);
+.foot h3{font:500 .72rem/1 var(--mono);letter-spacing:.06em;
   text-transform:uppercase;color:var(--ink-4);margin-bottom:14px}
 .foot nav{display:grid;gap:9px;justify-items:start}
 .foot nav a{color:var(--ink-2);text-decoration:underline;text-decoration-thickness:1px;
@@ -676,7 +679,8 @@ section[id],main[id]{scroll-margin-top:84px}
       <p class="sec-head"><span class="rub">Обо мне</span><i class="rule"></i><span class="meta">Психолог, секс-терапевт</span></p>
       <h2>Меня зовут Дарья</h2>
       <div class="about-body">
-        <p>Я&nbsp;практикующий психолог и&nbsp;секс-терапевт. Работаю с&nbsp;тревожным спектром (тревога, паника, <span class="abbr">ОКР</span>, фобии, ипохондрия) и&nbsp;с&nbsp;расстройствами пограничного спектра. Онлайн и&nbsp;очно в&nbsp;Симферополе.</p>
+        <p>Я&nbsp;практикующий психолог и&nbsp;секс-терапевт. А&nbsp;ещё я&nbsp;просто человек, который перестал бороться со&nbsp;своей тревогой и&nbsp;научился дружить с&nbsp;ней.</p>
+        <p>Работаю с&nbsp;тревожным спектром (тревога, паника, <span class="abbr">ОКР</span>, фобии, ипохондрия) и&nbsp;с&nbsp;расстройствами пограничного спектра. Онлайн и&nbsp;очно в&nbsp;Симферополе.</p>
         <p>Мне очень хорошо знакомо состояние бесконечного напряжения:</p>
         <ul class="dashes">
           <li>вы просыпаетесь несколько раз за&nbsp;ночь с&nbsp;сильным сердцебиением;</li>
@@ -693,10 +697,6 @@ section[id],main[id]{scroll-margin-top:84px}
           <p class="q">Из&nbsp;этого состояния есть выход.</p>
           <p>Я&nbsp;знаю это не&nbsp;только по&nbsp;учебникам&nbsp;— я&nbsp;прошла это сама. Выход лежит через понимание того, как устроено именно ваше состояние, и&nbsp;через конкретные шаги, которые мы проходим вместе.</p>
         </div>
-        <figure class="pull">
-          <blockquote>А&nbsp;ещё я&nbsp;просто человек, который перестал бороться со&nbsp;своей тревогой и&nbsp;научился дружить с&nbsp;ней.</blockquote>
-          <figcaption>Дарья</figcaption>
-        </figure>
       </div>
     </div>
   </section>
@@ -704,7 +704,7 @@ section[id],main[id]{scroll-margin-top:84px}
   <!-- ─────────── ОБРАЗОВАНИЕ ─────────── -->
   <section class="section pad-s" id="obrazovanie">
     <div class="wrap sec-grid">
-      <p class="sec-head"><span class="rub">Образование</span><i class="rule"></i><span class="meta">7 программ</span></p>
+      <p class="sec-head"><span class="rub">Образование</span><i class="rule"></i></p>
       <h2>Образование</h2>
       <div class="edu">
         <div class="edu-head" aria-hidden="true"><span>Программа</span><span>Учреждение</span><span>Объём</span></div>
@@ -754,7 +754,7 @@ section[id],main[id]{scroll-margin-top:84px}
       <p class="sec-head"><span class="rub">Подход</span><i class="rule"></i><span class="meta">4 подхода</span></p>
       <h2>Работаю не с симптомом, а с человеком</h2>
       <div class="approach-lead">
-        <p>Я&nbsp;работаю комплексно: не&nbsp;только с&nbsp;конкретным симптомом, но&nbsp;и&nbsp;со&nbsp;всей вашей личностью. Я&nbsp;соединяю доказательные подходы: схема-терапию, <span class="abbr">ЛОРП</span>, <span class="abbr">КПТ</span> и&nbsp;<span class="abbr">ЭПР</span>.</p>
+        <p>Я&nbsp;работаю комплексно: не&nbsp;только с&nbsp;конкретным симптомом, но&nbsp;и&nbsp;со&nbsp;всей вашей личностью. Я&nbsp;соединяю доказательные подходы: <b class="hl">схема-терапию, <span class="abbr">ЛОРП</span>, <span class="abbr">КПТ</span> и&nbsp;<span class="abbr">ЭПР</span></b>.</p>
         <p>Я&nbsp;считаю, что одним из&nbsp;ключевых шагов навстречу ремиссии и&nbsp;хорошему самочувствию является понимание собственного состояния, его особенностей и&nbsp;прозрачность процесса терапии. Мне важно, чтобы вы понимали: как именно устроено ваше расстройство, почему мы работаем именно в&nbsp;таком формате, зачем делаем эти упражнения, куда мы по&nbsp;итогу придём.</p>
       </div>
       <div class="approach-note">
@@ -890,22 +890,45 @@ section[id],main[id]{scroll-margin-top:84px}
   <section class="section" id="vazhno">
     <div class="wrap sec-grid">
       <p class="sec-head"><span class="rub">Важно</span><i class="rule"></i><span class="meta">Прозрачные правила</span></p>
-      <h2>Что ещё важно знать перед началом работы</h2>
+      <h2>Что ещё&nbsp;важно знать перед началом работы</h2>
       <div class="cols">
         <details class="panel">
-          <summary><h3>Как я работаю</h3></summary>
-          <ul>
-            <li><span class="num">1</span><span>Диагностика</span></li>
-            <li><span class="num">2</span><span>Информирование</span></li>
-            <li><span class="num">3</span><span>Работа с&nbsp;симптомами</span></li>
-            <li><span class="num">4</span><span>Реконструкция отношений и&nbsp;навыков</span></li>
-          </ul>
+          <summary><h3>Первая встреча</h3></summary>
+          <div class="body">
+            <p>На первой встрече нам важно не&nbsp;только познакомиться, но&nbsp;ещё&nbsp;провести диагностику и&nbsp;понять целостную картину вашего запроса. Мы исследуем:</p>
+            <ul class="dashes">
+              <li>какие симптомы вас беспокоят;</li>
+              <li>как&nbsp;давно они возникли;</li>
+              <li>бывают ли&nbsp;периоды усиления симптомов и&nbsp;наоборот, бывает ли&nbsp;облегчение;</li>
+              <li>как&nbsp;именно это&nbsp;сказывается на&nbsp;вашей жизни.</li>
+            </ul>
+            <p>Для меня важно информирование в&nbsp;процессе терапии, чтобы даже после первой встречи у&nbsp;вас было хотя бы&nbsp;небольшое понимание того, что&nbsp;с&nbsp;вами происходит.</p>
+            <p>После первой встречи мы&nbsp;можем продолжить регулярную терапию или&nbsp;остановиться на&nbsp;одной консультации, но&nbsp;даже после неё&nbsp;у&nbsp;вас останется понимание, что&nbsp;с&nbsp;вами происходит и&nbsp;какие первые шаги можно сделать навстречу изменениям.</p>
+          </div>
         </details>
         <details class="panel">
-          <summary><h3>С чем я не работаю</h3></summary>
+          <summary><h3>Как я&nbsp;работаю</h3></summary>
+          <ol class="stages">
+            <li><span class="num">1</span><div><b>Диагностика</b><p>Диагностика — важный этап терапии. В неё&nbsp;входит: исследование жалоб, анамнез жизни и&nbsp;болезни (или&nbsp;симптомов), анализ функционирования вашей личности. Если это&nbsp;необходимо, я&nbsp;рекомендую обследования у&nbsp;других специалистов, чтобы понимать картину вашего состояния более объёмно.</p></div></li>
+            <li><span class="num">2</span><div><b>Информирование</b><p>Мне важно, чтобы вы&nbsp;понимали: как&nbsp;именно устроено ваше расстройство, почему мы&nbsp;работаем именно в&nbsp;таком формате, зачем делаем эти упражнения, куда мы&nbsp;по&nbsp;итогу придём. Знания дают расслабление, и&nbsp;чем больше человек понимает своё состояние, тем легче ему поменять отношение к&nbsp;проблеме и&nbsp;в&nbsp;дальнейшем прийти к&nbsp;её разрешению.</p></div></li>
+            <li><span class="num">3</span><div><b>Работа с&nbsp;симптомами</b><p>Сначала в&nbsp;терапии мы&nbsp;начинаем работу на&nbsp;снижение симптоматики. Для этого я&nbsp;использую доказательные методы, такие как&nbsp;<span class="abbr">ЭПР</span>, <span class="abbr">КПТ</span> и&nbsp;другие.</p></div></li>
+            <li><span class="num">4</span><div><b>Реконструкция отношения и&nbsp;навыков</b><p>После снижения симптомов мы&nbsp;переходим в&nbsp;более глубокую работу с&nbsp;личностью. Симптомы — это&nbsp;верхушка айсберга, и&nbsp;возникают они не&nbsp;у&nbsp;всех людей, а&nbsp;у&nbsp;конкретного человека. Нам важно исследовать индивидуальные особенности, чтобы снизить риск обострения и&nbsp;рецидивов.</p><p>Мы изучаем способы саморегуляции, систему отношений личности, привычные паттерны поведения и&nbsp;др.</p></div></li>
+          </ol>
+        </details>
+        <details class="panel">
+          <summary><h3>Важные нюансы терапии</h3></summary>
+          <div class="body">
+            <p class="lead-in">Терапия — это&nbsp;совместная работа</p>
+            <p>Сам поход к&nbsp;психологу не&nbsp;гарантирует изменений. Психотерапия — это&nbsp;процесс сотрудничества, в&nbsp;котором результат зависит от&nbsp;работы обеих сторон.</p>
+            <p>Моя задача как&nbsp;специалиста — разобраться в&nbsp;ситуации, определить цели терапии, подобрать подходящие методы и&nbsp;выстроить понятный план работы. Ваша — быть включённым в&nbsp;процесс, открыто исследовать свой опыт и&nbsp;постепенно применять новые навыки за&nbsp;пределами кабинета.</p>
+            <p>Психотерапия не&nbsp;сводится к&nbsp;советам и&nbsp;готовым решениям. Это скорее обучение новым способам справляться с&nbsp;трудностями. Знания и&nbsp;понимание важны, но&nbsp;именно регулярная практика помогает превратить понимание в&nbsp;реальные и&nbsp;устойчивые изменения.</p>
+          </div>
+        </details>
+        <details class="panel">
+          <summary><h3>С чем я&nbsp;не&nbsp;работаю</h3></summary>
           <ul class="dash">
             <li><span>Семейные пары</span></li>
-            <li><span>Дети и&nbsp;подростки младше 18&nbsp;лет</span></li>
+            <li><span>Дети и&nbsp;подростки младше 18 лет</span></li>
             <li><span>Алкогольные, химические и&nbsp;игровые зависимости</span></li>
           </ul>
         </details>
@@ -987,17 +1010,14 @@ section[id],main[id]{scroll-margin-top:84px}
   <!-- ─────────── КОНТАКТЫ ─────────── -->
   <section class="deep" id="kontakty">
     <div class="wrap sec-grid">
-      <p class="sec-head"><span class="rub">Контакты</span><i class="rule"></i><span class="meta">Ответ в течение дня</span></p>
+      <p class="sec-head"><span class="rub">Контакты</span><i class="rule"></i></p>
       <div class="contact-text">
         <h2>Напишите прямо сейчас</h2>
         <p>Кратко поделитесь, что вас беспокоит. Я&nbsp;отвечу лично в&nbsp;течение дня, и&nbsp;мы подберём комфортное время для первой встречи.</p>
         <p class="reply"><span class="tick"></span>Ответ&nbsp;— в&nbsp;течение дня</p>
       </div>
       <div class="channels">
-        <a class="channel channel--tg" href="tel:+79781123235">
-          <div>Позвонить<span>+7&nbsp;978 112-32-35</span></div><span class="go">Набрать</span>
-        </a>
-        <a class="channel" href="https://wa.me/79781123235" target="_blank" rel="noopener">
+        <a class="channel channel--tg" href="https://wa.me/79781123235" target="_blank" rel="noopener">
           <div>WhatsApp<span>+7&nbsp;978 112-32-35</span></div><span class="go">Написать</span>
         </a>
         <a class="channel" href="https://t.me/ponomarzovaa" target="_blank" rel="noopener">
@@ -1080,7 +1100,6 @@ section[id],main[id]{scroll-margin-top:84px}
       "image": "https://thebenua.github.io/portfolio-site/darya/foto.jpg",
       "provider": {"@id": "https://thebenua.github.io/portfolio-site/darya/#person"},
       "priceRange": "4500–5000 ₽",
-      "telephone": "+7 978 112-32-35",
       "areaServed": "RU",
       "address": {
         "@type": "PostalAddress",
