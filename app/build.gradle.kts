@@ -3,6 +3,7 @@ android {
     namespace = "ru.campuslife.app"
     compileSdk = 35
     defaultConfig { applicationId = "ru.campuslife.app"; minSdk = 26; targetSdk = 35; versionCode = 1; versionName = "1.0" }
+    if (providers.gradleProperty("campusQa").orNull == "true") { buildTypes.getByName("debug").applicationIdSuffix = ".qa" }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }

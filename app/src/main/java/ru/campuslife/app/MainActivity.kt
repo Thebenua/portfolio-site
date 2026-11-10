@@ -13,10 +13,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.net.Uri
+import android.graphics.BitmapFactory
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -30,6 +33,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -55,7 +59,7 @@ private val sand = Color(0xFFE3C4A0)
 private val ink = Color(0xFFF4F0E9)
 private val locale = Locale.forLanguageTag("ru")
 private val fmt = DateTimeFormatter.ofPattern("d MMMM, EEEE", locale)
-private data class Event(val id:Int, val title:String, val category:String, val date:LocalDateTime, val place:String, val description:String, val subtitle:String, val tint:Color)
+private data class Event(val id:Int, val title:String, val category:String, val date:LocalDateTime, val place:String, val description:String, val subtitle:String, val tint:Color, val photoUri:String = "")
 private fun events(day:LocalDate):List<Event> {
 
  return listOf(
@@ -93,11 +97,11 @@ private fun cancelReminder(context:Context,e:Event) {
  context.getSharedPreferences("campus",Context.MODE_PRIVATE).edit().remove("reminder_"+e.id).apply()
 }
 private fun loadCustom(context: Context):List<Event> = try {
- val a=JSONArray(context.getSharedPreferences("campus",Context.MODE_PRIVATE).getString("custom_events","[]")); (0 until a.length()).map { i -> val o=a.getJSONObject(i); Event(o.getInt("id"),o.getString("title"),o.getString("category"),LocalDateTime.parse(o.getString("date")),o.getString("place"),o.getString("description"),o.getString("subtitle"),Color(0xFF755E4E)) }
+ val a=JSONArray(context.getSharedPreferences("campus",Context.MODE_PRIVATE).getString("custom_events","[]")); (0 until a.length()).map { i -> val o=a.getJSONObject(i); Event(o.getInt("id"),o.getString("title"),o.getString("category"),LocalDateTime.parse(o.getString("date")),o.getString("place"),o.getString("description"),o.getString("subtitle"),Color(0xFF755E4E),o.optString("photoUri", "")) }
 } catch (_:Exception) { emptyList() }
 private fun saveCustom(context:Context,e:Event) {
  val prefs=context.getSharedPreferences("campus",Context.MODE_PRIVATE); val a=try { JSONArray(prefs.getString("custom_events","[]")) } catch (_:Exception) { JSONArray() }
- a.put(JSONObject().put("id",e.id).put("title",e.title).put("category",e.category).put("date",e.date.toString()).put("place",e.place).put("description",e.description).put("subtitle",e.subtitle)); prefs.edit().putString("custom_events",a.toString()).apply()
+ a.put(JSONObject().put("id",e.id).put("title",e.title).put("category",e.category).put("date",e.date.toString()).put("place",e.place).put("description",e.description).put("subtitle",e.subtitle).put("photoUri",e.photoUri)); prefs.edit().putString("custom_events",a.toString()).apply()
 }
 class BootReceiver:BroadcastReceiver() {
  override fun onReceive(context:Context,intent:Intent) {
@@ -129,19 +133,48 @@ class ReminderReceiver:BroadcastReceiver(){ override fun onReceive(context:Conte
 }
 @Composable private fun Chip(text:String,selected:Boolean,onClick:()->Unit){Box(Modifier.clip(RoundedCornerShape(50)).background(if(selected)sand else card).clickable(onClick=onClick).padding(horizontal=16.dp,vertical=10.dp)){Text(text,color=if(selected)bg else muted,fontSize=12.sp)}}
 @Composable private fun EventCard(e:Event,favorite:Boolean,onClick:()->Unit,onFavorite:()->Unit){Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(card).clickable(onClick=onClick)){
- Box(Modifier.fillMaxWidth().height(145.dp).background(e.tint)){Image(painterResource(ru.campuslife.app.R.drawable.event_cover),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop); Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.42f)));Text(e.category.uppercase(locale),Modifier.align(Alignment.TopStart).padding(16.dp).clip(RoundedCornerShape(20.dp)).background(Color.Black.copy(alpha=.28f)).padding(horizontal=10.dp,vertical=6.dp),color=ink,fontSize=10.sp,letterSpacing=1.sp);Text(if(favorite)"♥" else "♡",Modifier.align(Alignment.TopEnd).padding(15.dp).clip(RoundedCornerShape(50)).background(Color.Black.copy(alpha=.3f)).clickable(onClick=onFavorite).padding(horizontal=10.dp,vertical=4.dp),color=sand,fontSize=21.sp);Text(e.subtitle,Modifier.align(Alignment.BottomStart).padding(16.dp),color=ink.copy(alpha=.85f),fontSize=13.sp)}
+ Box(Modifier.fillMaxWidth().height(145.dp).background(e.tint)){EventPhoto(e); Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.42f)));Text(e.category.uppercase(locale),Modifier.align(Alignment.TopStart).padding(16.dp).clip(RoundedCornerShape(20.dp)).background(Color.Black.copy(alpha=.28f)).padding(horizontal=10.dp,vertical=6.dp),color=ink,fontSize=10.sp,letterSpacing=1.sp);Text(if(favorite)"♥" else "♡",Modifier.align(Alignment.TopEnd).padding(15.dp).clip(RoundedCornerShape(50)).background(Color.Black.copy(alpha=.3f)).clickable(onClick=onFavorite).padding(horizontal=10.dp,vertical=4.dp),color=sand,fontSize=21.sp);Text(e.subtitle,Modifier.align(Alignment.BottomStart).padding(16.dp),color=ink.copy(alpha=.85f),fontSize=13.sp)}
  Column(Modifier.padding(17.dp)){Text(e.title,color=ink,fontSize=19.sp,fontWeight=FontWeight.SemiBold);Spacer(Modifier.height(9.dp));Text("${e.date.format(fmt)}  ·  ${e.date.format(DateTimeFormatter.ofPattern("HH:mm"))}",color=sand,fontSize=12.sp);Spacer(Modifier.height(5.dp));Text(e.place,color=muted,fontSize=12.sp)} }}
 @Composable private fun Detail(e:Event,favorite:Boolean,joined:Boolean,reminded:Int,onBack:()->Unit,onFavorite:()->Unit,onJoin:()->Unit,onReminder:(Int)->Unit){Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(22.dp)){
- Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("‹  Назад",Modifier.clickable(onClick=onBack).padding(vertical=8.dp),color=muted,fontSize=15.sp);Text(if(favorite)"♥" else "♡",Modifier.clickable(onClick=onFavorite).padding(horizontal=8.dp),color=sand,fontSize=27.sp)}; Spacer(Modifier.height(24.dp));Box(Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(22.dp)).background(e.tint)){Image(painterResource(ru.campuslife.app.R.drawable.event_cover),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop); Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.35f)));Text(e.category.uppercase(locale),Modifier.align(Alignment.BottomStart).padding(20.dp),color=sand,fontSize=12.sp,letterSpacing=2.sp)}; Spacer(Modifier.height(25.dp));Text(e.title,color=ink,fontSize=30.sp,fontWeight=FontWeight.SemiBold);Spacer(Modifier.height(8.dp));Text(e.subtitle,color=muted,fontSize=15.sp);Spacer(Modifier.height(25.dp));Info("КОГДА", "${e.date.format(fmt)} · ${e.date.format(DateTimeFormatter.ofPattern("HH:mm"))}");Info("ГДЕ",e.place);Spacer(Modifier.height(12.dp));Text("О событии",color=ink,fontSize=18.sp,fontWeight=FontWeight.Medium);Spacer(Modifier.height(10.dp));Text(e.description,color=muted,lineHeight=23.sp,fontSize=14.sp);Spacer(Modifier.height(24.dp)); Button(onClick=onJoin,modifier=Modifier.fillMaxWidth().height(53.dp),shape=RoundedCornerShape(15.dp),colors=ButtonDefaults.buttonColors(containerColor=if(joined)line else sand,contentColor=if(joined)ink else bg)){Text(if(joined)"Отменить запись" else "Записаться",fontWeight=FontWeight.Bold)};Spacer(Modifier.height(10.dp)); Text("НАПОМИНАНИЕ",color=muted,fontSize=10.sp,letterSpacing=1.3.sp); Spacer(Modifier.height(8.dp)); LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) { rowItems(listOf(0 to "Нет", 10 to "10 мин", 60 to "1 час", 1440 to "1 день")) { (minutes,label) -> Chip(label,reminded==minutes) { onReminder(minutes) } } }; if(reminded>0){ Spacer(Modifier.height(8.dp)); Text("Уведомление может прийти с задержкой из-за настроек энергосбережения телефона.",color=muted,fontSize=11.sp,lineHeight=16.sp) };Spacer(Modifier.height(10.dp));Text("Демонстрационные события · данные сохраняются на устройстве",color=muted,fontSize=11.sp,lineHeight=16.sp)
+ Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("‹  Назад",Modifier.clickable(onClick=onBack).padding(vertical=8.dp),color=muted,fontSize=15.sp);Text(if(favorite)"♥" else "♡",Modifier.clickable(onClick=onFavorite).padding(horizontal=8.dp),color=sand,fontSize=27.sp)}; Spacer(Modifier.height(24.dp));Box(Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(22.dp)).background(e.tint)){EventPhoto(e); Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha=.35f)));Text(e.category.uppercase(locale),Modifier.align(Alignment.BottomStart).padding(20.dp),color=sand,fontSize=12.sp,letterSpacing=2.sp)}; Spacer(Modifier.height(25.dp));Text(e.title,color=ink,fontSize=30.sp,fontWeight=FontWeight.SemiBold);Spacer(Modifier.height(8.dp));Text(e.subtitle,color=muted,fontSize=15.sp);Spacer(Modifier.height(25.dp));Info("КОГДА", "${e.date.format(fmt)} · ${e.date.format(DateTimeFormatter.ofPattern("HH:mm"))}");Info("ГДЕ",e.place);Spacer(Modifier.height(12.dp));Text("О событии",color=ink,fontSize=18.sp,fontWeight=FontWeight.Medium);Spacer(Modifier.height(10.dp));Text(e.description,color=muted,lineHeight=23.sp,fontSize=14.sp);Spacer(Modifier.height(24.dp)); Button(onClick=onJoin,modifier=Modifier.fillMaxWidth().height(53.dp),shape=RoundedCornerShape(15.dp),colors=ButtonDefaults.buttonColors(containerColor=if(joined)line else sand,contentColor=if(joined)ink else bg)){Text(if(joined)"Отменить запись" else "Записаться",fontWeight=FontWeight.Bold)};Spacer(Modifier.height(10.dp)); Text("НАПОМИНАНИЕ",color=muted,fontSize=10.sp,letterSpacing=1.3.sp); Spacer(Modifier.height(8.dp)); LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) { rowItems(listOf(0 to "Нет", 10 to "10 мин", 60 to "1 час", 1440 to "1 день")) { (minutes,label) -> Chip(label,reminded==minutes) { onReminder(minutes) } } }; if(reminded>0){ Spacer(Modifier.height(8.dp)); Text("Уведомление может прийти с задержкой из-за настроек энергосбережения телефона.",color=muted,fontSize=11.sp,lineHeight=16.sp) };Spacer(Modifier.height(10.dp));Text("Демонстрационные события · данные сохраняются на устройстве",color=muted,fontSize=11.sp,lineHeight=16.sp)
 }}
 @Composable private fun Info(label:String,value:String){Column(Modifier.fillMaxWidth().padding(bottom=15.dp).clip(RoundedCornerShape(14.dp)).background(card).padding(15.dp)){Text(label,color=muted,fontSize=10.sp,letterSpacing=1.3.sp);Spacer(Modifier.height(6.dp));Text(value,color=ink,fontSize=14.sp)}}
 
 
 @Composable private fun CreateEvent(onBack:()->Unit,onSave:(Event)->Unit) {
- val ctx=LocalContext.current; var title by remember { mutableStateOf("") }; var place by remember { mutableStateOf("") }; var desc by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Наука") }; var date by remember { mutableStateOf(LocalDateTime.now().plusDays(1).withHour(16).withMinute(0).withSecond(0).withNano(0)) }; var error by remember { mutableStateOf("") }
+ val ctx=LocalContext.current; var title by remember { mutableStateOf("") }; var place by remember { mutableStateOf("") }; var desc by remember { mutableStateOf("") }; var category by remember { mutableStateOf("Наука") }; var date by remember { mutableStateOf(LocalDateTime.now().plusDays(1).withHour(16).withMinute(0).withSecond(0).withNano(0)) }; var error by remember { mutableStateOf("") }; var photoUri by remember { mutableStateOf("") }
+ val photoPicker=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+  if(uri!=null) { try { ctx.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION); photoUri=uri.toString() } catch (_:SecurityException) { Toast.makeText(ctx,"Не удалось сохранить доступ к фотографии",Toast.LENGTH_SHORT).show() } }
+ }
  Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(22.dp)) {
   Text("‹  Назад",Modifier.clickable(onClick=onBack).padding(vertical=8.dp),color=muted); Spacer(Modifier.height(18.dp)); Text("Новое событие",fontSize=27.sp,fontWeight=FontWeight.SemiBold,color=ink); Spacer(Modifier.height(8.dp)); Text("Создаётся на этом устройстве",color=muted,fontSize=13.sp); Spacer(Modifier.height(18.dp))
-  OutlinedTextField(title,{title=it},label={Text("Название")},modifier=Modifier.fillMaxWidth(),singleLine=true); Spacer(Modifier.height(10.dp)); OutlinedTextField(place,{place=it},label={Text("Место")},modifier=Modifier.fillMaxWidth(),singleLine=true); Spacer(Modifier.height(10.dp)); OutlinedTextField(desc,{desc=it},label={Text("Описание")},modifier=Modifier.fillMaxWidth(),minLines=3); Spacer(Modifier.height(16.dp)); Text("КАТЕГОРИЯ",color=muted,fontSize=10.sp,letterSpacing=1.sp); Spacer(Modifier.height(8.dp)); LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) { rowItems(listOf("Наука","Творчество","Спорт","Технологии")) { c -> Chip(c,c==category){category=c} } }; Spacer(Modifier.height(18.dp))
-  Text("ДАТА И ВРЕМЯ",color=muted,fontSize=10.sp,letterSpacing=1.sp); Spacer(Modifier.height(8.dp)); Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){ Chip(date.format(DateTimeFormatter.ofPattern("d MMM yyyy",locale)),false) { DatePickerDialog(ctx,{ _,y,m,d -> date=date.withDayOfMonth(1).withYear(y).withMonth(m+1).withDayOfMonth(d) },date.year,date.monthValue-1,date.dayOfMonth).show() }; Chip(date.format(DateTimeFormatter.ofPattern("HH:mm")),false) { TimePickerDialog(ctx,{ _,h,m -> date=date.withHour(h).withMinute(m) },date.hour,date.minute,true).show() } }; Spacer(Modifier.height(16.dp)); if(error.isNotEmpty()) { Text(error,color=Color(0xFFFFB4AB),fontSize=13.sp); Spacer(Modifier.height(10.dp)) }; Button(onClick={ if(title.isBlank()||place.isBlank()||desc.isBlank()) error="Заполни название, место и описание" else if(date.isBefore(LocalDateTime.now())) error="Выбери дату в будущем" else onSave(Event((System.currentTimeMillis()%Int.MAX_VALUE).toInt(),title.trim(),category,date,place.trim(),desc.trim(),"Событие школьного сообщества",Color(0xFF755E4E))) },modifier=Modifier.fillMaxWidth().height(54.dp),shape=RoundedCornerShape(15.dp),colors=ButtonDefaults.buttonColors(containerColor=sand,contentColor=bg)){Text("Создать событие",fontWeight=FontWeight.Bold)}; Spacer(Modifier.height(24.dp))
+  OutlinedTextField(title,{title=it},label={Text("Название")},modifier=Modifier.fillMaxWidth(),singleLine=true); Spacer(Modifier.height(10.dp)); OutlinedTextField(place,{place=it},label={Text("Место")},modifier=Modifier.fillMaxWidth(),singleLine=true); Spacer(Modifier.height(10.dp)); OutlinedTextField(desc,{desc=it},label={Text("Описание")},modifier=Modifier.fillMaxWidth(),minLines=3); Spacer(Modifier.height(12.dp)); OutlinedButton(onClick={photoPicker.launch(arrayOf("image/*"))},modifier=Modifier.fillMaxWidth()){Text(if(photoUri.isEmpty()) "Добавить фотографию" else "Фотография выбрана · изменить",color=sand)}; Spacer(Modifier.height(16.dp)); Text("КАТЕГОРИЯ",color=muted,fontSize=10.sp,letterSpacing=1.sp); Spacer(Modifier.height(8.dp)); LazyRow(horizontalArrangement=Arrangement.spacedBy(8.dp)) { rowItems(listOf("Наука","Творчество","Спорт","Технологии")) { c -> Chip(c,c==category){category=c} } }; Spacer(Modifier.height(18.dp))
+  Text("ДАТА И ВРЕМЯ",color=muted,fontSize=10.sp,letterSpacing=1.sp); Spacer(Modifier.height(8.dp)); Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){ Chip(date.format(DateTimeFormatter.ofPattern("d MMM yyyy",locale)),false) { DatePickerDialog(ctx,{ _,y,m,d -> date=date.withDayOfMonth(1).withYear(y).withMonth(m+1).withDayOfMonth(d) },date.year,date.monthValue-1,date.dayOfMonth).show() }; Chip(date.format(DateTimeFormatter.ofPattern("HH:mm")),false) { TimePickerDialog(ctx,{ _,h,m -> date=date.withHour(h).withMinute(m) },date.hour,date.minute,true).show() } }; Spacer(Modifier.height(16.dp)); if(error.isNotEmpty()) { Text(error,color=Color(0xFFFFB4AB),fontSize=13.sp); Spacer(Modifier.height(10.dp)) }; Button(onClick={ if(title.isBlank()||place.isBlank()||desc.isBlank()) error="Заполни название, место и описание" else if(date.isBefore(LocalDateTime.now())) error="Выбери дату в будущем" else onSave(Event((System.currentTimeMillis()%Int.MAX_VALUE).toInt(),title.trim(),category,date,place.trim(),desc.trim(),"Событие школьного сообщества",Color(0xFF755E4E),photoUri)) },modifier=Modifier.fillMaxWidth().height(54.dp),shape=RoundedCornerShape(15.dp),colors=ButtonDefaults.buttonColors(containerColor=sand,contentColor=bg)){Text("Создать событие",fontWeight=FontWeight.Bold)}; Spacer(Modifier.height(24.dp))
+ }
+}
+
+@Composable private fun EventPhoto(event:Event) {
+ val context=LocalContext.current
+ val bitmap=remember(event.photoUri) {
+  if(event.photoUri.isBlank()) null else try {
+   val uri=Uri.parse(event.photoUri)
+   val bounds=BitmapFactory.Options().apply { inJustDecodeBounds=true }
+   context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it,null,bounds) }
+   var sample=1
+   while(bounds.outWidth / sample > 1600 || bounds.outHeight / sample > 1600) sample*=2
+   context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it,null,BitmapFactory.Options().apply { inSampleSize=sample })?.asImageBitmap() }
+  } catch (_:Exception) { null }
+ }
+ if(bitmap!=null) Image(bitmap,null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
+ else {
+  val cover=when(event.id) {
+   1 -> R.drawable.cover_science
+   2 -> R.drawable.cover_art
+   3 -> R.drawable.cover_sport
+   4 -> R.drawable.cover_tech
+   5 -> R.drawable.cover_music
+   else -> R.drawable.event_cover
+  }
+  Image(painterResource(cover),null,Modifier.fillMaxSize(),contentScale=ContentScale.Crop)
  }
 }
