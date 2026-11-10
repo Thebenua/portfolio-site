@@ -20,3 +20,9 @@
 
 Приложение создано на Kotlin и Jetpack Compose.
 
+
+## Сборка из исходников
+
+Откройте репозиторий в Android Studio, дождитесь установки зависимостей и синхронизации Gradle. Для сборки необходимы JDK 17 и Android SDK 35. Выберите конфигурацию `app` и запустите её на устройстве или эмуляторе.
+
+Из командной строки: `./gradlew assembleDebug` (Windows: `gradlew.bat assembleDebug`). Результат находится в `app/build/outputs/apk/debug/app-debug.apk`. Путь к локальному SDK задаётся в Android Studio или через `ANDROID_HOME` и не входит в репозиторий.
