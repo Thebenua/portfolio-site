@@ -1,14 +1,17 @@
 package ru.campuslife.app
 
-import android.graphics.BitmapFactory
-import android.net.Uri
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +23,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,8 +36,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,12 +48,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -85,22 +90,34 @@ internal fun reminderLabel(minutes: Int): String = when (minutes) {
     else -> "Без напоминания"
 }
 
+private val CardCornerShape = RoundedCornerShape(24.dp)
+private val CoverScrimBrush = Brush.verticalGradient(
+    0.0f to Color(0x520D0F13),
+    0.42f to Color(0x1F0D0F13),
+    1.0f to Color(0xDB111317)
+)
+private val TicketDashEffect = PathEffect.dashPathEffect(floatArrayOf(12f, 10f), 0f)
+
 /**
- * Мягкий тактильный модификатор нажатия для карточек и кнопок (180 мс, учитывает prefers-reduced-motion)
+ * Мягкий тактильный модификатор нажатия в фазе GPU-отрисовки (graphicsLayer) с опциональной защитой от двойного клика.
  */
 @Composable
 fun Modifier.pressableScale(
     pressedScale: Float = 0.975f,
     enabled: Boolean = true,
+    debounce: Boolean = true,
+    debounceMs: Long = 260L,
     role: Role? = Role.Button,
     onClick: () -> Unit
 ): Modifier {
     val reducedMotion = LocalReducedMotion.current
     val interaction = remember { MutableInteractionSource() }
+    val guard = remember(debounceMs) { RapidTapGuard(debounceMs) }
     val pressed by interaction.collectIsPressedAsState()
+
     val scale by animateFloatAsState(
         targetValue = if (pressed && !reducedMotion && enabled) pressedScale else 1f,
-        animationSpec = if (reducedMotion) snap() else tween(180, easing = FastOutSlowInEasing),
+        animationSpec = if (reducedMotion) snap() else CampusMotion.tactileSpring(),
         label = "pressScale"
     )
     return this
@@ -113,12 +130,16 @@ fun Modifier.pressableScale(
             interactionSource = interaction,
             indication = null,
             role = role,
-            onClick = onClick
+            onClick = {
+                if (!debounce || guard.tryAcquire()) {
+                    onClick()
+                }
+            }
         )
 }
 
 /**
- * Круглая или капсульная стеклянная кнопка иконки (назад, избранное, создание события)
+ * Стеклянная кнопка иконки (назад, создание события, навигация по месяцам)
  */
 @Composable
 fun GlassIconButton(
@@ -126,36 +147,47 @@ fun GlassIconButton(
     modifier: Modifier = Modifier,
     size: Dp = 42.dp,
     accent: Boolean = false,
+    debounce: Boolean = true,
+    contentDescriptionLabel: String? = null,
     content: @Composable () -> Unit
 ) {
     val shape = RoundedCornerShape(14.dp)
+    val bgBrush = remember(accent) {
+        if (accent) {
+            Brush.linearGradient(
+                colors = listOf(
+                    CampusColors.WarmSand.copy(alpha = 0.22f),
+                    CampusColors.GraphiteElevated
+                )
+            )
+        } else {
+            Brush.linearGradient(
+                colors = listOf(
+                    CampusColors.GraphiteElevated,
+                    CampusColors.Graphite
+                )
+            )
+        }
+    }
+
     Box(
         modifier = modifier
             .size(size)
             .clip(shape)
-            .background(
-                if (accent) {
-                    Brush.linearGradient(
-                        colors = listOf(
-                            CampusColors.WarmSand.copy(alpha = 0.22f),
-                            CampusColors.GraphiteElevated
-                        )
-                    )
-                } else {
-                    Brush.linearGradient(
-                        colors = listOf(
-                            CampusColors.GraphiteElevated,
-                            CampusColors.Graphite
-                        )
-                    )
-                }
-            )
+            .background(bgBrush)
             .border(
                 width = 1.dp,
                 color = if (accent) CampusColors.WarmSand.copy(alpha = 0.34f) else CampusColors.Hairline,
                 shape = shape
             )
-            .pressableScale(pressedScale = 0.93f, onClick = onClick),
+            .then(
+                if (contentDescriptionLabel != null) {
+                    Modifier.semantics { contentDescription = contentDescriptionLabel }
+                } else {
+                    Modifier
+                }
+            )
+            .pressableScale(pressedScale = 0.92f, debounce = debounce, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         content()
@@ -163,7 +195,82 @@ fun GlassIconButton(
 }
 
 /**
- * Единый фильтр-чип дизайн-системы Campus Life
+ * Кнопка избранного с упругим spring-импульсом при добавлении сердечка и тактильным откликом
+ */
+@Composable
+fun FavoriteHeartButton(
+    isFavorite: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier,
+    size: Dp = 38.dp,
+    iconSize: Dp = 18.5.dp,
+    glassCircle: Boolean = true
+) {
+    val reducedMotion = LocalReducedMotion.current
+    val haptics = LocalHapticFeedback.current
+    var pulseCount by remember { mutableIntStateOf(0) }
+    val pulseScale = remember { Animatable(1f) }
+
+    LaunchedEffect(pulseCount) {
+        if (pulseCount > 0 && !reducedMotion) {
+            pulseScale.snapTo(0.82f)
+            pulseScale.animateTo(1.16f, tween(115, easing = CampusMotion.EmphasizedDecelerate))
+            pulseScale.animateTo(1f, CampusMotion.heartBounceSpring())
+        }
+    }
+
+    val tint by animateColorAsState(
+        targetValue = if (isFavorite) CampusColors.WarmSand else CampusColors.Milk,
+        animationSpec = if (reducedMotion) snap() else tween(180),
+        label = "heartTint"
+    )
+    val borderTint by animateColorAsState(
+        targetValue = if (isFavorite) CampusColors.WarmSand.copy(alpha = 0.52f) else CampusColors.Milk.copy(alpha = 0.16f),
+        animationSpec = if (reducedMotion) snap() else tween(180),
+        label = "heartBorder"
+    )
+
+    val containerShape = if (glassCircle) CircleShape else RoundedCornerShape(14.dp)
+    val containerBg = if (glassCircle) Color(0xB315181E) else CampusColors.GraphiteElevated
+
+    Box(
+        modifier = modifier
+            .size(size)
+            .clip(containerShape)
+            .background(containerBg)
+            .border(width = 0.9.dp, color = borderTint, shape = containerShape)
+            .semantics {
+                contentDescription = if (isFavorite) "Убрать из избранного" else "Добавить в избранное"
+            }
+            .pressableScale(
+                pressedScale = 0.90f,
+                debounce = false,
+                onClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    pulseCount++
+                    onToggle()
+                }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier.graphicsLayer {
+                scaleX = pulseScale.value
+                scaleY = pulseScale.value
+            }
+        ) {
+            NavHeartIcon(
+                color = tint,
+                active = isFavorite,
+                filledWhenActive = true,
+                size = iconSize
+            )
+        }
+    }
+}
+
+/**
+ * Единый фильтр-чип дизайн-системы Campus Life (мгновенная реакция на быстрые переключения без блокировки)
  */
 @Composable
 fun FilterPill(
@@ -176,17 +283,17 @@ fun FilterPill(
     val reducedMotion = LocalReducedMotion.current
     val bgColor by animateColorAsState(
         targetValue = if (selected) CampusColors.Milk else CampusColors.Graphite,
-        animationSpec = if (reducedMotion) snap() else tween(190),
+        animationSpec = if (reducedMotion) snap() else tween(180, easing = CampusMotion.EmphasizedDecelerate),
         label = "chipBg"
     )
     val textColor by animateColorAsState(
         targetValue = if (selected) CampusColors.DeepObsidian else CampusColors.SlateMuted,
-        animationSpec = if (reducedMotion) snap() else tween(190),
+        animationSpec = if (reducedMotion) snap() else tween(180, easing = CampusMotion.EmphasizedDecelerate),
         label = "chipText"
     )
     val borderColor by animateColorAsState(
         targetValue = if (selected) CampusColors.Milk else CampusColors.Hairline,
-        animationSpec = if (reducedMotion) snap() else tween(190),
+        animationSpec = if (reducedMotion) snap() else tween(180),
         label = "chipBorder"
     )
 
@@ -196,7 +303,7 @@ fun FilterPill(
             .clip(shape)
             .background(bgColor)
             .border(1.dp, borderColor, shape)
-            .pressableScale(pressedScale = 0.95f, onClick = onClick)
+            .pressableScale(pressedScale = 0.94f, debounce = false, onClick = onClick)
             .padding(horizontal = 15.dp, vertical = 9.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -217,7 +324,7 @@ fun FilterPill(
 }
 
 /**
- * Основная карточка мероприятия для «Афиши» и «Избранного»
+ * Основная карточка мероприятия для «Афиши» и «Избранного» (неблокирующая обложка + кэшированные кисти)
  */
 @Composable
 fun PosterEventCard(
@@ -228,40 +335,34 @@ fun PosterEventCard(
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val cardShape = RoundedCornerShape(24.dp)
+    val reducedMotion = LocalReducedMotion.current
     val relBadge = remember(event.date) { relativeDayBadge(event.date) }
+    val dateSummary = remember(event.date) {
+        "${event.date.format(ShortDateFmt)}, ${event.date.format(TimeFmt)}"
+    }
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(cardShape)
+            .clip(CardCornerShape)
             .background(CampusColors.Graphite)
-            .border(1.dp, CampusColors.Hairline, cardShape)
-            .pressableScale(pressedScale = 0.982f, onClick = onClick)
+            .border(1.dp, CampusColors.Hairline, CardCornerShape)
+            .pressableScale(pressedScale = 0.984f, onClick = onClick)
     ) {
-        // Фотообложка с мягкой многослойной виньеткой и стеклянными метками
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(176.dp)
+                .height(178.dp)
                 .background(event.tint)
         ) {
-            EventCoverImage(event = event)
+            AsyncEventCover(event = event, maxDimension = 1280)
 
-            // Кинематографический градиент для безупречной читаемости текста поверх любой фотографии
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            0.0f to Color(0x520D0F13),
-                            0.42f to Color(0x1F0D0F13),
-                            1.0f to Color(0xDB111317)
-                        )
-                    )
+                    .background(CoverScrimBrush)
             )
 
-            // Верхний ряд: категория + статус записи / дата + кнопка избранного
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -277,7 +378,7 @@ fun PosterEventCard(
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(percent = 50))
-                            .background(Color(0xAD15181E))
+                            .background(Color(0xB315181E))
                             .border(0.8.dp, CampusColors.Milk.copy(alpha = 0.16f), RoundedCornerShape(percent = 50))
                             .padding(horizontal = 11.dp, vertical = 5.5.dp)
                     ) {
@@ -291,76 +392,75 @@ fun PosterEventCard(
                         )
                     }
 
-                    if (isJoined) {
-                        Row(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(percent = 50))
-                                .background(Color(0xBF17231E))
-                                .border(0.8.dp, CampusColors.Success.copy(alpha = 0.38f), RoundedCornerShape(percent = 50))
-                                .padding(horizontal = 10.dp, vertical = 5.5.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            CheckGlyph(color = CampusColors.Success, size = 12.dp)
-                            Text(
-                                text = "Записан",
-                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp),
-                                color = CampusColors.Success
-                            )
-                        }
-                    } else if (relBadge != null) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(percent = 50))
-                                .background(Color(0x9E1C2128))
-                                .padding(horizontal = 9.5.dp, vertical = 5.5.dp)
-                        ) {
-                            Text(
-                                text = relBadge,
-                                style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp),
-                                color = CampusColors.SkyMuted
-                            )
+                    AnimatedContent(
+                        targetState = isJoined,
+                        transitionSpec = {
+                            if (reducedMotion) {
+                                fadeIn(snap()) togetherWith fadeOut(snap())
+                            } else {
+                                (fadeIn(tween(180)) + scaleIn(tween(180), initialScale = 0.9f))
+                                    .togetherWith(fadeOut(tween(140)) + scaleOut(tween(140), targetScale = 0.9f))
+                            }
+                        },
+                        label = "cardJoinedStatus"
+                    ) { joinedState ->
+                        if (joinedState) {
+                            Row(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(percent = 50))
+                                    .background(Color(0xC417231E))
+                                    .border(0.8.dp, CampusColors.Success.copy(alpha = 0.42f), RoundedCornerShape(percent = 50))
+                                    .padding(horizontal = 10.dp, vertical = 5.5.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                CheckGlyph(color = CampusColors.Success, size = 12.dp)
+                                Text(
+                                    text = "Записан",
+                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp),
+                                    color = CampusColors.Success
+                                )
+                            }
+                        } else if (relBadge != null) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(percent = 50))
+                                    .background(Color(0xA61C2128))
+                                    .padding(horizontal = 9.5.dp, vertical = 5.5.dp)
+                            ) {
+                                Text(
+                                    text = relBadge,
+                                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.5.sp),
+                                    color = CampusColors.SkyMuted
+                                )
+                            }
+                        } else {
+                            Spacer(Modifier.width(1.dp))
                         }
                     }
                 }
 
-                // Кнопка сердечка в стеклянном круге
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xAD15181E))
-                        .border(
-                            width = 0.8.dp,
-                            color = if (isFavorite) CampusColors.WarmSand.copy(alpha = 0.5f) else CampusColors.Milk.copy(alpha = 0.16f),
-                            shape = CircleShape
-                        )
-                        .pressableScale(pressedScale = 0.88f, onClick = onToggleFavorite),
-                    contentAlignment = Alignment.Center
-                ) {
-                    NavHeartIcon(
-                        color = if (isFavorite) CampusColors.WarmSand else CampusColors.Milk,
-                        active = isFavorite,
-                        filledWhenActive = true,
-                        size = 18.dp
-                    )
-                }
+                FavoriteHeartButton(
+                    isFavorite = isFavorite,
+                    onToggle = onToggleFavorite,
+                    size = 37.dp,
+                    iconSize = 18.dp,
+                    glassCircle = true
+                )
             }
 
-            // Нижний подзаголовок внутри обложки
             Text(
                 text = event.subtitle,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(horizontal = 16.dp, vertical = 13.dp),
                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 13.sp),
-                color = CampusColors.Milk.copy(alpha = 0.86f),
+                color = CampusColors.Milk.copy(alpha = 0.88f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
 
-        // Текстовый блок карточки
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -388,7 +488,7 @@ fun PosterEventCard(
                 ) {
                     ClockGlyph(color = CampusColors.WarmSand, size = 14.5.dp)
                     Text(
-                        text = "${event.date.format(ShortDateFmt)}, ${event.date.format(TimeFmt)}",
+                        text = dateSummary,
                         style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.5.sp),
                         color = CampusColors.WarmSand,
                         maxLines = 1
@@ -426,21 +526,23 @@ fun BookingTicketCard(
     onCancelBooking: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val shape = RoundedCornerShape(24.dp)
+    val haptics = LocalHapticFeedback.current
     val dayNumber = remember(event.date) { event.date.dayOfMonth.toString().padStart(2, '0') }
     val monthShort = remember(event.date) {
         event.date.format(DateTimeFormatter.ofPattern("MMM", RuLocale)).trimEnd('.')
+    }
+    val timeAndPlace = remember(event.date, event.place) {
+        "${event.date.format(TimeFmt)} · ${event.place}"
     }
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(shape)
+            .clip(CardCornerShape)
             .background(CampusColors.Graphite)
-            .border(1.dp, CampusColors.Hairline, shape)
-            .pressableScale(pressedScale = 0.982f, onClick = onClick)
+            .border(1.dp, CampusColors.Hairline, CardCornerShape)
+            .pressableScale(pressedScale = 0.984f, onClick = onClick)
     ) {
-        // Верхняя часть билета: блок даты + название + миниатюра
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -448,7 +550,6 @@ fun BookingTicketCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            // Календарный бейдж даты
             Column(
                 modifier = Modifier
                     .width(60.dp)
@@ -514,7 +615,7 @@ fun BookingTicketCard(
                 Spacer(Modifier.height(5.dp))
 
                 Text(
-                    text = "${event.date.format(TimeFmt)} · ${event.place}",
+                    text = timeAndPlace,
                     style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.5.sp),
                     color = CampusColors.SlateMuted,
                     maxLines = 1,
@@ -522,18 +623,16 @@ fun BookingTicketCard(
                 )
             }
 
-            // Компактная превью-обложка
             Box(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(15.dp))
                     .background(event.tint)
             ) {
-                EventCoverImage(event = event)
+                AsyncEventCover(event = event, maxDimension = 360)
             }
         }
 
-        // Линия перфорации билета с боковыми полукруглыми вырезами
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -542,7 +641,6 @@ fun BookingTicketCard(
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val y = size.height / 2f
-                // Вырезы цвета фона экрана
                 drawCircle(
                     color = CampusColors.DeepObsidian,
                     radius = 7.dp.toPx(),
@@ -553,18 +651,16 @@ fun BookingTicketCard(
                     radius = 7.dp.toPx(),
                     center = Offset(size.width, y)
                 )
-                // Пунктирная линия контроля
                 drawLine(
                     color = CampusColors.Milk.copy(alpha = 0.13f),
                     start = Offset(16.dp.toPx(), y),
                     end = Offset(size.width - 16.dp.toPx(), y),
                     strokeWidth = 1.dp.toPx(),
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(12f, 10f), 0f)
+                    pathEffect = TicketDashEffect
                 )
             }
         }
 
-        // Нижний корешок билета: напоминание + аккуратное действие отмены
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -592,17 +688,23 @@ fun BookingTicketCard(
                 modifier = Modifier
                     .clip(RoundedCornerShape(percent = 50))
                     .background(CampusColors.GraphiteElevated)
-                    .pressableScale(pressedScale = 0.94f, onClick = onCancelBooking)
+                    .pressableScale(
+                        pressedScale = 0.93f,
+                        onClick = {
+                            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            onCancelBooking()
+                        }
+                    )
                     .padding(horizontal = 12.dp, vertical = 6.dp),
                 style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.5.sp),
-                color = CampusColors.Milk.copy(alpha = 0.85f)
+                color = CampusColors.Milk.copy(alpha = 0.88f)
             )
         }
     }
 }
 
 /**
- * Продуманное пустое состояние для каждого из трёх разделов и поисковой выдачи
+ * Плавное пустое состояние разделов и поисковой выдачи
  */
 @Composable
 fun CampusEmptyState(
@@ -611,6 +713,23 @@ fun CampusEmptyState(
     onPrimaryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val reducedMotion = LocalReducedMotion.current
+    var visible by remember { androidx.compose.runtime.mutableStateOf(reducedMotion) }
+    LaunchedEffect(tab, hasActiveFilters) {
+        visible = true
+    }
+
+    val enterAlpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = if (reducedMotion) snap() else tween(220, easing = CampusMotion.EmphasizedDecelerate),
+        label = "emptyAlpha"
+    )
+    val enterScale by animateFloatAsState(
+        targetValue = if (visible) 1f else 0.96f,
+        animationSpec = if (reducedMotion) snap() else CampusMotion.navSpring(),
+        label = "emptyScale"
+    )
+
     val title: String
     val subtitle: String
     val actionLabel: String
@@ -618,7 +737,7 @@ fun CampusEmptyState(
     when {
         tab == CampusTab.Poster && hasActiveFilters -> {
             title = "По этим фильтрам пусто"
-            subtitle = "Попробуй изменить поисковый запрос, категорию или выбранный период дат."
+            subtitle = "Попробуй изменить поисковый запрос, направление или выбранный период дат."
             actionLabel = "Сбросить фильтры"
         }
         tab == CampusTab.Favorites -> {
@@ -641,7 +760,12 @@ fun CampusEmptyState(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 28.dp, vertical = 32.dp),
+            .graphicsLayer {
+                alpha = enterAlpha
+                scaleX = enterScale
+                scaleY = enterScale
+            }
+            .padding(horizontal = 28.dp, vertical = 34.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -678,7 +802,7 @@ fun CampusEmptyState(
             textAlign = TextAlign.Center
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(22.dp))
 
         Button(
             onClick = onPrimaryAction,
@@ -687,7 +811,7 @@ fun CampusEmptyState(
                 containerColor = CampusColors.GraphiteElevated,
                 contentColor = CampusColors.Milk
             ),
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 11.dp)
+            contentPadding = PaddingValues(horizontal = 22.dp, vertical = 12.dp)
         ) {
             Text(
                 text = actionLabel,
@@ -697,9 +821,6 @@ fun CampusEmptyState(
     }
 }
 
-/**
- * Информационная карточка метаданных в экране деталей события
- */
 @Composable
 fun DetailMetaTile(
     icon: @Composable () -> Unit,
@@ -742,59 +863,5 @@ fun DetailMetaTile(
                 color = CampusColors.Milk
             )
         }
-    }
-}
-
-/**
- * Рендеринг фотообложки события (пользовательское URI или демонстрационный ресурс)
- */
-@Composable
-internal fun EventCoverImage(event: Event) {
-    val context = LocalContext.current
-    val bitmap = remember(event.photoUri) {
-        if (event.photoUri.isBlank()) null else try {
-            val uri = Uri.parse(event.photoUri)
-            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            context.contentResolver.openInputStream(uri)?.use {
-                BitmapFactory.decodeStream(it, null, bounds)
-            }
-            var sample = 1
-            while (bounds.outWidth / sample > 1600 || bounds.outHeight / sample > 1600) {
-                sample *= 2
-            }
-            context.contentResolver.openInputStream(uri)?.use {
-                BitmapFactory.decodeStream(
-                    it,
-                    null,
-                    BitmapFactory.Options().apply { inSampleSize = sample }
-                )?.asImageBitmap()
-            }
-        } catch (_: Exception) {
-            null
-        }
-    }
-
-    if (bitmap != null) {
-        Image(
-            bitmap = bitmap,
-            contentDescription = event.title,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    } else {
-        val cover = when (event.id) {
-            1 -> R.drawable.cover_science
-            2 -> R.drawable.cover_art
-            3 -> R.drawable.cover_sport
-            4 -> R.drawable.cover_tech
-            5 -> R.drawable.cover_music
-            else -> R.drawable.event_cover
-        }
-        Image(
-            painter = painterResource(cover),
-            contentDescription = event.title,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
     }
 }

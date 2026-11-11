@@ -1,6 +1,11 @@
 package ru.campuslife.app
 
+import android.os.SystemClock
 import android.provider.Settings
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -8,6 +13,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -24,24 +30,63 @@ import androidx.compose.ui.unit.sp
 /**
  * Campus Life — Architectural Dark & Airy Palette
  */
+@Immutable
 object CampusColors {
-    val DeepObsidian = Color(0xFF111317)      // Основной тёмный фон
+    val DeepObsidian = Color(0xFF111317)      // Основной глубокий фон
     val Graphite = Color(0xFF22262B)          // Графитовая поверхность карточек
-    val GraphiteElevated = Color(0xFF292E35)  // Приподнятый графит (фильтры, инпуты, модальные плашки)
-    val GraphiteSubtle = Color(0xFF191C21)    // Мягкая подложка секций
+    val GraphiteElevated = Color(0xFF292E35)  // Приподнятый графит (инпуты, кнопки, плашки)
+    val GraphiteSubtle = Color(0xFF191C21)    // Мягкая подложка секций и модальных окон
 
     val Milk = Color(0xFFF3F0EA)              // Молочно-белый основной текст и символы
     val SkyMuted = Color(0xFFBCCBD7)          // Приглушённый небесный (воздух, стекло, холодные акценты)
-    val WarmSand = Color(0xFFC9B7A0)          // Тёплый бежевый акцент (ключевые действия, даты, статус)
-    val SlateMuted = Color(0xFF929AA4)        // Дополнительный дымчато-серый вторичный текст
+    val WarmSand = Color(0xFFC9B7A0)          // Тёплый бежевый акцент (ключевые действия, даты)
+    val SlateMuted = Color(0xFF929AA4)        // Дымчато-серый вторичный текст
 
     val Hairline = Color(0x1CF3F0EA)          // Деликатный контур поверхностей (11%)
     val HairlineStrong = Color(0x30BCCBD7)    // Световой стеклянный блик (19%)
-    val GlassSurface = Color(0xCC1E2228)      // Полупрозрачная графитовая поверхность капсулы
-    val GlassPillActive = Color(0x29BCCBD7)   // Мягкая активная капсула внутри навигации
+    val GlassSurfaceTop = Color(0xEB282D35)   // Верхняя грань парящего стекла
+    val GlassSurfaceBottom = Color(0xE31B1F25)// Нижняя грань парящего стекла
 
     val Success = Color(0xFFA8C5B5)           // Спокойный шалфейный для подтверждённой записи
     val ErrorSoft = Color(0xFFE5A9A0)         // Деликатный кораллово-бежевый для ошибок формы
+}
+
+/**
+ * Единые кинематические кривые и spring-параметры дизайн-системы (180–280 мс, без паразитных колебаний)
+ */
+object CampusMotion {
+    // Плавный архитектурный выход (быстрый старт, очень мягкая посадка)
+    val EmphasizedDecelerate = CubicBezierEasing(0.18f, 0.88f, 0.22f, 1.0f)
+    val StandardCurve = CubicBezierEasing(0.2f, 0.0f, 0.0f, 1.0f)
+
+    fun <T> navSpring(): SpringSpec<T> = spring(
+        dampingRatio = 0.84f,
+        stiffness = 520f
+    )
+
+    fun <T> tactileSpring(): SpringSpec<T> = spring(
+        dampingRatio = 0.72f,
+        stiffness = 680f
+    )
+
+    fun <T> heartBounceSpring(): SpringSpec<T> = spring(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = 560f
+    )
+}
+
+/**
+ * Защита от случайных двойных/тройных нажатий при открытии экранов и модальных диалогов
+ */
+class RapidTapGuard(private val cooldownMs: Long = 280L) {
+    private var lastTriggerTime = 0L
+
+    fun tryAcquire(): Boolean {
+        val now = SystemClock.elapsedRealtime()
+        if (now - lastTriggerTime < cooldownMs) return false
+        lastTriggerTime = now
+        return true
+    }
 }
 
 @OptIn(ExperimentalTextApi::class)
@@ -118,7 +163,7 @@ val CampusTypography = Typography(
         fontWeight = FontWeight.SemiBold,
         fontSize = 10.5.sp,
         lineHeight = 14.sp,
-        letterSpacing = 0.4.sp
+        letterSpacing = 0.35.sp
     )
 )
 

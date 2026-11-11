@@ -1,8 +1,6 @@
 package ru.campuslife.app
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -37,13 +35,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
@@ -59,9 +60,14 @@ enum class CampusTab(val label: String) {
     Bookings("Записи")
 }
 
+private val CapsuleShape = RoundedCornerShape(percent = 50)
+private val InnerPillShape = RoundedCornerShape(percent = 50)
+
 /**
- * Floating Bottom Navigation — парящая стеклянная капсула с тремя равноширинными вкладками,
- * плавно скользящей внутренней подушкой и тактильным откликом без изменения габаритов панели.
+ * Floating Bottom Navigation (120Hz GPU-accelerated):
+ * - Перемещение активного индикатора и масштабирование выполняются в graphicsLayer (Draw-фаза GPU, 0 layout-перерасчётов).
+ * - Градиенты и световые блики стекла кэшируются в drawWithCache.
+ * - Высота и геометрия капсулы строго постоянны, исключены любые скачки, мигания и исчезновения.
  */
 @Composable
 fun FloatingBottomNav(
@@ -72,110 +78,118 @@ fun FloatingBottomNav(
     modifier: Modifier = Modifier
 ) {
     val reducedMotion = LocalReducedMotion.current
+    val haptics = LocalHapticFeedback.current
+    val density = LocalDensity.current
     val tabs = CampusTab.entries
     val selectedIndex = tabs.indexOf(selectedTab).coerceAtLeast(0)
 
-    val capsuleShape = RoundedCornerShape(percent = 50)
-    val innerPillShape = RoundedCornerShape(percent = 50)
+    val outerRimBrush = remember {
+        Brush.verticalGradient(
+            colors = listOf(
+                CampusColors.Milk.copy(alpha = 0.24f),
+                CampusColors.SkyMuted.copy(alpha = 0.08f),
+                Color.Black.copy(alpha = 0.35f)
+            )
+        )
+    }
+    val innerPillBrush = remember {
+        Brush.verticalGradient(
+            colors = listOf(
+                CampusColors.SkyMuted.copy(alpha = 0.21f),
+                CampusColors.Milk.copy(alpha = 0.08f)
+            )
+        )
+    }
+    val innerPillRimBrush = remember {
+        Brush.verticalGradient(
+            colors = listOf(
+                CampusColors.Milk.copy(alpha = 0.22f),
+                CampusColors.SkyMuted.copy(alpha = 0.05f)
+            )
+        )
+    }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .navigationBarsPadding()
             .padding(horizontal = 18.dp)
-            .padding(bottom = 18.dp, top = 8.dp),
+            .padding(bottom = 16.dp, top = 8.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Внешний контейнер с деликатной глубокой тенью, создающей эффект парения над списком
         BoxWithConstraints(
             modifier = Modifier
-                .widthIn(max = 430.dp)
+                .widthIn(max = 432.dp)
                 .fillMaxWidth()
                 .height(72.dp)
                 .shadow(
                     elevation = 26.dp,
-                    shape = capsuleShape,
-                    ambientColor = Color.Black.copy(alpha = 0.65f),
-                    spotColor = Color.Black.copy(alpha = 0.72f)
+                    shape = CapsuleShape,
+                    ambientColor = Color.Black.copy(alpha = 0.68f),
+                    spotColor = Color.Black.copy(alpha = 0.76f)
                 )
-                .clip(capsuleShape)
-                // Glassmorphism-поверхность: дымчато-графитовый полупрозрачный слой + верхний небесно-молочный рефлекс
-                .background(
-                    Brush.verticalGradient(
+                .clip(CapsuleShape)
+                .drawWithCache {
+                    val surfaceBrush = Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xEB282D35), // Верхняя кромка стекла (~92% непрозрачности для идеальной читаемости)
-                            Color(0xE31B1F25)  // Нижняя глубокая графитовая грань (~89%)
+                            CampusColors.GlassSurfaceTop,
+                            CampusColors.GlassSurfaceBottom
                         )
                     )
-                )
-                .drawBehind {
-                    // Мягкий воздушный блик в верхней трети капсулы
-                    drawRoundRect(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                CampusColors.SkyMuted.copy(alpha = 0.11f),
-                                Color.Transparent
-                            ),
-                            startY = 0f,
-                            endY = size.height * 0.52f
+                    val topSheenBrush = Brush.verticalGradient(
+                        colors = listOf(
+                            CampusColors.SkyMuted.copy(alpha = 0.13f),
+                            Color.Transparent
                         ),
-                        cornerRadius = CornerRadius(size.height / 2f, size.height / 2f)
+                        startY = 0f,
+                        endY = size.height * 0.54f
                     )
-                }
-                .border(
-                    width = 1.dp,
-                    brush = Brush.verticalGradient(
+                    val glowBrush = Brush.radialGradient(
                         colors = listOf(
-                            CampusColors.Milk.copy(alpha = 0.22f),
-                            CampusColors.SkyMuted.copy(alpha = 0.08f),
-                            Color.Black.copy(alpha = 0.32f)
-                        )
-                    ),
-                    shape = capsuleShape
-                )
+                            CampusColors.WarmSand.copy(alpha = 0.07f),
+                            Color.Transparent
+                        ),
+                        center = Offset(size.width * 0.5f, 0f),
+                        radius = size.width * 0.65f
+                    )
+                    val cr = CornerRadius(size.height / 2f, size.height / 2f)
+
+                    onDrawBehind {
+                        drawRoundRect(brush = surfaceBrush, cornerRadius = cr)
+                        drawRoundRect(brush = topSheenBrush, cornerRadius = cr)
+                        drawRoundRect(brush = glowBrush, cornerRadius = cr)
+                    }
+                }
+                .border(width = 1.dp, brush = outerRimBrush, shape = CapsuleShape)
                 .padding(horizontal = 6.dp, vertical = 6.dp)
         ) {
-            val innerWidth = maxWidth
-            val slotWidth = innerWidth / tabs.size
+            val slotWidth = maxWidth / tabs.size
+            val slotWidthPx = with(density) { slotWidth.toPx() }
 
-            val indicatorOffset by animateDpAsState(
-                targetValue = slotWidth * selectedIndex,
+            // Плавная spring-анимация позиции индикатора напрямую в пикселях для GPU translationX
+            val animatedSlotProgress by animateFloatAsState(
+                targetValue = selectedIndex.toFloat(),
                 animationSpec = if (reducedMotion) {
                     snap()
                 } else {
-                    tween(durationMillis = 235, easing = FastOutSlowInEasing)
+                    CampusMotion.navSpring()
                 },
-                label = "navPillOffset"
+                label = "navPillSlotProgress"
             )
 
-            // Плавно скользящая подложка активного раздела (мягкое матовое стекло без кричащих цветов)
+            // Скользящая подушка активной вкладки (движется без перерасчёта layout)
             Box(
                 modifier = Modifier
-                    .offset(x = indicatorOffset)
                     .width(slotWidth)
                     .fillMaxHeight()
-                    .clip(innerPillShape)
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                CampusColors.SkyMuted.copy(alpha = 0.19f),
-                                CampusColors.Milk.copy(alpha = 0.08f)
-                            )
-                        )
-                    )
-                    .border(
-                        width = 0.8.dp,
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                CampusColors.Milk.copy(alpha = 0.20f),
-                                CampusColors.SkyMuted.copy(alpha = 0.04f)
-                            )
-                        ),
-                        shape = innerPillShape
-                    )
+                    .graphicsLayer {
+                        translationX = animatedSlotProgress * slotWidthPx
+                    }
+                    .clip(InnerPillShape)
+                    .background(innerPillBrush)
+                    .border(width = 0.8.dp, brush = innerPillRimBrush, shape = InnerPillShape)
             )
 
-            // Три идеально равных слота вкладок (фиксированная геометрия без скачков ширины)
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
@@ -188,22 +202,22 @@ fun FloatingBottomNav(
                     val pressScale by animateFloatAsState(
                         targetValue = when {
                             reducedMotion -> 1f
-                            isPressed -> 0.94f
+                            isPressed -> 0.93f
                             else -> 1f
                         },
-                        animationSpec = tween(durationMillis = 160, easing = FastOutSlowInEasing),
+                        animationSpec = if (reducedMotion) snap() else CampusMotion.tactileSpring(),
                         label = "tabPressScale"
                     )
 
-                    val iconLift by animateDpAsState(
-                        targetValue = if (isSelected && !reducedMotion) (-1).dp else 0.dp,
-                        animationSpec = if (reducedMotion) snap() else tween(210, easing = FastOutSlowInEasing),
-                        label = "tabIconLift"
+                    val iconLiftPx by animateFloatAsState(
+                        targetValue = if (isSelected && !reducedMotion) with(density) { (-1.2).dp.toPx() } else 0f,
+                        animationSpec = if (reducedMotion) snap() else CampusMotion.navSpring(),
+                        label = "tabIconLiftPx"
                     )
 
                     val contentColor by animateColorAsState(
                         targetValue = if (isSelected) CampusColors.Milk else CampusColors.SlateMuted,
-                        animationSpec = if (reducedMotion) snap() else tween(200),
+                        animationSpec = if (reducedMotion) snap() else tween(190, easing = CampusMotion.EmphasizedDecelerate),
                         label = "tabContentColor"
                     )
 
@@ -213,11 +227,17 @@ fun FloatingBottomNav(
                         CampusTab.Poster -> 0
                     }
 
+                    val badgeAlpha by animateFloatAsState(
+                        targetValue = if (badgeCount > 0 && !isSelected) 1f else 0f,
+                        animationSpec = if (reducedMotion) snap() else tween(180),
+                        label = "tabBadgeAlpha"
+                    )
+
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .clip(innerPillShape)
+                            .clip(InnerPillShape)
                             .semantics {
                                 selected = isSelected
                                 contentDescription = tab.label
@@ -226,7 +246,12 @@ fun FloatingBottomNav(
                                 interactionSource = interaction,
                                 indication = null,
                                 role = Role.Tab,
-                                onClick = { onSelect(tab) }
+                                onClick = {
+                                    if (!isSelected) {
+                                        haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    }
+                                    onSelect(tab)
+                                }
                             )
                             .graphicsLayer {
                                 scaleX = pressScale
@@ -240,8 +265,8 @@ fun FloatingBottomNav(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .offset(y = iconLift)
-                                    .height(24.dp),
+                                    .height(24.dp)
+                                    .graphicsLayer { translationY = iconLiftPx },
                                 contentAlignment = Alignment.Center
                             ) {
                                 when (tab) {
@@ -262,13 +287,17 @@ fun FloatingBottomNav(
                                     )
                                 }
 
-                                // Деликатная точка-индикатор наличия элементов (не меняет центровку иконки)
-                                if (badgeCount > 0 && !isSelected) {
+                                if (badgeAlpha > 0.01f) {
                                     Box(
                                         modifier = Modifier
                                             .align(Alignment.TopEnd)
                                             .offset(x = 5.dp, y = (-1).dp)
                                             .size(5.5.dp)
+                                            .graphicsLayer {
+                                                alpha = badgeAlpha
+                                                scaleX = badgeAlpha
+                                                scaleY = badgeAlpha
+                                            }
                                             .clip(CircleShape)
                                             .background(CampusColors.WarmSand)
                                     )
@@ -277,7 +306,6 @@ fun FloatingBottomNav(
 
                             Spacer(Modifier.height(3.5.dp))
 
-                            // Фиксированный вес шрифта (Medium) исключает микро-прыжки ширины букв при смене вкладки
                             Text(
                                 text = tab.label,
                                 style = MaterialTheme.typography.labelMedium.copy(
@@ -285,7 +313,7 @@ fun FloatingBottomNav(
                                     fontWeight = FontWeight.Medium,
                                     letterSpacing = 0.15.sp
                                 ),
-                                color = if (isSelected) CampusColors.Milk else CampusColors.SlateMuted.copy(alpha = 0.92f),
+                                color = contentColor,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
