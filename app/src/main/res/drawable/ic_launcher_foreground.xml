@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Safe zone is centered 66x66 inside 108x108: scale 0.62 + translate(23, 23) -->
+    <group
+        android:translateX="23"
+        android:translateY="23"
+        android:scaleX="0.62"
+        android:scaleY="0.62">
+
+        <!-- Outer C-orbit arc -->
+        <path
+            android:pathData="M76.40,70.89 A32.5,32.5 0,1 1,77.79 30.90"
+            android:strokeWidth="7.0"
+            android:strokeLineCap="round">
+            <aapt:attr name="android:strokeColor">
+                <gradient
+                    android:startX="20"
+                    android:startY="18"
+                    android:endX="82"
+                    android:endY="84"
+                    android:type="linear">
+                    <item android:offset="0.0" android:color="#FFFFFFFF" />
+                    <item android:offset="0.68" android:color="#FFF3F0EA" />
+                    <item android:offset="1.0" android:color="#FFBCCBD7" />
+                </gradient>
+            </aapt:attr>
+        </path>
+
+        <!-- Middle dynamic orbit arc -->
+        <path
+            android:pathData="M62.44,68.16 A21.2,21.2 0,1 1,66.35 30.92"
+            android:strokeColor="#FFDCE4EC"
+            android:strokeWidth="6.3"
+            android:strokeLineCap="round" />
+
+        <!-- Inner core arc -->
+        <path
+            android:pathData="M54.75,61.36 A10.8,10.8 0,0 1,57.75 40.03"
+            android:strokeColor="#FFF3F0EA"
+            android:strokeWidth="5.7"
+            android:strokeLineCap="round" />
+    </group>
+</vector>

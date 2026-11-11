@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="640" height="640" fill="none">
+  <defs>
+    <radialGradient id="bgGlow" cx="38%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#272C33"/>
+      <stop offset="55%" stop-color="#16191E"/>
+      <stop offset="100%" stop-color="#111317"/>
+    </radialGradient>
+    <radialGradient id="ambientHalo" cx="50%" cy="48%" r="42%">
+      <stop offset="0%" stop-color="#BCCBD7" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#BCCBD7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="arcOuter" x1="46" y1="42" x2="114" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="65%" stop-color="#F3F0EA"/>
+      <stop offset="100%" stop-color="#BCCBD7"/>
+    </linearGradient>
+    <linearGradient id="arcMid" x1="56" y1="52" x2="106" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F3F0EA"/>
+      <stop offset="100%" stop-color="#BCCBD7" stop-opacity="0.86"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" fill="url(#bgGlow)"/>
+  <circle cx="80" cy="80" r="58" fill="url(#ambientHalo)"/>
+  <g transform="translate(30, 30)">
+    <path d="M 76.40 70.89 A 32.5 32.5 0 1 1 77.79 30.90" stroke="url(#arcOuter)" stroke-width="6.8" stroke-linecap="round"/>
+    <path d="M 62.44 68.16 A 21.2 21.2 0 1 1 66.35 30.92" stroke="url(#arcMid)" stroke-width="6.2" stroke-linecap="round"/>
+    <path d="M 54.75 61.36 A 10.8 10.8 0 0 1 57.75 40.03" stroke="#F3F0EA" stroke-opacity="0.92" stroke-width="5.6" stroke-linecap="round"/>
+  </g>
+</svg>
