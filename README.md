@@ -10,14 +10,14 @@
 **Всероссийский хакатон по информационным технологиям «TASKILLS» · Трек «Мобильная разработка»**
 
 <p align="center">
-  <a href="https://github.com/Thebenua/portfolio-site/releases/latest">
-    <img src="https://img.shields.io/badge/Скачать_релиз-v1.2_APK_(3.0_МБ)-C9B7A0?style=for-the-badge&logo=android&logoColor=111317" alt="Скачать APK v1.2" />
+  <a href="https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk">
+    <img src="https://img.shields.io/badge/Скачать_APK-v1.2_Release_(3.0_МБ)-C9B7A0?style=for-the-badge&logo=android&logoColor=111317" alt="Скачать APK v1.2" />
   </a>
-  <a href="https://github.com/Thebenua/portfolio-site/releases/latest">
+  <a href="https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-demo.mp4">
     <img src="https://img.shields.io/badge/Смотреть_демо-Видео_работы_(MP4)-BCCBD7?style=for-the-badge&logo=youtube&logoColor=111317" alt="Смотреть видеодемонстрацию" />
   </a>
-  <a href="design/SYSTEM.md">
-    <img src="https://img.shields.io/badge/Дизайн--система-Architectural_Dark-22262B?style=for-the-badge&logo=figma&logoColor=F3F0EA" alt="Дизайн-система" />
+  <a href="https://github.com/Thebenua/portfolio-site/releases/tag/v1.2.0">
+    <img src="https://img.shields.io/badge/GitHub_Release-v1.2.0-22262B?style=for-the-badge&logo=github&logoColor=F3F0EA" alt="Открыть релиз v1.2.0" />
   </a>
 </p>
 
@@ -123,8 +123,8 @@
 
 | Материал | Описание | Ссылка |
 | :--- | :--- | :--- |
-| **Release APK (`v1.2`)** | Оптимизированная и сжатая R8 сборка для Android 8.0+ (`3.0 МБ`) | [`campuslife/CampusLife-preview.apk`](campuslife/CampusLife-preview.apk) · **[GitHub Release](https://github.com/Thebenua/portfolio-site/releases/latest)** |
-| **Видеодемонстрация (`MP4`)** | Запись работы приложения и пользовательских сценариев | [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) · **[GitHub Release](https://github.com/Thebenua/portfolio-site/releases/latest)** |
+| **Release APK (`v1.2`)** | Оптимизированная и сжатая R8 сборка для Android 8.0+ (`3.0 МБ`) | **[Скачать APK из релиза](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk)** · [`campuslife/CampusLife-preview.apk`](campuslife/CampusLife-preview.apk) |
+| **Видеодемонстрация (`MP4`)** | Запись работы приложения и пользовательских сценариев | **[Скачать видео из релиза](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-demo.mp4)** · [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) |
 
 ---
 
