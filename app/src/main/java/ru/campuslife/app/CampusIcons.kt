@@ -549,3 +549,248 @@ fun CheckGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 15.dp) {
             }
     )
 }
+
+/**
+ * Иконка QR-кода / сканера (единая сетка 24x24, кэширование геометрии)
+ */
+@Composable
+fun QrCodeGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 19.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                val cr = CornerRadius(1.6f * u, 1.6f * u)
+                val boxSize = Size(6.4f * u, 6.4f * u)
+                onDrawBehind {
+                    drawRoundRect(color = color, topLeft = Offset(3.6f * u, 3.6f * u), size = boxSize, cornerRadius = cr, style = st)
+                    drawRoundRect(color = color, topLeft = Offset(14.0f * u, 3.6f * u), size = boxSize, cornerRadius = cr, style = st)
+                    drawRoundRect(color = color, topLeft = Offset(3.6f * u, 14.0f * u), size = boxSize, cornerRadius = cr, style = st)
+
+                    drawCircle(color = color, radius = 1.15f * u, center = Offset(6.8f * u, 6.8f * u))
+                    drawCircle(color = color, radius = 1.15f * u, center = Offset(17.2f * u, 6.8f * u))
+                    drawCircle(color = color, radius = 1.15f * u, center = Offset(6.8f * u, 17.2f * u))
+
+                    drawCircle(color = color, radius = 1.15f * u, center = Offset(14.6f * u, 14.6f * u))
+                    drawLine(color, Offset(17.8f * u, 14.2f * u), Offset(19.8f * u, 14.2f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                    drawLine(color, Offset(14.2f * u, 18.0f * u), Offset(16.6f * u, 18.0f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                    drawLine(color, Offset(19.2f * u, 17.0f * u), Offset(19.2f * u, 19.8f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                }
+            }
+    )
+}
+
+/**
+ * Иконка видоискателя сканера QR-кодов
+ */
+@Composable
+fun ScanFrameGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 20.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val corners = Path().apply {
+                    // Верхний левый
+                    moveTo(4f * u, 8.5f * u)
+                    lineTo(4f * u, 5.5f * u)
+                    cubicTo(4f * u, 4.5f * u, 4.5f * u, 4f * u, 5.5f * u, 4f * u)
+                    lineTo(8.5f * u, 4f * u)
+                    // Верхний правый
+                    moveTo(15.5f * u, 4f * u)
+                    lineTo(18.5f * u, 4f * u)
+                    cubicTo(19.5f * u, 4f * u, 20f * u, 4.5f * u, 20f * u, 5.5f * u)
+                    lineTo(20f * u, 8.5f * u)
+                    // Нижний левый
+                    moveTo(4f * u, 15.5f * u)
+                    lineTo(4f * u, 18.5f * u)
+                    cubicTo(4f * u, 19.5f * u, 4.5f * u, 20f * u, 5.5f * u, 20f * u)
+                    lineTo(8.5f * u, 20f * u)
+                    // Нижний правый
+                    moveTo(15.5f * u, 20f * u)
+                    lineTo(18.5f * u, 20f * u)
+                    cubicTo(19.5f * u, 20f * u, 20f * u, 19.5f * u, 20f * u, 18.5f * u)
+                    lineTo(20f * u, 15.5f * u)
+                }
+                val st = Stroke(width = 1.95f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawPath(corners, color = color, style = st)
+                    drawLine(
+                        color = CampusColors.WarmSand,
+                        start = Offset(6.5f * u, 12f * u),
+                        end = Offset(17.5f * u, 12f * u),
+                        strokeWidth = 1.85f * u,
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
+    )
+}
+
+/**
+ * Иконка участников / аудитории организатора
+ */
+@Composable
+fun UsersGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 18.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val body = Path().apply {
+                    moveTo(3.6f * u, 18.8f * u)
+                    cubicTo(3.6f * u, 15.5f * u, 6.4f * u, 13.6f * u, 9.6f * u, 13.6f * u)
+                    cubicTo(12.8f * u, 13.6f * u, 15.6f * u, 15.5f * u, 15.6f * u, 18.8f * u)
+                }
+                val secondBody = Path().apply {
+                    moveTo(15.5f * u, 13.9f * u)
+                    cubicTo(18.1f * u, 14.3f * u, 20.2f * u, 16.0f * u, 20.4f * u, 18.6f * u)
+                }
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawCircle(color = color, radius = 3.1f * u, center = Offset(9.6f * u, 8.0f * u), style = st)
+                    drawPath(body, color = color, style = st)
+                    drawArc(
+                        color = color.copy(alpha = 0.85f),
+                        startAngle = -75f,
+                        sweepAngle = 155f,
+                        useCenter = false,
+                        topLeft = Offset(13.2f * u, 5.3f * u),
+                        size = Size(5.4f * u, 5.4f * u),
+                        style = st
+                    )
+                    drawPath(secondBody, color = color.copy(alpha = 0.85f), style = st)
+                }
+            }
+    )
+}
+
+/**
+ * Иконка редактирования события организатором
+ */
+@Composable
+fun EditGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 18.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val pen = Path().apply {
+                    moveTo(15.2f * u, 4.6f * u)
+                    lineTo(19.4f * u, 8.8f * u)
+                    lineTo(9.2f * u, 19.0f * u)
+                    lineTo(4.6f * u, 19.6f * u)
+                    lineTo(5.2f * u, 15.0f * u)
+                    close()
+                }
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawPath(pen, color = color, style = st)
+                    drawLine(
+                        color = color,
+                        start = Offset(13.2f * u, 6.8f * u),
+                        end = Offset(17.2f * u, 10.8f * u),
+                        strokeWidth = 1.65f * u,
+                        cap = StrokeCap.Round
+                    )
+                }
+            }
+    )
+}
+
+/**
+ * Иконка удаления пользовательского события
+ */
+@Composable
+fun TrashGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 18.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val bin = Path().apply {
+                    moveTo(6.4f * u, 7.2f * u)
+                    lineTo(7.4f * u, 19.2f * u)
+                    cubicTo(7.5f * u, 20.0f * u, 8.1f * u, 20.4f * u, 9.0f * u, 20.4f * u)
+                    lineTo(15.0f * u, 20.4f * u)
+                    cubicTo(15.9f * u, 20.4f * u, 16.5f * u, 20.0f * u, 16.6f * u, 19.2f * u)
+                    lineTo(17.6f * u, 7.2f * u)
+                }
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawLine(color, Offset(4.5f * u, 7.0f * u), Offset(19.5f * u, 7.0f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                    drawLine(color, Offset(9.5f * u, 4.2f * u), Offset(14.5f * u, 4.2f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                    drawPath(bin, color = color, style = st)
+                    drawLine(color, Offset(10.3f * u, 10.8f * u), Offset(10.6f * u, 16.8f * u), strokeWidth = 1.65f * u, cap = StrokeCap.Round)
+                    drawLine(color, Offset(13.7f * u, 10.8f * u), Offset(13.4f * u, 16.8f * u), strokeWidth = 1.65f * u, cap = StrokeCap.Round)
+                }
+            }
+    )
+}
+
+/**
+ * Иконка отправки / шаринга QR-кода или приглашения
+ */
+@Composable
+fun ShareGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 18.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val arrow = Path().apply {
+                    moveTo(8.2f * u, 8.2f * u)
+                    lineTo(12.0f * u, 4.2f * u)
+                    lineTo(15.8f * u, 8.2f * u)
+                }
+                val tray = Path().apply {
+                    moveTo(5.2f * u, 13.5f * u)
+                    lineTo(5.2f * u, 18.2f * u)
+                    cubicTo(5.2f * u, 19.3f * u, 6.0f * u, 20.0f * u, 7.2f * u, 20.0f * u)
+                    lineTo(16.8f * u, 20.0f * u)
+                    cubicTo(18.0f * u, 20.0f * u, 18.8f * u, 19.3f * u, 18.8f * u, 18.2f * u)
+                    lineTo(18.8f * u, 13.5f * u)
+                }
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawPath(arrow, color = color, style = st)
+                    drawLine(color, Offset(12.0f * u, 4.6f * u), Offset(12.0f * u, 15.0f * u), strokeWidth = 1.85f * u, cap = StrokeCap.Round)
+                    drawPath(tray, color = color, style = st)
+                }
+            }
+    )
+}
+
+/**
+ * Иконка профиля / кабинета организатора
+ */
+@Composable
+fun OrganizerBadgeGlyph(color: Color, modifier: Modifier = Modifier, size: Dp = 18.dp) {
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val u = this.size.minDimension / 24f
+                val shield = Path().apply {
+                    moveTo(12f * u, 3.6f * u)
+                    lineTo(18.8f * u, 6.4f * u)
+                    lineTo(18.8f * u, 11.8f * u)
+                    cubicTo(18.8f * u, 16.0f * u, 15.8f * u, 19.0f * u, 12f * u, 20.6f * u)
+                    cubicTo(8.2f * u, 19.0f * u, 5.2f * u, 16.0f * u, 5.2f * u, 11.8f * u)
+                    lineTo(5.2f * u, 6.4f * u)
+                    close()
+                }
+                val check = Path().apply {
+                    moveTo(9.0f * u, 12.1f * u)
+                    lineTo(11.1f * u, 14.2f * u)
+                    lineTo(15.2f * u, 10.0f * u)
+                }
+                val st = Stroke(width = 1.85f * u, cap = StrokeCap.Round, join = StrokeJoin.Round)
+                onDrawBehind {
+                    drawPath(shield, color = color, style = st)
+                    drawPath(check, color = CampusColors.WarmSand, style = st)
+                }
+            }
+    )
+}

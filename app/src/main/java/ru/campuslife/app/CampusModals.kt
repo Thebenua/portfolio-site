@@ -61,7 +61,7 @@ private val WeekDayLabels = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб
  * Базовый контейнер модального окна с плавным появлением (scale + fade 210 мс) в едином стиле Campus Life
  */
 @Composable
-private fun CampusModalFrame(
+internal fun CampusModalFrame(
     onDismiss: () -> Unit,
     content: @Composable () -> Unit
 ) {

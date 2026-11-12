@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,24 +35,26 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -73,7 +74,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -86,103 +86,43 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
-import org.json.JSONArray
-import org.json.JSONObject
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-@Immutable
-data class Event(
-    val id: Int,
-    val title: String,
-    val category: String,
-    val date: LocalDateTime,
-    val place: String,
-    val description: String,
-    val subtitle: String,
-    val tint: Color,
-    val photoUri: String = ""
-)
-
-private fun seedEvents(day: LocalDate): List<Event> = listOf(
-    Event(
-        id = 1,
-        title = "Ночь науки",
-        category = "Наука",
-        date = day.plusDays(2).atTime(16, 30),
-        place = "Актовый зал",
-        description = "Опыты, которые можно не только увидеть, но и повторить. Исследуем свет, звук и неожиданные свойства привычных вещей.",
-        subtitle = "Опыты и открытия рядом",
-        tint = Color(0xFF333C48)
-    ),
-    Event(
-        id = 2,
-        title = "Творческая мастерская",
-        category = "Творчество",
-        date = day.plusDays(4).atTime(15, 0),
-        place = "Кабинет 204",
-        description = "Встреча для тех, кто любит придумывать и создавать. Материалы будут на месте, опыт не требуется.",
-        subtitle = "Идеи, которым нужно место",
-        tint = Color(0xFF423837)
-    ),
-    Event(
-        id = 3,
-        title = "Школьный турнир",
-        category = "Спорт",
-        date = day.plusDays(6).atTime(14, 30),
-        place = "Спортивный зал",
-        description = "Собираем команды для дружеских соревнований. Приходи участвовать или поддержать друзей.",
-        subtitle = "Играем одной командой",
-        tint = Color(0xFF2F3E3A)
-    ),
-    Event(
-        id = 4,
-        title = "Клуб создателей",
-        category = "Технологии",
-        date = day.plusDays(9).atTime(16, 0),
-        place = "Медиатека",
-        description = "Обсуждаем идеи приложений и пробуем создавать небольшие проекты вместе. Можно прийти без подготовки.",
-        subtitle = "От первой идеи к проекту",
-        tint = Color(0xFF2E3645)
-    ),
-    Event(
-        id = 5,
-        title = "Открытый микрофон",
-        category = "Творчество",
-        date = day.plusDays(12).atTime(17, 0),
-        place = "Библиотека",
-        description = "Музыка, стихи и истории. Выступай или просто приходи послушать в уютной компании.",
-        subtitle = "Вечер, где слышно каждого",
-        tint = Color(0xFF3F3632)
-    )
-)
-
 class MainActivity : ComponentActivity() {
     private var pendingReminder: Pair<Event, Int>? = null
     private var permissionVersion by mutableIntStateOf(0)
+    private var pendingTestNotificationEvent by mutableStateOf<Event?>(null)
+    private var incomingDeepLink by mutableStateOf<String?>(null)
 
     private val permission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val pending = pendingReminder
+        val testEvent = pendingTestNotificationEvent
         pendingReminder = null
-        if (granted && pending != null) {
-            saveReminder(this, pending.first, pending.second)
-            permissionVersion++
-        } else if (!granted) {
+        pendingTestNotificationEvent = null
+
+        if (granted) {
+            if (pending != null) {
+                saveReminder(this, pending.first, pending.second)
+                permissionVersion++
+            }
+            if (testEvent != null) {
+                triggerInstantReminderPreview(this, testEvent)
+            }
+        } else {
             Toast.makeText(
                 this,
-                "Разреши уведомления, чтобы получать напоминания",
+                "Разреши уведомления, чтобы получать напоминания о событиях",
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -196,10 +136,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         preferSmoothDisplayMode()
 
+        if (savedInstanceState == null) {
+            intent?.dataString?.takeIf { it.startsWith("campuslife://", ignoreCase = true) }?.let {
+                incomingDeepLink = it
+            }
+        }
+
         setContent {
             CampusTheme {
                 CampusApp(
                     permissionVersion = permissionVersion,
+                    incomingDeepLink = incomingDeepLink,
+                    onConsumeDeepLink = { incomingDeepLink = null },
                     onRemind = { event, minutes ->
                         if (minutes == 0) {
                             cancelReminder(this, event)
@@ -218,9 +166,28 @@ class MainActivity : ComponentActivity() {
                             saveReminder(this, event, minutes)
                             true
                         }
+                    },
+                    onTestNotification = { event ->
+                        if (
+                            Build.VERSION.SDK_INT >= 33 &&
+                            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            pendingTestNotificationEvent = event
+                            permission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            triggerInstantReminderPreview(this, event)
+                        }
                     }
                 )
             }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent.dataString?.takeIf { it.startsWith("campuslife://", ignoreCase = true) }?.let {
+            incomingDeepLink = it
         }
     }
 }
@@ -229,6 +196,7 @@ private fun reminderIntent(context: Context, event: Event): PendingIntent {
     val intent = Intent(context, ReminderReceiver::class.java)
         .putExtra("title", event.title)
         .putExtra("place", event.place)
+        .putExtra("time", event.date.format(TimeFmt))
         .putExtra("id", event.id)
     return PendingIntent.getBroadcast(
         context,
@@ -244,10 +212,19 @@ private fun saveReminder(context: Context, event: Event, minutes: Int) {
         .atZone(ZoneId.systemDefault())
         .toInstant()
         .toEpochMilli()
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val pi = reminderIntent(context, event)
     try {
-        (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
-            .set(AlarmManager.RTC_WAKEUP, time, reminderIntent(context, event))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi)
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pi)
+        }
     } catch (_: SecurityException) {
+        try {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, time, pi)
+        } catch (_: Exception) {
+        }
     }
     context.getSharedPreferences("campus", Context.MODE_PRIVATE)
         .edit()
@@ -267,47 +244,18 @@ private fun cancelReminder(context: Context, event: Event) {
         .apply()
 }
 
-private fun loadCustom(context: Context): List<Event> = try {
-    val raw = context.getSharedPreferences("campus", Context.MODE_PRIVATE)
-        .getString("custom_events", "[]")
-    val array = JSONArray(raw)
-    (0 until array.length()).map { index ->
-        val obj = array.getJSONObject(index)
-        Event(
-            id = obj.getInt("id"),
-            title = obj.getString("title"),
-            category = obj.getString("category"),
-            date = LocalDateTime.parse(obj.getString("date")),
-            place = obj.getString("place"),
-            description = obj.getString("description"),
-            subtitle = obj.getString("subtitle"),
-            tint = Color(0xFF333C48),
-            photoUri = obj.optString("photoUri", "")
-        )
-    }
-} catch (_: Exception) {
-    emptyList()
-}
-
-private fun saveCustom(context: Context, event: Event) {
-    val prefs = context.getSharedPreferences("campus", Context.MODE_PRIVATE)
-    val array = try {
-        JSONArray(prefs.getString("custom_events", "[]"))
-    } catch (_: Exception) {
-        JSONArray()
-    }
-    array.put(
-        JSONObject()
-            .put("id", event.id)
-            .put("title", event.title)
-            .put("category", event.category)
-            .put("date", event.date.toString())
-            .put("place", event.place)
-            .put("description", event.description)
-            .put("subtitle", event.subtitle)
-            .put("photoUri", event.photoUri)
-    )
-    prefs.edit().putString("custom_events", array.toString()).apply()
+private fun triggerInstantReminderPreview(context: Context, event: Event) {
+    val broadcast = Intent(context, ReminderReceiver::class.java)
+        .putExtra("title", event.title)
+        .putExtra("place", event.place)
+        .putExtra("time", event.date.format(TimeFmt))
+        .putExtra("id", event.id)
+    ReminderReceiver().onReceive(context, broadcast)
+    Toast.makeText(
+        context,
+        "Тестовое уведомление отправлено в шторку системы",
+        Toast.LENGTH_SHORT
+    ).show()
 }
 
 class BootReceiver : BroadcastReceiver() {
@@ -315,7 +263,8 @@ class BootReceiver : BroadcastReceiver() {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
         val prefs = context.getSharedPreferences("campus", Context.MODE_PRIVATE)
         val seed = prefs.getLong("seed_day", 0L)
-        val all = (if (seed != 0L) seedEvents(LocalDate.ofEpochDay(seed)) else emptyList()) + loadCustom(context)
+        if (seed == 0L) return
+        val all = CampusStorage.loadAllEvents(context, LocalDate.ofEpochDay(seed))
         all.forEach { event ->
             val minutes = prefs.getInt("reminder_${event.id}", 0)
             if (minutes > 0 && event.date.minusMinutes(minutes.toLong()).isAfter(LocalDateTime.now())) {
@@ -330,24 +279,38 @@ class ReminderReceiver : BroadcastReceiver() {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= 26) {
             manager.createNotificationChannel(
-                NotificationChannel("events", "Мероприятия", NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel(
+                    "events",
+                    "Мероприятия кампуса",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
             )
+        }
+        val eventId = intent.getIntExtra("id", 0)
+        val openIntent = Intent(context, MainActivity::class.java).apply {
+            if (eventId > 0) {
+                data = android.net.Uri.parse("campuslife://register?id=$eventId")
+            }
         }
         val launch = PendingIntent.getActivity(
             context,
-            0,
-            Intent(context, MainActivity::class.java),
+            eventId,
+            openIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
+        val place = intent.getStringExtra("place").orEmpty()
+        val time = intent.getStringExtra("time").orEmpty()
+        val subtitle = if (time.isNotEmpty()) "$time · $place" else place
         val notification = NotificationCompat.Builder(context, "events")
             .setSmallIcon(R.drawable.ic_stat_campus)
             .setContentTitle("Скоро: ${intent.getStringExtra("title")}")
-            .setContentText(intent.getStringExtra("place"))
+            .setContentText(subtitle)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(launch)
             .setAutoCancel(true)
             .build()
         try {
-            manager.notify(intent.getIntExtra("id", 0), notification)
+            manager.notify(eventId, notification)
         } catch (_: SecurityException) {
         }
     }
@@ -369,35 +332,39 @@ private val BottomScrimBrush = Brush.verticalGradient(
     )
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CampusApp(
     permissionVersion: Int,
-    onRemind: (Event, Int) -> Boolean
+    incomingDeepLink: String?,
+    onConsumeDeepLink: () -> Unit,
+    onRemind: (Event, Int) -> Boolean,
+    onTestNotification: (Event) -> Unit
 ) {
     val ctx = LocalContext.current
     val reducedMotion = LocalReducedMotion.current
     val prefs = remember { ctx.getSharedPreferences("campus", Context.MODE_PRIVATE) }
 
-    // Фоновый прогрев обложек сразу после старта для мгновенного скролла 120 Гц без рывков
     LaunchedEffect(Unit) {
         CampusImageCache.preloadDefaults(ctx)
     }
 
-    val seed = remember {
-        val start = prefs.getLong("seed_day", 0L).let { saved ->
-            if (saved == 0L) {
-                LocalDate.now().toEpochDay().also { value ->
-                    prefs.edit().putLong("seed_day", value).apply()
-                }
-            } else {
-                saved
+    val seedDay = remember {
+        val saved = prefs.getLong("seed_day", 0L)
+        val epoch = if (saved == 0L) {
+            LocalDate.now().toEpochDay().also { value ->
+                prefs.edit().putLong("seed_day", value).apply()
             }
+        } else {
+            saved
         }
-        seedEvents(LocalDate.ofEpochDay(start))
+        LocalDate.ofEpochDay(epoch)
     }
 
-    var custom by remember { mutableStateOf(loadCustom(ctx)) }
-    val allEvents = remember(seed, custom) { (seed + custom).sortedBy { it.date } }
+    var eventsVersion by remember { mutableIntStateOf(0) }
+    val allEvents = remember(seedDay, eventsVersion) {
+        CampusStorage.loadAllEvents(ctx, seedDay)
+    }
 
     var favorites by remember {
         mutableStateOf(prefs.getStringSet("favorites", emptySet()).orEmpty().toSet())
@@ -405,15 +372,18 @@ private fun CampusApp(
     var joined by remember {
         mutableStateOf(prefs.getStringSet("joined", emptySet()).orEmpty().toSet())
     }
+    var attendeesVersion by remember { mutableIntStateOf(0) }
     var reminderVersion by rememberSaveable { mutableIntStateOf(0) }
 
-    // Все пользовательские состояния сохраняются при повороте экрана и смене размера окна (rememberSaveable)
+    var studentName by remember { mutableStateOf(CampusStorage.getStudentName(ctx)) }
+    var studentGroup by remember { mutableStateOf(CampusStorage.getStudentGroup(ctx)) }
+
     var activeTabName by rememberSaveable { mutableStateOf(CampusTab.Poster.name) }
     val activeTab = remember(activeTabName) {
         CampusTab.entries.firstOrNull { it.name == activeTabName } ?: CampusTab.Poster
     }
 
-    // "home", "create" или "detail:<id>"
+    // Маршруты: "home" | "create" | "detail:<id>" | "edit:<id>" | "scan" | "checkin:<id>"
     var routeKey by rememberSaveable { mutableStateOf("home") }
 
     var query by rememberSaveable { mutableStateOf("") }
@@ -423,8 +393,12 @@ private fun CampusApp(
     val exactDate = remember(exactDateEpoch) { exactDateEpoch?.let(LocalDate::ofEpochDay) }
 
     var showFilterCalendar by rememberSaveable { mutableStateOf(false) }
+    var showProfileModal by rememberSaveable { mutableStateOf(false) }
 
-    // Независимая позиция прокрутки для каждой из 3 вкладок — скролл никогда не сбрасывается при возврате из деталей!
+    // Модальное окно QR-кода: Pair(eventId, isParticipantTicket)
+    var qrModalTarget by remember { mutableStateOf<Pair<Event, Boolean>?>(null) }
+    var participantsModalEvent by remember { mutableStateOf<Event?>(null) }
+
     val posterListState = rememberLazyListState()
     val favoritesListState = rememberLazyListState()
     val bookingsListState = rememberLazyListState()
@@ -436,9 +410,114 @@ private fun CampusApp(
         return updated
     }
 
+    fun registerCurrentUserForEvent(target: Event, viaQr: Boolean) {
+        val idStr = target.id.toString()
+        val currentParticipants = CampusStorage.totalParticipantCount(
+            ctx,
+            target,
+            isCurrentUserJoined = idStr in joined
+        )
+        if (idStr !in joined && currentParticipants >= target.capacity) {
+            Toast.makeText(ctx, "На это мероприятие уже заняты все места", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (idStr !in joined) {
+            val updated = joined + idStr
+            prefs.edit().putStringSet("joined", updated).apply()
+            joined = updated
+        }
+        CampusStorage.syncCurrentUserRegistration(ctx, target.id, joined = true, viaQr = viaQr)
+        attendeesVersion++
+    }
+
+    fun toggleCurrentUserJoin(target: Event) {
+        val idStr = target.id.toString()
+        val wasJoined = idStr in joined
+        if (!wasJoined) {
+            val currentParticipants = CampusStorage.totalParticipantCount(ctx, target, isCurrentUserJoined = false)
+            if (currentParticipants >= target.capacity) {
+                Toast.makeText(ctx, "Свободных мест на событие не осталось", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+        joined = toggleStoredSet(joined, "joined", target.id)
+        CampusStorage.syncCurrentUserRegistration(ctx, target.id, joined = !wasJoined, viaQr = false)
+        attendeesVersion++
+        if (wasJoined) {
+            cancelReminder(ctx, target)
+            reminderVersion++
+        }
+    }
+
+    fun applyDecodedQr(payload: ParsedQrPayload, checkInTarget: Event?) {
+        when (payload) {
+            is ParsedQrPayload.EventInvite -> {
+                var target = allEvents.firstOrNull { it.id == payload.eventId }
+                if (target == null && payload.embeddedEvent != null) {
+                    CampusStorage.upsertEvent(ctx, payload.embeddedEvent)
+                    eventsVersion++
+                    target = payload.embeddedEvent
+                }
+                if (target != null) {
+                    registerCurrentUserForEvent(target, viaQr = true)
+                    routeKey = "detail:${target.id}"
+                    Toast.makeText(
+                        ctx,
+                        "QR принят! Ты записан на «${target.title}»",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(ctx, "Событие из QR-кода не найдено", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            is ParsedQrPayload.ParticipantTicket -> {
+                val targetId = checkInTarget?.id ?: payload.eventId
+                var target = allEvents.firstOrNull { it.id == targetId }
+                if (target == null && payload.embeddedEvent != null) {
+                    CampusStorage.upsertEvent(ctx, payload.embeddedEvent)
+                    eventsVersion++
+                    target = payload.embeddedEvent
+                }
+                if (target != null) {
+                    CampusStorage.addExternalCheckInAttendee(
+                        context = ctx,
+                        eventId = target.id,
+                        name = payload.attendeeName,
+                        group = payload.attendeeGroup,
+                        source = "qr"
+                    )
+                    attendeesVersion++
+                    routeKey = "detail:${target.id}"
+                    Toast.makeText(
+                        ctx,
+                        "Отмечен участник: ${payload.attendeeName} (${payload.attendeeGroup})",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(ctx, "Событие билета не найдено", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // Обработка входящего deep-link campuslife://... (из внешнего сканера камеры или уведомления)
+    LaunchedEffect(incomingDeepLink, allEvents) {
+        val raw = incomingDeepLink ?: return@LaunchedEffect
+        onConsumeDeepLink()
+        val parsed = CampusQrCodec.parsePayloadOrShortCode(raw, allEvents)
+        if (parsed != null) {
+            applyDecodedQr(parsed, checkInTarget = null)
+        }
+    }
+
     val isOverlayOpen = routeKey != "home"
     BackHandler(enabled = isOverlayOpen) {
-        routeKey = "home"
+        routeKey = when {
+            routeKey.startsWith("edit:") -> "detail:${routeKey.removePrefix("edit:")}"
+            routeKey.startsWith("checkin:") -> "detail:${routeKey.removePrefix("checkin:")}"
+            else -> "home"
+        }
     }
 
     val detailEvent = remember(routeKey, allEvents) {
@@ -450,6 +529,26 @@ private fun CampusApp(
         }
     }
 
+    val editEvent = remember(routeKey, allEvents) {
+        if (routeKey.startsWith("edit:")) {
+            val id = routeKey.removePrefix("edit:").toIntOrNull()
+            allEvents.firstOrNull { it.id == id }
+        } else {
+            null
+        }
+    }
+
+    val checkInEvent = remember(routeKey, allEvents) {
+        if (routeKey.startsWith("checkin:")) {
+            val id = routeKey.removePrefix("checkin:").toIntOrNull()
+            allEvents.firstOrNull { it.id == id }
+        } else {
+            null
+        }
+    }
+
+    val isImeVisible = WindowInsets.isImeVisible
+
     Surface(
         color = CampusColors.DeepObsidian,
         modifier = Modifier.fillMaxSize()
@@ -459,8 +558,6 @@ private fun CampusApp(
                 .fillMaxSize()
                 .background(RootBgBrush)
         ) {
-            // Слой 1: Домашний экран и парящая нижняя навигация остаются смонтированными постоянно.
-            // Это полностью исключает мерцание, пересоздание списков, сброс скролла и прыжки нижней капсулы!
             val homeLayerAlpha by animateFloatAsState(
                 targetValue = if (isOverlayOpen) 0.45f else 1f,
                 animationSpec = if (reducedMotion) snap() else tween(220, easing = CampusMotion.EmphasizedDecelerate),
@@ -486,8 +583,11 @@ private fun CampusApp(
                     activeTab = activeTab,
                     favorites = favorites,
                     joined = joined,
+                    attendeesVersion = attendeesVersion,
                     reminderVersion = reminderVersion,
                     permissionVersion = permissionVersion,
+                    studentName = studentName,
+                    studentGroup = studentGroup,
                     posterListState = posterListState,
                     favoritesListState = favoritesListState,
                     bookingsListState = bookingsListState,
@@ -511,41 +611,44 @@ private fun CampusApp(
                     },
                     onSwitchTab = { activeTabName = it.name },
                     onOpenCreate = { routeKey = "create" },
+                    onOpenScanner = { routeKey = "scan" },
+                    onOpenStudentProfile = { showProfileModal = true },
                     onOpenEvent = { ev -> routeKey = "detail:${ev.id}" },
+                    onShowTicketQr = { ev -> qrModalTarget = ev to true },
                     onToggleFavorite = { ev ->
                         favorites = toggleStoredSet(favorites, "favorites", ev.id)
                     },
-                    onToggleJoin = { ev ->
-                        val wasJoined = ev.id.toString() in joined
-                        joined = toggleStoredSet(joined, "joined", ev.id)
-                        if (wasJoined) {
-                            cancelReminder(ctx, ev)
-                            reminderVersion++
-                        }
-                    }
+                    onToggleJoin = { ev -> toggleCurrentUserJoin(ev) }
                 )
 
-                // Парящая капсула всегда неподвижно закреплена внизу домашнего слоя (без прыжков при вводе в поиск и переходах)
-                Box(
+                AnimatedVisibility(
+                    visible = !isImeVisible,
+                    enter = if (reducedMotion) fadeIn(snap()) else fadeIn(tween(180)),
+                    exit = if (reducedMotion) fadeOut(snap()) else fadeOut(tween(140)),
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
-                        .background(BottomScrimBrush)
                 ) {
-                    FloatingBottomNav(
-                        selectedTab = activeTab,
-                        favoritesCount = favorites.size,
-                        bookingsCount = joined.size,
-                        onSelect = { selected ->
-                            if (routeKey == "home") {
-                                activeTabName = selected.name
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(BottomScrimBrush)
+                    ) {
+                        FloatingBottomNav(
+                            selectedTab = activeTab,
+                            favoritesCount = favorites.size,
+                            bookingsCount = joined.size,
+                            onSelect = { selected ->
+                                if (routeKey == "home") {
+                                    activeTabName = selected.name
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
 
-            // Слой 2: Плавный экран деталей события поверх домашнего слоя (240 мс без моргания)
+            // Слой 2: Полноценная страница мероприятия с панелью организатора, напоминаниями и QR-кодами
             AnimatedVisibility(
                 visible = detailEvent != null,
                 enter = if (reducedMotion) {
@@ -562,39 +665,53 @@ private fun CampusApp(
                 },
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Помним последнее событие во время анимации закрытия, чтобы контент не пропадал до конца кадра
                 var cachedEvent by remember { mutableStateOf(detailEvent) }
                 if (detailEvent != null) cachedEvent = detailEvent
                 val target = cachedEvent
 
                 if (target != null) {
+                    val isJoined = target.id.toString() in joined
                     val reminderMinutes = remember(target.id, reminderVersion, permissionVersion) {
                         prefs.getInt("reminder_${target.id}", 0)
                     }
+                    val attendees = remember(target.id, attendeesVersion, isJoined) {
+                        CampusStorage.loadAttendees(ctx, target.id)
+                    }
+                    val totalParticipants = remember(target, attendees, isJoined) {
+                        CampusStorage.totalParticipantCount(ctx, target, isJoined, attendees)
+                    }
+
                     EventDetailScreen(
                         event = target,
                         isFavorite = target.id.toString() in favorites,
-                        isJoined = target.id.toString() in joined,
+                        isJoined = isJoined,
+                        totalParticipants = totalParticipants,
+                        attendees = attendees,
                         reminderMinutes = reminderMinutes,
                         onBack = { routeKey = "home" },
                         onToggleFavorite = {
                             favorites = toggleStoredSet(favorites, "favorites", target.id)
                         },
-                        onToggleJoin = {
-                            joined = toggleStoredSet(joined, "joined", target.id)
-                        },
+                        onToggleJoin = { toggleCurrentUserJoin(target) },
                         onSelectReminder = { minutes ->
                             if (onRemind(target, minutes)) {
                                 reminderVersion++
                             }
-                        }
+                        },
+                        onTestNotification = { onTestNotification(target) },
+                        onShowEventQr = { qrModalTarget = target to false },
+                        onShowParticipantQr = { qrModalTarget = target to true },
+                        onEditEvent = { routeKey = "edit:${target.id}" },
+                        onOpenCheckInScanner = { routeKey = "checkin:${target.id}" },
+                        onOpenParticipantsModal = { participantsModalEvent = target }
                     )
                 }
             }
 
-            // Слой 3: Плавный экран создания нового события
+            // Слой 3: Создание или редактирование мероприятия организатором
+            val isEditorOpen = routeKey == "create" || editEvent != null
             AnimatedVisibility(
-                visible = routeKey == "create",
+                visible = isEditorOpen,
                 enter = if (reducedMotion) {
                     fadeIn(snap())
                 } else {
@@ -609,17 +726,69 @@ private fun CampusApp(
                 },
                 modifier = Modifier.fillMaxSize()
             ) {
-                CreateEventScreen(
-                    onBack = { routeKey = "home" },
-                    onSave = { newEvent ->
-                        saveCustom(ctx, newEvent)
-                        custom = loadCustom(ctx)
-                        routeKey = "detail:${newEvent.id}"
+                EventEditorScreen(
+                    existingEvent = editEvent,
+                    onBack = {
+                        routeKey = if (editEvent != null) "detail:${editEvent.id}" else "home"
+                    },
+                    onSave = { savedEvent ->
+                        CampusStorage.upsertEvent(ctx, savedEvent)
+                        eventsVersion++
+                        // Если время мероприятия изменилось и стояло активное напоминание — перепланируем его
+                        val existingRem = prefs.getInt("reminder_${savedEvent.id}", 0)
+                        if (existingRem > 0) {
+                            if (savedEvent.date.minusMinutes(existingRem.toLong()).isAfter(LocalDateTime.now())) {
+                                saveReminder(ctx, savedEvent, existingRem)
+                            } else {
+                                cancelReminder(ctx, savedEvent)
+                            }
+                            reminderVersion++
+                        }
+                        routeKey = "detail:${savedEvent.id}"
+                    },
+                    onDelete = { toDelete ->
+                        cancelReminder(ctx, toDelete)
+                        CampusStorage.deleteCustomEvent(ctx, toDelete.id)
+                        favorites = prefs.getStringSet("favorites", emptySet()).orEmpty().toSet()
+                        joined = prefs.getStringSet("joined", emptySet()).orEmpty().toSet()
+                        eventsVersion++
+                        reminderVersion++
+                        routeKey = "home"
+                        Toast.makeText(ctx, "Событие удалено", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
 
-            // Фирменный модальный календарь для фильтра точной даты
+            // Слой 4: Сканер QR-кодов (для записи участника или проверки билетов организатором)
+            val isScannerOpen = routeKey == "scan" || checkInEvent != null
+            AnimatedVisibility(
+                visible = isScannerOpen,
+                enter = if (reducedMotion) {
+                    fadeIn(snap())
+                } else {
+                    fadeIn(tween(200, easing = CampusMotion.EmphasizedDecelerate)) +
+                        slideInVertically(tween(240, easing = CampusMotion.EmphasizedDecelerate)) { it / 15 }
+                },
+                exit = if (reducedMotion) {
+                    fadeOut(snap())
+                } else {
+                    fadeOut(tween(165)) +
+                        slideOutVertically(tween(195, easing = CampusMotion.EmphasizedDecelerate)) { it / 16 }
+                },
+                modifier = Modifier.fillMaxSize()
+            ) {
+                QrScannerScreen(
+                    allEvents = allEvents,
+                    targetCheckInEvent = checkInEvent,
+                    onBack = {
+                        routeKey = if (checkInEvent != null) "detail:${checkInEvent.id}" else "home"
+                    },
+                    onDecodedPayload = { decoded ->
+                        applyDecodedQr(decoded, checkInTarget = checkInEvent)
+                    }
+                )
+            }
+
             if (showFilterCalendar) {
                 CampusDateModal(
                     initialDate = exactDate ?: LocalDate.now(),
@@ -636,6 +805,73 @@ private fun CampusApp(
                     }
                 )
             }
+
+            val activeQrModal = qrModalTarget
+            if (activeQrModal != null) {
+                val latestEvent = allEvents.firstOrNull { it.id == activeQrModal.first.id } ?: activeQrModal.first
+                EventQrModal(
+                    event = latestEvent,
+                    isParticipantTicket = activeQrModal.second,
+                    studentName = studentName,
+                    studentGroup = studentGroup,
+                    onDismiss = { qrModalTarget = null }
+                )
+            }
+
+            val activeParticipantsEvent = participantsModalEvent
+            if (activeParticipantsEvent != null) {
+                val refreshedEvent = allEvents.firstOrNull { it.id == activeParticipantsEvent.id }
+                    ?: activeParticipantsEvent
+                val isJoinedNow = refreshedEvent.id.toString() in joined
+                val attendees = remember(refreshedEvent.id, attendeesVersion, isJoinedNow) {
+                    CampusStorage.loadAttendees(ctx, refreshedEvent.id)
+                }
+                val totalCount = remember(refreshedEvent, attendees, isJoinedNow) {
+                    CampusStorage.totalParticipantCount(ctx, refreshedEvent, isJoinedNow, attendees)
+                }
+                OrganizerParticipantsModal(
+                    event = refreshedEvent,
+                    totalParticipants = totalCount,
+                    attendees = attendees,
+                    onAddManualAttendee = { name, group ->
+                        CampusStorage.addExternalCheckInAttendee(
+                            context = ctx,
+                            eventId = refreshedEvent.id,
+                            name = name,
+                            group = group,
+                            source = "organizer"
+                        )
+                        attendeesVersion++
+                    },
+                    onRemoveAttendee = { attendeeId ->
+                        CampusStorage.removeAttendee(ctx, refreshedEvent.id, attendeeId)
+                        attendeesVersion++
+                    },
+                    onOpenCheckInScanner = { routeKey = "checkin:${refreshedEvent.id}" },
+                    onDismiss = { participantsModalEvent = null }
+                )
+            }
+
+            if (showProfileModal) {
+                StudentProfileModal(
+                    initialName = studentName,
+                    initialGroup = studentGroup,
+                    onDismiss = { showProfileModal = false },
+                    onSave = { updatedName, updatedGroup ->
+                        CampusStorage.saveStudentProfile(ctx, updatedName, updatedGroup)
+                        studentName = CampusStorage.getStudentName(ctx)
+                        studentGroup = CampusStorage.getStudentGroup(ctx)
+                        // Обновляем имя в активных записях
+                        joined.forEach { idStr ->
+                            idStr.toIntOrNull()?.let { id ->
+                                CampusStorage.syncCurrentUserRegistration(ctx, id, joined = true)
+                            }
+                        }
+                        attendeesVersion++
+                        showProfileModal = false
+                    }
+                )
+            }
         }
     }
 }
@@ -646,8 +882,11 @@ private fun HomeTabsContent(
     activeTab: CampusTab,
     favorites: Set<String>,
     joined: Set<String>,
+    attendeesVersion: Int,
     reminderVersion: Int,
     permissionVersion: Int,
+    studentName: String,
+    studentGroup: String,
     posterListState: LazyListState,
     favoritesListState: LazyListState,
     bookingsListState: LazyListState,
@@ -663,7 +902,10 @@ private fun HomeTabsContent(
     onResetFilters: () -> Unit,
     onSwitchTab: (CampusTab) -> Unit,
     onOpenCreate: () -> Unit,
+    onOpenScanner: () -> Unit,
+    onOpenStudentProfile: () -> Unit,
     onOpenEvent: (Event) -> Unit,
+    onShowTicketQr: (Event) -> Unit,
     onToggleFavorite: (Event) -> Unit,
     onToggleJoin: (Event) -> Unit
 ) {
@@ -680,14 +922,21 @@ private fun HomeTabsContent(
             val catOk = category == "Все" || ev.category == category
             val queryOk = trimmedQuery.isEmpty() ||
                 ev.title.contains(trimmedQuery, ignoreCase = true) ||
+                ev.description.contains(trimmedQuery, ignoreCase = true) ||
                 ev.place.contains(trimmedQuery, ignoreCase = true) ||
                 ev.category.contains(trimmedQuery, ignoreCase = true) ||
+                ev.organizer.contains(trimmedQuery, ignoreCase = true) ||
                 ev.subtitle.contains(trimmedQuery, ignoreCase = true)
-            val exactOk = exactDate == null || ev.date.toLocalDate() == exactDate
-            val rangeOk = dateFilter == "Все даты" || (
-                !ev.date.toLocalDate().isBefore(today) &&
-                    ev.date.toLocalDate() <= today.plusDays(if (dateFilter == "7 дней") 7 else 30)
-            )
+            val evDay = ev.date.toLocalDate()
+            val exactOk = exactDate == null || evDay == exactDate
+            val rangeOk = when (dateFilter) {
+                "Все даты" -> true
+                "Сегодня" -> evDay == today
+                "Завтра" -> evDay == today.plusDays(1)
+                "7 дней" -> !evDay.isBefore(today) && !evDay.isAfter(today.plusDays(7))
+                "30 дней" -> !evDay.isBefore(today) && !evDay.isAfter(today.plusDays(30))
+                else -> true
+            }
             catOk && queryOk && exactOk && rangeOk
         }
     }
@@ -696,6 +945,16 @@ private fun HomeTabsContent(
     }
     val bookingsList = remember(allEvents, joined) {
         allEvents.filter { it.id.toString() in joined }
+    }
+
+    val countsByEventId = remember(allEvents, joined, attendeesVersion) {
+        allEvents.associate { ev ->
+            ev.id to CampusStorage.totalParticipantCount(
+                ctx,
+                ev,
+                isCurrentUserJoined = ev.id.toString() in joined
+            )
+        }
     }
 
     BoxWithConstraints(
@@ -721,7 +980,7 @@ private fun HomeTabsContent(
                     .widthIn(max = contentMaxWidth)
                     .fillMaxSize()
             ) {
-                // Шапка с логотипом Campus Life и кнопкой создания события
+                // Шапка с логотипом Campus Life, кнопкой QR-сканера и кнопкой создания события организатором
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -760,17 +1019,29 @@ private fun HomeTabsContent(
                         }
                     }
 
-                    GlassIconButton(
-                        onClick = onOpenCreate,
-                        size = 44.dp,
-                        accent = true,
-                        contentDescriptionLabel = "Создать событие"
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        PlusGlyph(color = CampusColors.WarmSand, size = 20.dp)
+                        GlassIconButton(
+                            onClick = onOpenScanner,
+                            size = 44.dp,
+                            contentDescriptionLabel = "Сканировать QR-код"
+                        ) {
+                            QrCodeGlyph(color = CampusColors.SkyMuted, size = 20.dp)
+                        }
+
+                        GlassIconButton(
+                            onClick = onOpenCreate,
+                            size = 44.dp,
+                            accent = true,
+                            contentDescriptionLabel = "Создать событие"
+                        ) {
+                            PlusGlyph(color = CampusColors.WarmSand, size = 20.dp)
+                        }
                     }
                 }
 
-                // Направленный переход между вкладками в зависимости от их порядка (Афиша <-> Избранное <-> Записи)
                 AnimatedContent(
                     targetState = activeTab,
                     transitionSpec = {
@@ -826,6 +1097,51 @@ private fun HomeTabsContent(
                                     onClearExactDate = onClearExactDate,
                                     onResetAll = onResetFilters
                                 )
+                            }
+                        }
+
+                        if (tab == CampusTab.Bookings) {
+                            item(key = "student_profile_bar", contentType = "profile_bar") {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(18.dp))
+                                        .background(CampusColors.Graphite)
+                                        .border(1.dp, CampusColors.Hairline, RoundedCornerShape(18.dp))
+                                        .pressableScale(pressedScale = 0.98f, onClick = onOpenStudentProfile)
+                                        .padding(horizontal = 15.dp, vertical = 12.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(36.dp)
+                                                .clip(RoundedCornerShape(12.dp))
+                                                .background(CampusColors.GraphiteElevated),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            QrCodeGlyph(color = CampusColors.WarmSand, size = 18.dp)
+                                        }
+                                        Column {
+                                            Text(
+                                                text = "$studentName · $studentGroup",
+                                                style = MaterialTheme.typography.labelLarge,
+                                                color = CampusColors.Milk
+                                            )
+                                            Text(
+                                                text = "Данные для личных QR-билетов · нажми, чтобы изменить",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = CampusColors.SlateMuted
+                                            )
+                                        }
+                                    }
+                                    EditGlyph(color = CampusColors.SkyMuted, size = 16.dp)
+                                }
                             }
                         }
 
@@ -905,6 +1221,7 @@ private fun HomeTabsContent(
                                     event = ev,
                                     reminderMinutes = reminderMin,
                                     onClick = { onOpenEvent(ev) },
+                                    onShowQrTicket = { onShowTicketQr(ev) },
                                     onCancelBooking = { onToggleJoin(ev) },
                                     modifier = if (reducedMotion) {
                                         Modifier
@@ -918,7 +1235,6 @@ private fun HomeTabsContent(
                                 )
                             }
                         } else if (isTabletWide) {
-                            // На широких экранах планшетов — адаптивная двухколоночная сетка карточек
                             val rows = listForTab.chunked(2)
                             items(
                                 items = rows,
@@ -934,6 +1250,7 @@ private fun HomeTabsContent(
                                         event = first,
                                         isFavorite = first.id.toString() in favorites,
                                         isJoined = first.id.toString() in joined,
+                                        participantsCount = countsByEventId[first.id] ?: first.baseParticipants,
                                         onClick = { onOpenEvent(first) },
                                         onToggleFavorite = { onToggleFavorite(first) },
                                         modifier = Modifier.weight(1f)
@@ -944,6 +1261,7 @@ private fun HomeTabsContent(
                                             event = second,
                                             isFavorite = second.id.toString() in favorites,
                                             isJoined = second.id.toString() in joined,
+                                            participantsCount = countsByEventId[second.id] ?: second.baseParticipants,
                                             onClick = { onOpenEvent(second) },
                                             onToggleFavorite = { onToggleFavorite(second) },
                                             modifier = Modifier.weight(1f)
@@ -963,6 +1281,7 @@ private fun HomeTabsContent(
                                     event = ev,
                                     isFavorite = ev.id.toString() in favorites,
                                     isJoined = ev.id.toString() in joined,
+                                    participantsCount = countsByEventId[ev.id] ?: ev.baseParticipants,
                                     onClick = { onOpenEvent(ev) },
                                     onToggleFavorite = { onToggleFavorite(ev) },
                                     modifier = if (reducedMotion) {
@@ -1049,7 +1368,7 @@ private fun PosterSearchAndFilters(
 
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             rowItems(
-                items = listOf("Все", "Наука", "Творчество", "Спорт", "Технологии"),
+                items = CampusCategories,
                 key = { it }
             ) { item ->
                 FilterPill(
@@ -1067,7 +1386,7 @@ private fun PosterSearchAndFilters(
             verticalAlignment = Alignment.CenterVertically
         ) {
             rowItems(
-                items = listOf("Все даты", "7 дней", "30 дней"),
+                items = DateRangeOptions,
                 key = { it }
             ) { period ->
                 FilterPill(
@@ -1128,11 +1447,19 @@ private fun EventDetailScreen(
     event: Event,
     isFavorite: Boolean,
     isJoined: Boolean,
+    totalParticipants: Int,
+    attendees: List<AttendeeEntry>,
     reminderMinutes: Int,
     onBack: () -> Unit,
     onToggleFavorite: () -> Unit,
     onToggleJoin: () -> Unit,
-    onSelectReminder: (Int) -> Unit
+    onSelectReminder: (Int) -> Unit,
+    onTestNotification: () -> Unit,
+    onShowEventQr: () -> Unit,
+    onShowParticipantQr: () -> Unit,
+    onEditEvent: () -> Unit,
+    onOpenCheckInScanner: () -> Unit,
+    onOpenParticipantsModal: () -> Unit
 ) {
     val reducedMotion = LocalReducedMotion.current
     val haptics = LocalHapticFeedback.current
@@ -1192,13 +1519,34 @@ private fun EventDetailScreen(
                         )
                     }
 
-                    FavoriteHeartButton(
-                        isFavorite = isFavorite,
-                        onToggle = onToggleFavorite,
-                        size = 42.dp,
-                        iconSize = 20.dp,
-                        glassCircle = false
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        GlassIconButton(
+                            onClick = onShowEventQr,
+                            size = 42.dp,
+                            contentDescriptionLabel = "QR-код события"
+                        ) {
+                            QrCodeGlyph(color = CampusColors.WarmSand, size = 19.dp)
+                        }
+
+                        GlassIconButton(
+                            onClick = onEditEvent,
+                            size = 42.dp,
+                            contentDescriptionLabel = "Редактировать событие"
+                        ) {
+                            EditGlyph(color = CampusColors.SkyMuted, size = 18.dp)
+                        }
+
+                        FavoriteHeartButton(
+                            isFavorite = isFavorite,
+                            onToggle = onToggleFavorite,
+                            size = 42.dp,
+                            iconSize = 20.dp,
+                            glassCircle = false
+                        )
+                    }
                 }
 
                 Spacer(Modifier.height(18.dp))
@@ -1302,6 +1650,14 @@ private fun EventDetailScreen(
                     value = event.place
                 )
 
+                Spacer(Modifier.height(10.dp))
+
+                DetailMetaTile(
+                    icon = { UsersGlyph(color = CampusColors.WarmSand, size = 18.dp) },
+                    label = "Организатор и участники",
+                    value = "${event.organizer} · записано $totalParticipants из ${event.capacity}"
+                )
+
                 Spacer(Modifier.height(22.dp))
 
                 Text(
@@ -1318,7 +1674,7 @@ private fun EventDetailScreen(
                     color = CampusColors.Milk.copy(alpha = 0.86f)
                 )
 
-                Spacer(Modifier.height(26.dp))
+                Spacer(Modifier.height(24.dp))
 
                 Button(
                     onClick = {
@@ -1352,8 +1708,50 @@ private fun EventDetailScreen(
                     }
                 }
 
-                Spacer(Modifier.height(22.dp))
+                AnimatedVisibility(
+                    visible = isJoined,
+                    enter = if (reducedMotion) fadeIn(snap()) else fadeIn(tween(180)) + expandVertically(tween(180)),
+                    exit = if (reducedMotion) fadeOut(snap()) else fadeOut(tween(140)) + shrinkVertically(tween(140))
+                ) {
+                    Column {
+                        Spacer(Modifier.height(10.dp))
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(CampusColors.WarmSand.copy(alpha = 0.13f))
+                                .border(1.dp, CampusColors.WarmSand.copy(alpha = 0.36f), RoundedCornerShape(16.dp))
+                                .pressableScale(pressedScale = 0.97f, onClick = onShowParticipantQr)
+                                .padding(horizontal = 16.dp, vertical = 13.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                QrCodeGlyph(color = CampusColors.WarmSand, size = 19.dp)
+                                Column {
+                                    Text(
+                                        text = "Открыть мой QR-билет участника",
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = CampusColors.Milk
+                                    )
+                                    Text(
+                                        text = "Для быстрой отметки на входе у организатора",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = CampusColors.SlateMuted
+                                    )
+                                }
+                            }
+                            ChevronRightGlyph(color = CampusColors.WarmSand, size = 17.dp)
+                        }
+                    }
+                }
 
+                Spacer(Modifier.height(20.dp))
+
+                // Секция напоминаний о приближающемся мероприятии
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1363,14 +1761,31 @@ private fun EventDetailScreen(
                         .padding(16.dp)
                 ) {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        BellGlyph(color = CampusColors.SkyMuted, size = 17.dp)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            BellGlyph(color = CampusColors.SkyMuted, size = 17.dp)
+                            Text(
+                                text = "Напоминание на телефон",
+                                style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
+                                color = CampusColors.Milk
+                            )
+                        }
+
                         Text(
-                            text = "Напоминание на телефон",
-                            style = MaterialTheme.typography.titleMedium.copy(fontSize = 15.sp),
-                            color = CampusColors.Milk
+                            text = "Проверить",
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(percent = 50))
+                                .background(CampusColors.GraphiteElevated)
+                                .pressableScale(pressedScale = 0.93f, onClick = onTestNotification)
+                                .padding(horizontal = 11.dp, vertical = 5.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = CampusColors.WarmSand
                         )
                     }
 
@@ -1380,7 +1795,8 @@ private fun EventDetailScreen(
                         rowItems(
                             items = listOf(
                                 0 to "Нет",
-                                10 to "За 10 мин",
+                                5 to "За 5 мин",
+                                15 to "За 15 мин",
                                 60 to "За 1 час",
                                 1440 to "За 1 день"
                             ),
@@ -1402,7 +1818,7 @@ private fun EventDetailScreen(
                         Column {
                             Spacer(Modifier.height(10.dp))
                             Text(
-                                text = "Уведомление придёт автоматически; возможна небольшая задержка из-за энергосбережения системы.",
+                                text = "Уведомление запланировано и восстановится даже после перезагрузки телефона.",
                                 style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                                 color = CampusColors.SlateMuted
                             )
@@ -1410,388 +1826,29 @@ private fun EventDetailScreen(
                     }
                 }
 
+                Spacer(Modifier.height(18.dp))
+
+                // Панель организатора: счётчик участников, редактирование, QR для регистрации и сканер на входе
+                OrganizerEventPanel(
+                    event = event,
+                    totalParticipants = totalParticipants,
+                    attendees = attendees,
+                    onEditEvent = onEditEvent,
+                    onShowEventQr = onShowEventQr,
+                    onOpenCheckInScanner = onOpenCheckInScanner,
+                    onOpenParticipantsModal = onOpenParticipantsModal
+                )
+
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "Данные сохраняются локально на этом устройстве и доступны без сети.",
+                    text = "Все записи, избранное, участники и QR-билеты надёжно хранятся на устройстве и работают офлайн.",
                     style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
                     color = CampusColors.SlateMuted.copy(alpha = 0.78f)
                 )
 
-                Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(24.dp))
             }
         }
-    }
-}
-
-@Composable
-private fun CreateEventScreen(
-    onBack: () -> Unit,
-    onSave: (Event) -> Unit
-) {
-    val ctx = LocalContext.current
-    val reducedMotion = LocalReducedMotion.current
-    val submitGuard = remember { RapidTapGuard(600L) }
-
-    var title by rememberSaveable { mutableStateOf("") }
-    var place by rememberSaveable { mutableStateOf("") }
-    var desc by rememberSaveable { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf("Наука") }
-    var dateIso by rememberSaveable {
-        mutableStateOf(
-            LocalDateTime.now()
-                .plusDays(1)
-                .withHour(16)
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0)
-                .toString()
-        )
-    }
-    val date = remember(dateIso) { LocalDateTime.parse(dateIso) }
-
-    var error by rememberSaveable { mutableStateOf("") }
-    var photoUri by rememberSaveable { mutableStateOf("") }
-
-    var showDateModal by rememberSaveable { mutableStateOf(false) }
-    var showTimeModal by rememberSaveable { mutableStateOf(false) }
-
-    val photoPicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        if (uri != null) {
-            try {
-                ctx.contentResolver.takePersistableUriPermission(
-                    uri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                )
-                photoUri = uri.toString()
-            } catch (_: SecurityException) {
-                Toast.makeText(
-                    ctx,
-                    "Не удалось сохранить доступ к фотографии",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-
-    var previewBitmap by remember(photoUri) {
-        mutableStateOf(
-            if (photoUri.isNotBlank()) CampusImageCache.getCached("uri:1280:$photoUri") else null
-        )
-    }
-    LaunchedEffect(photoUri) {
-        if (photoUri.isNotBlank() && previewBitmap == null) {
-            previewBitmap = CampusImageCache.loadUriBitmap(ctx, photoUri, maxDimension = 1280)
-        }
-    }
-
-    val fieldColors = OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = CampusColors.SkyMuted.copy(alpha = 0.6f),
-        unfocusedBorderColor = CampusColors.Hairline,
-        focusedContainerColor = CampusColors.Graphite,
-        unfocusedContainerColor = CampusColors.Graphite,
-        focusedLabelColor = CampusColors.SkyMuted,
-        unfocusedLabelColor = CampusColors.SlateMuted,
-        cursorColor = CampusColors.WarmSand
-    )
-
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(RootBgBrush)
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .imePadding()
-    ) {
-        val horizontalPad = when {
-            maxWidth < 360.dp -> 14.dp
-            maxWidth >= 600.dp -> 32.dp
-            else -> 20.dp
-        }
-
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-            Column(
-                modifier = Modifier
-                    .widthIn(max = 680.dp)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = horizontalPad, vertical = 14.dp)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(CampusColors.Graphite)
-                        .border(1.dp, CampusColors.Hairline, RoundedCornerShape(14.dp))
-                        .pressableScale(pressedScale = 0.94f, onClick = onBack)
-                        .padding(start = 10.dp, end = 15.dp, top = 9.dp, bottom = 9.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    BackArrowGlyph(color = CampusColors.Milk, size = 18.dp)
-                    Text(
-                        text = "К афише",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = CampusColors.Milk
-                    )
-                }
-
-                Spacer(Modifier.height(20.dp))
-
-                Text(
-                    text = "Новое событие",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = CampusColors.Milk
-                )
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    text = "Анонс сохранится на этом устройстве и сразу появится в общей ленте кампуса.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = CampusColors.SlateMuted
-                )
-
-                Spacer(Modifier.height(20.dp))
-
-                val bmp: ImageBitmap? = previewBitmap
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(if (bmp != null) 172.dp else 94.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(CampusColors.Graphite)
-                        .border(1.dp, CampusColors.HairlineStrong, RoundedCornerShape(20.dp))
-                        .pressableScale(
-                            pressedScale = 0.985f,
-                            onClick = { photoPicker.launch(arrayOf("image/*")) }
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (bmp != null) {
-                        Image(
-                            bitmap = bmp,
-                            contentDescription = "Выбранная обложка",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(Color.Black.copy(alpha = 0.38f))
-                        )
-                    }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(percent = 50))
-                            .background(
-                                if (bmp != null) Color(0xCC16191F) else Color.Transparent
-                            )
-                            .padding(horizontal = 16.dp, vertical = 9.dp)
-                    ) {
-                        PhotoGlyph(color = CampusColors.WarmSand, size = 20.dp)
-                        Text(
-                            text = if (photoUri.isEmpty()) {
-                                "Выбрать фотообложку события"
-                            } else {
-                                "Обложка выбрана · нажми, чтобы заменить"
-                            },
-                            style = MaterialTheme.typography.labelLarge,
-                            color = CampusColors.Milk
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = {
-                        title = it
-                        if (error.isNotEmpty()) error = ""
-                    },
-                    label = { Text("Название события") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = CampusColors.Milk),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = fieldColors
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = place,
-                    onValueChange = {
-                        place = it
-                        if (error.isNotEmpty()) error = ""
-                    },
-                    label = { Text("Место (аудитория, зал, площадка)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = CampusColors.Milk),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = fieldColors
-                )
-
-                Spacer(Modifier.height(12.dp))
-
-                OutlinedTextField(
-                    value = desc,
-                    onValueChange = {
-                        desc = it
-                        if (error.isNotEmpty()) error = ""
-                    },
-                    label = { Text("Описание и детали участия") },
-                    modifier = Modifier.fillMaxWidth(),
-                    minLines = 3,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = CampusColors.Milk),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = fieldColors
-                )
-
-                Spacer(Modifier.height(20.dp))
-
-                Text(
-                    text = "Направление",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = CampusColors.SlateMuted
-                )
-                Spacer(Modifier.height(10.dp))
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    rowItems(
-                        items = listOf("Наука", "Творчество", "Спорт", "Технологии"),
-                        key = { it }
-                    ) { item ->
-                        FilterPill(
-                            text = item,
-                            selected = item == category,
-                            onClick = { category = item }
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(20.dp))
-
-                Text(
-                    text = "Дата и время начала",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = CampusColors.SlateMuted
-                )
-                Spacer(Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    FilterPill(
-                        text = date.format(DateTimeFormatter.ofPattern("d MMM yyyy", RuLocale)),
-                        selected = false,
-                        onClick = { showDateModal = true },
-                        leadingContent = {
-                            NavPosterIcon(color = CampusColors.WarmSand, active = false, size = 15.dp)
-                        }
-                    )
-
-                    FilterPill(
-                        text = date.format(TimeFmt),
-                        selected = false,
-                        onClick = { showTimeModal = true },
-                        leadingContent = {
-                            ClockGlyph(color = CampusColors.SkyMuted, size = 15.dp)
-                        }
-                    )
-                }
-
-                Spacer(Modifier.height(18.dp))
-
-                AnimatedVisibility(
-                    visible = error.isNotEmpty(),
-                    enter = if (reducedMotion) fadeIn(snap()) else fadeIn(tween(170)) + expandVertically(tween(170)),
-                    exit = if (reducedMotion) fadeOut(snap()) else fadeOut(tween(130)) + shrinkVertically(tween(130))
-                ) {
-                    Column {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(CampusColors.ErrorSoft.copy(alpha = 0.14f))
-                                .border(1.dp, CampusColors.ErrorSoft.copy(alpha = 0.35f), RoundedCornerShape(14.dp))
-                                .padding(horizontal = 14.dp, vertical = 11.dp)
-                        ) {
-                            Text(
-                                text = error,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = CampusColors.ErrorSoft
-                            )
-                        }
-                        Spacer(Modifier.height(14.dp))
-                    }
-                }
-
-                Button(
-                    onClick = {
-                        when {
-                            title.isBlank() || place.isBlank() || desc.isBlank() -> {
-                                error = "Заполни название, место проведения и короткое описание."
-                            }
-                            date.isBefore(LocalDateTime.now()) -> {
-                                error = "Выбери дату и время в будущем."
-                            }
-                            submitGuard.tryAcquire() -> {
-                                onSave(
-                                    Event(
-                                        id = (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
-                                        title = title.trim(),
-                                        category = category,
-                                        date = date,
-                                        place = place.trim(),
-                                        description = desc.trim(),
-                                        subtitle = "Событие школьного сообщества",
-                                        tint = Color(0xFF333C48),
-                                        photoUri = photoUri
-                                    )
-                                )
-                            }
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(18.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = CampusColors.WarmSand,
-                        contentColor = CampusColors.DeepObsidian
-                    )
-                ) {
-                    Text(
-                        text = "Опубликовать событие",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
-                    )
-                }
-
-                Spacer(Modifier.height(26.dp))
-            }
-        }
-    }
-
-    if (showDateModal) {
-        CampusDateModal(
-            initialDate = date.toLocalDate(),
-            allowClear = false,
-            onDismiss = { showDateModal = false },
-            onConfirm = { picked ->
-                dateIso = LocalDateTime.of(picked, date.toLocalTime()).toString()
-                if (error.isNotEmpty()) error = ""
-                showDateModal = false
-            }
-        )
-    }
-
-    if (showTimeModal) {
-        CampusTimeModal(
-            initialTime = date.toLocalTime(),
-            onDismiss = { showTimeModal = false },
-            onConfirm = { pickedTime ->
-                dateIso = LocalDateTime.of(date.toLocalDate(), pickedTime).toString()
-                if (error.isNotEmpty()) error = ""
-                showTimeModal = false
-            }
-        )
     }
 }

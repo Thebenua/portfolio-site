@@ -152,13 +152,25 @@ object CampusImageCache {
 }
 
 @DrawableRes
-internal fun defaultCoverResForEvent(eventId: Int): Int = when (eventId) {
+internal fun defaultCoverResForEvent(event: Event): Int = when (event.id) {
     1 -> R.drawable.cover_science
     2 -> R.drawable.cover_art
     3 -> R.drawable.cover_sport
     4 -> R.drawable.cover_tech
     5 -> R.drawable.cover_music
-    else -> R.drawable.event_cover
+    6 -> R.drawable.cover_tech
+    7 -> R.drawable.cover_science
+    8 -> R.drawable.cover_sport
+    9 -> R.drawable.cover_art
+    10 -> R.drawable.event_cover
+    else -> when (event.category) {
+        "Наука" -> R.drawable.cover_science
+        "Творчество" -> R.drawable.cover_art
+        "Спорт" -> R.drawable.cover_sport
+        "Конкурсы" -> R.drawable.event_cover
+        "Технологии" -> R.drawable.cover_tech
+        else -> R.drawable.event_cover
+    }
 }
 
 /**
@@ -172,7 +184,7 @@ fun AsyncEventCover(
 ) {
     val context = LocalContext.current
     val reducedMotion = LocalReducedMotion.current
-    val fallbackRes = remember(event.id) { defaultCoverResForEvent(event.id) }
+    val fallbackRes = remember(event.id, event.category) { defaultCoverResForEvent(event) }
     val primaryKey = remember(event.photoUri, fallbackRes, maxDimension) {
         if (event.photoUri.isNotBlank()) "uri:$maxDimension:${event.photoUri}" else "res:$maxDimension:$fallbackRes"
     }

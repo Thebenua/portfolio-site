@@ -84,7 +84,9 @@ internal fun relativeDayBadge(date: LocalDateTime): String? {
 }
 
 internal fun reminderLabel(minutes: Int): String = when (minutes) {
+    5 -> "Напоминание за 5 мин"
     10 -> "Напоминание за 10 мин"
+    15 -> "Напоминание за 15 мин"
     60 -> "Напоминание за 1 час"
     1440 -> "Напоминание за 1 день"
     else -> "Без напоминания"
@@ -331,6 +333,7 @@ fun PosterEventCard(
     event: Event,
     isFavorite: Boolean,
     isJoined: Boolean,
+    participantsCount: Int,
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier
@@ -339,6 +342,9 @@ fun PosterEventCard(
     val relBadge = remember(event.date) { relativeDayBadge(event.date) }
     val dateSummary = remember(event.date) {
         "${event.date.format(ShortDateFmt)}, ${event.date.format(TimeFmt)}"
+    }
+    val seatsSummary = remember(participantsCount, event.capacity) {
+        "$participantsCount/${event.capacity}"
     }
 
     Column(
@@ -495,20 +501,38 @@ fun PosterEventCard(
                     )
                 }
 
-                Spacer(Modifier.width(12.dp))
+                Spacer(Modifier.width(10.dp))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    PinGlyph(color = CampusColors.SlateMuted, size = 14.5.dp)
-                    Text(
-                        text = event.place,
-                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.5.sp),
-                        color = CampusColors.SlateMuted,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        UsersGlyph(color = CampusColors.SkyMuted, size = 14.dp)
+                        Text(
+                            text = seatsSummary,
+                            style = MaterialTheme.typography.labelMedium.copy(fontSize = 12.sp),
+                            color = CampusColors.SkyMuted,
+                            maxLines = 1
+                        )
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        PinGlyph(color = CampusColors.SlateMuted, size = 14.dp)
+                        Text(
+                            text = event.place,
+                            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 12.sp),
+                            color = CampusColors.SlateMuted,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
         }
@@ -523,6 +547,7 @@ fun BookingTicketCard(
     event: Event,
     reminderMinutes: Int,
     onClick: () -> Unit,
+    onShowQrTicket: () -> Unit,
     onCancelBooking: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -683,22 +708,51 @@ fun BookingTicketCard(
                 )
             }
 
-            Text(
-                text = "Отменить",
-                modifier = Modifier
-                    .clip(RoundedCornerShape(percent = 50))
-                    .background(CampusColors.GraphiteElevated)
-                    .pressableScale(
-                        pressedScale = 0.93f,
-                        onClick = {
-                            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                            onCancelBooking()
-                        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(percent = 50))
+                        .background(CampusColors.WarmSand.copy(alpha = 0.16f))
+                        .border(0.8.dp, CampusColors.WarmSand.copy(alpha = 0.42f), RoundedCornerShape(percent = 50))
+                        .pressableScale(
+                            pressedScale = 0.93f,
+                            onClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onShowQrTicket()
+                            }
+                        )
+                        .padding(horizontal = 11.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    QrCodeGlyph(color = CampusColors.WarmSand, size = 13.dp)
+                    Text(
+                        text = "QR-билет",
+                        style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.5.sp),
+                        color = CampusColors.WarmSand
                     )
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.5.sp),
-                color = CampusColors.Milk.copy(alpha = 0.88f)
-            )
+                }
+
+                Text(
+                    text = "Отменить",
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(percent = 50))
+                        .background(CampusColors.GraphiteElevated)
+                        .pressableScale(
+                            pressedScale = 0.93f,
+                            onClick = {
+                                haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                onCancelBooking()
+                            }
+                        )
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    style = MaterialTheme.typography.labelMedium.copy(fontSize = 11.5.sp),
+                    color = CampusColors.Milk.copy(alpha = 0.88f)
+                )
+            }
         }
     }
 }
