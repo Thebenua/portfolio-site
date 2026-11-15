@@ -13,7 +13,7 @@
   <a href="https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk">
     <img src="https://img.shields.io/badge/Скачать_APK-v1.2_Release_(3.0_МБ)-C9B7A0?style=for-the-badge&logo=android&logoColor=111317" alt="Скачать APK v1.2" />
   </a>
-  <a href="https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-demo.mp4">
+  <a href="https://github.com/Thebenua/portfolio-site/blob/main/campuslife/CampusLife-demo.mp4">
     <img src="https://img.shields.io/badge/Смотреть_демо-Видео_работы_(MP4)-BCCBD7?style=for-the-badge&logo=youtube&logoColor=111317" alt="Смотреть видеодемонстрацию" />
   </a>
   <a href="https://github.com/Thebenua/portfolio-site/releases/tag/v1.2.0">
@@ -119,12 +119,12 @@
 
 ## Видеодемонстрация и релиз
 
-Готовая сборка приложения и видеозапись демонстрации доступны как прямо в репозитории, так и в разделе **[GitHub Releases](https://github.com/Thebenua/portfolio-site/releases/latest)**:
+Готовый APK — в разделе **[GitHub Releases](https://github.com/Thebenua/portfolio-site/releases/latest)**, видеодемонстрация — прямо в репозитории:
 
 | Материал | Описание | Ссылка |
 | :--- | :--- | :--- |
 | **Release APK (`v1.2`)** | Оптимизированная и сжатая R8 сборка для Android 8.0+ (`3.0 МБ`) | **[Скачать APK из релиза](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk)** · [`campuslife/CampusLife-preview.apk`](campuslife/CampusLife-preview.apk) |
-| **Видеодемонстрация (`MP4`)** | Запись работы приложения и пользовательских сценариев | **[Скачать видео из релиза](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-demo.mp4)** · [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) |
+| **Видеодемонстрация (`MP4`)** | Все требования кейса за 2:10 по главам: лента, поиск и фильтры, запись и билеты, избранное и напоминания, кабинет организатора, QR-регистрация и сканер. 960×1920, 30 fps | **[Открыть видео](https://github.com/Thebenua/portfolio-site/blob/main/campuslife/CampusLife-demo.mp4)** · [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) |
 
 ---
 
