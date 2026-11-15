@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 <img src="design/showcase/01-hero-banner.png" width="100%" alt="Campus Life — Мобильная афиша школьного сообщества" />
 
@@ -124,7 +124,7 @@
 | Материал | Описание | Ссылка |
 | :--- | :--- | :--- |
 | **Release APK (`v1.2`)** | Оптимизированная и сжатая R8 сборка для Android 8.0+ (`3.0 МБ`) | **[Скачать APK из релиза](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk)** · [`campuslife/CampusLife-preview.apk`](campuslife/CampusLife-preview.apk) |
-| **Видеодемонстрация (`MP4`)** | Все требования кейса за 2:10 по главам: лента, поиск и фильтры, запись и билеты, избранное и напоминания, кабинет организатора, QR-регистрация и сканер. 960×1920, 30 fps | **[Открыть видео](https://github.com/Thebenua/portfolio-site/blob/main/campuslife/CampusLife-demo.mp4)** · [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) |
+| **Видеодемонстрация (`MP4`)** | Все требования кейса за 2:13 по главам: лента, поиск и фильтры, запись и билеты, избранное и напоминания, кабинет организатора, QR-регистрация и сканер. 960×1920, 30 fps | **[Открыть видео](https://github.com/Thebenua/portfolio-site/blob/main/campuslife/CampusLife-demo.mp4)** · [`campuslife/CampusLife-demo.mp4`](campuslife/CampusLife-demo.mp4) |
 
 ---
 
@@ -215,3 +215,4 @@ cd portfolio-site
 <div align="center">
   <sub>Разработано специально для Всероссийского хакатона по информационным технологиям <b>«TASKILLS»</b> · 2026</sub>
 </div>
+
