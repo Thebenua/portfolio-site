@@ -175,7 +175,7 @@ campuslife-repository/
 
 ### Способ 1. Установка готового APK на смартфон (за 30 секунд)
 
-1. Скачайте **[`CampusLife-preview.apk`](https://github.com/Thebenua/portfolio-site/releases/latest)** из последнего релиза (или из папки [`campuslife/`](campuslife/CampusLife-preview.apk)) на устройство с **Android 8.0 (API 26)** или новее.
+1. Скачайте **[APK из релиза v1.2](https://github.com/Thebenua/portfolio-site/releases/download/v1.2.0/CampusLife-v1.2-release.apk)** (или файл [`CampusLife-preview.apk`](campuslife/CampusLife-preview.apk) из репозитория) на устройство с **Android 8.0 (API 26)** или новее.
 2. Откройте файл на телефоне и подтвердите установку пакета.
 3. Запустите **Campus Life**:
    - на Android 13+ при первом включении напоминания разрешите показ уведомлений;
