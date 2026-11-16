@@ -212,6 +212,8 @@ cd portfolio-site
 - `app/build/outputs/apk/debug/app-debug.apk`
 - `app/build/outputs/apk/release/app-release.apk`
 
+Релизная сборка в текущей конфигурации подписывается отладочным ключом. Для публикации приложения потребуется настроить собственный ключ подписи.
+
 ---
 
 <div align="center">
