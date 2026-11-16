@@ -188,6 +188,8 @@ campuslife-repository/
 - **Android Studio Ladybug / Koala** (или новее)
 - **Android SDK 35**
 
+Установите Android SDK 35 через SDK Manager в Android Studio. При первом запуске Gradle потребуется интернет для загрузки Gradle и зависимостей проекта.
+
 #### Команды сборки в терминале
 ```bash
 # Клонирование репозитория
