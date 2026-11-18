@@ -4,3 +4,10 @@
 local.properties
 *.iml
 .idea/
+captures/
+.DS_Store
+
+# Локальные ключи подписи не должны попадать в репозиторий
+*.keystore
+*.jks
+keystore.properties

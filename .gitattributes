@@ -1,0 +1,13 @@
+# Нормализация переводов строк при коммите (в индексе — LF, в рабочей копии — родные)
+* text=auto
+*.bat text eol=crlf
+
+# Бинарные файлы: Git не должен трогать их содержимое
+*.apk binary
+*.mp4 binary
+*.png binary
+*.webp binary
+*.jpg binary
+*.ico binary
+*.ttf binary
+*.jar binary
