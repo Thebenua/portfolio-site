@@ -218,7 +218,16 @@ cd portfolio-site
 - `app/build/outputs/apk/debug/app-debug.apk`
 - `app/build/outputs/apk/release/app-release.apk`
 
-Релизная сборка в текущей конфигурации подписывается отладочным ключом. Для публикации приложения потребуется настроить собственный ключ подписи.
+Релизная сборка берёт подпись из файла `keystore.properties` в корне проекта:
+
+```properties
+storeFile=release.keystore
+storePassword=пароль_хранилища
+keyAlias=имя_ключа
+keyPassword=пароль_ключа
+```
+
+Если файла нет, используется отладочный ключ — так демонстрационный APK собирается без дополнительной настройки. Файл `keystore.properties` и хранилища `*.keystore` / `*.jks` исключены из репозитория.
 
 ---
 
