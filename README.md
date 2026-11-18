@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 <img src="design/showcase/01-hero-banner.png" width="100%" alt="Campus Life — Мобильная афиша школьного сообщества" />
 
@@ -145,7 +145,7 @@
 ## Архитектура и стек технологий
 
 ```text
-campuslife-repository/
+portfolio-site/
 ├── app/src/main/
 │   ├── AndroidManifest.xml                  # Разрешения, FileProvider, Reminder/Boot receivers, deep-link campuslife://
 │   ├── java/ru/campuslife/app/
@@ -163,10 +163,16 @@ campuslife-repository/
 ├── campuslife/
 │   ├── CampusLife-preview.apk               # Готовый установочный Release APK
 │   └── CampusLife-demo.mp4                  # Видеодемонстрация работы приложения
-└── design/
-    ├── SYSTEM.md                            # Спецификация дизайн-системы и брендинга
-    ├── brand/                               # Логотипы, иконки и векторные знаки в SVG/PNG
-    └── showcase/                            # Широкоформатные презентационные иллюстрации для README
+├── design/
+│   ├── SYSTEM.md                            # Спецификация дизайн-системы и брендинга
+│   ├── brand/                               # Логотипы, иконки и векторные знаки в SVG/PNG
+│   └── showcase/                            # Широкоформатные презентационные иллюстрации для README
+├── gradle/wrapper/                          # Gradle Wrapper 8.10.2
+├── build.gradle.kts                         # Корневой build-скрипт
+├── settings.gradle.kts                      # Подключение модуля :app
+├── gradle.properties                        # JVM-память, AndroidX, кодировка
+├── gradlew / gradlew.bat                    # Обёртка Gradle для macOS/Linux и Windows
+└── README.md
 ```
 
 ---
